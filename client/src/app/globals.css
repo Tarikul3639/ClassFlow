@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- Fonts --- */
+  /* Maps the Next.js font variable to Tailwind's sans and display scales */
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* --- ClassFlow Colors --- */
+  --color-primary: #4999df;
+  --color-background-light: #ffffff;
+  --color-background-dark: #1a1a1a;
+  --color-neutral-border: #f0f2f4;
+  --color-text-main: #121517;
+  --color-text-muted: #657686;
+
+  /* --- Border Radius --- */
+  --radius-default: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* --- Shadows --- */
+  --shadow-soft-blue: 0 4px 14px 0 rgba(73, 153, 223, 0.25);
+  --shadow-hover-card: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+}
+
+/* Base Styles & Theme Variables */
+@layer base {
+  :root {
+    --background: var(--color-background-light);
+    --foreground: var(--color-text-main);
+    --card: #ffffff;
+    --border: var(--color-neutral-border);
+  }
+
+  /* Support for system dark mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: var(--color-background-dark);
+      --foreground: #ededed;
+      --card: #242424;
+      --border: #333333;
+    }
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+/* Custom Utility Classes */
+@layer utilities {
+  .bg-grid-pattern {
+    background-image: radial-gradient(var(--color-neutral-border) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
