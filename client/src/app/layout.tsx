@@ -12,6 +12,15 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "ClassFlow - Admin Panel",
   description: "Managed by Nexion Standard Design System",
+  icons: {
+    icon: [
+      { url: "/favicon.svg" }, // Legacy support
+      { url: "/icon.png", sizes: "100x100", type: "image/png" }, // Android
+    ],
+    // apple: [
+    //   { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }, // iOS
+    // ],
+  },
 };
 
 export default function RootLayout({
