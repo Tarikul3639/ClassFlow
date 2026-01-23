@@ -56,19 +56,6 @@ const EventCard: React.FC<EventCardProps> = ({
         backgroundColor: `${color}01`,
       }}
     >
-      {/* Top-right cooldown / deadline */}
-      {eventTime && (
-        <span
-          className="absolute top-1 right-2 text-xxs font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
-          style={{
-            backgroundColor: `${color}20`,
-            color: color,
-          }}
-        >
-          {eventTime}
-        </span>
-      )}
-
       {/* Header */}
       <div className="p-6 flex flex-col sm:flex-row sm:items-center gap-5 relative">
         <div
@@ -81,14 +68,28 @@ const EventCard: React.FC<EventCardProps> = ({
         <div className="flex-1">
           <h2 className="text-lg font-bold leading-tight flex items-center gap-2">
             {event.title}
+
             {highlight && (
               <span className="text-xs font-black text-[#399aef] uppercase tracking-widest bg-[#399aef]15 px-2 py-0.5 rounded">
                 NEXT
               </span>
             )}
+
+            {/* Top-right comedown / deadline */}
+            {eventTime && (
+              <span
+                className="max-xs:absolute top-2 right-4 text-xxs font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
+                style={{
+                  backgroundColor: `${color}20`,
+                  color: color,
+                }}
+              >
+                {eventTime}
+              </span>
+            )}
           </h2>
 
-          <div className="flex items-center gap-3 mt-1.5 text-[13px] font-medium text-[#617789]">
+          <div className="flex flex-col xs:flex-row xs:items-center xs:gap-3 mt-1.5 text-[13px] font-medium text-[#617789]">
             <span className="flex items-center gap-1.5">
               <Clock size={14} />
               {formatTime(event.startAt)}
@@ -96,13 +97,13 @@ const EventCard: React.FC<EventCardProps> = ({
             </span>
 
             {event.location && (
-              <>
-                <span className="w-1 h-1 bg-gray-300 rounded-full" />
+              <span className="flex items-center gap-1.5">
+                <span className="hidden xs:flex w-1 h-1 bg-gray-300 rounded-full" />
                 <span className="flex items-center gap-1.5">
                   <MapPin size={14} />
                   {event.location}
                 </span>
-              </>
+              </span>
             )}
           </div>
         </div>

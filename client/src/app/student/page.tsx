@@ -45,7 +45,7 @@ const StudentView = () => {
       ],
       isCompleted: false,
     },
-     {
+    {
       id: 6,
       type: "quiz",
       title: "Quiz: Algorithms",
@@ -151,17 +151,17 @@ const StudentView = () => {
   return (
     <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
       <Navbar />
-      <div className="h-24" />
+      <div className="h-14 sm:h-24" />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
         {/* Header */}
         <header className="space-y-1">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            {formatDate(new Date().toISOString())}
+            {formatDate(nextEvent?.startAt ?? new Date().toISOString())}
           </h1>
           <div className="flex items-center gap-2 text-[#399aef] font-bold text-sm">
             <span className="flex w-2 h-2 rounded-full bg-[#399aef] animate-pulse" />
-            <p>{activeEvents.length} events remaining today</p>
+            <p>{activeEvents.length} events remaining</p>
           </div>
         </header>
 
