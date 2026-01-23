@@ -46,13 +46,13 @@ const RegisterPage: React.FC = () => {
     <div className="bg-blue-50 min-h-screen flex flex-col font-display antialiased">
       {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-6 py-12">
-        <div className="w-full max-w-[480px] bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl shadow-[#399aef]/10 p-8 border border-white">
+        <div className="w-full max-w-120 bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl shadow-[#399aef]/10 p-8 border border-white">
           
           <div className="mb-8 text-center">
-            <h1 className="text-[#111518] tracking-tight text-2xl sm:text-3xl font-bold pb-1">
+            <h1 className="text-[#111518] tracking-tight text-xl sm:text-2xl font-bold pb-1">
               Create Account
             </h1>
-            <p className="text-[#617789] text-[13px] sm:text-sm font-medium">
+            <p className="text-[#617789] text-xs sm:text-xs font-medium">
               Join ClassFlow to track your academic progress
             </p>
           </div>
@@ -64,10 +64,10 @@ const RegisterPage: React.FC = () => {
                 key={r.label}
                 type="button"
                 onClick={() => setRole(r)}
-                className="relative flex-1 py-2.5 text-xs sm:text-sm font-bold"
+                className="relative flex-1 py-2 text-xs sm:text-sm font-bold"
               >
                 <div
-                  className={`relative z-10 flex items-center justify-center gap-2 transition-colors duration-300 ${
+                  className={`relative text-xs z-10 flex items-center justify-center gap-2 transition-colors duration-300 ${
                     role.label === r.label ? "text-[#111518]" : "text-[#617789]"
                   }`}
                 >
@@ -89,53 +89,53 @@ const RegisterPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Full Name */}
             <div className="space-y-2">
-              <label className="text-[#111518] text-[13px] font-bold ml-1">Full Name</label>
+              <label className="text-[#111518] text-xs font-bold ml-1">Full Name</label>
               <div className="relative group">
                 <input
                   type="text"
                   placeholder="e.g. Alex Johnson"
-                  className="w-full h-12 pl-11 pr-4 rounded-xl border border-[#dbe1e6] bg-white text-[14px] text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full h-10 pl-11 pr-4 rounded-lg border border-[#dbe1e6] bg-white text-xs text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                 />
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-5 group-focus-within:text-[#399aef] transition-colors" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-3.5 group-focus-within:text-[#399aef] transition-colors" />
               </div>
             </div>
 
             {/* ID Number */}
             <div className="space-y-2">
-              <label className="text-[#111518] text-[13px] font-bold ml-1">{role.label} ID Number</label>
+              <label className="text-[#111518] text-xs font-bold ml-1">{role.label} ID Number</label>
               <div className="relative group">
                 <input
                   type="text"
                   placeholder={`Enter your ${role.label.toLowerCase()} ID`}
-                  className="w-full h-12 pl-11 pr-4 rounded-xl border border-[#dbe1e6] bg-white text-[14px] text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full h-10 pl-11 pr-4 rounded-lg border border-[#dbe1e6] bg-white text-xs text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
                   onChange={(e) => setFormData({...formData, idNumber: e.target.value})}
                 />
-                <IdCard className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-5 group-focus-within:text-[#399aef] transition-colors" />
+                <IdCard className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-3.5 group-focus-within:text-[#399aef] transition-colors" />
               </div>
             </div>
 
             {/* Email */}
             <div className="space-y-2">
-              <label className="text-[#111518] text-[13px] font-bold ml-1">Email Address</label>
+              <label className="text-[#111518] text-xs font-bold ml-1">Email Address</label>
               <div className="relative group">
                 <input
                   type="email"
                   placeholder="name@university.edu"
-                  className="w-full h-12 pl-11 pr-4 rounded-xl border border-[#dbe1e6] bg-white text-[14px] text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full h-10 pl-11 pr-4 rounded-lg border border-[#dbe1e6] bg-white text-xs text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                 />
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-5 group-focus-within:text-[#399aef] transition-colors" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-3.5 group-focus-within:text-[#399aef] transition-colors" />
               </div>
             </div>
 
             {/* Department */}
             <div className="space-y-2">
-              <label className="text-[#111518] text-[13px] font-bold ml-1">Department</label>
+              <label className="text-[#111518] text-xs font-bold ml-1">Department</label>
               <div className="relative group">
-                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-5 group-focus-within:text-[#399aef] transition-colors z-10" />
+                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-3.5 group-focus-within:text-[#399aef] transition-colors z-10" />
                 <select 
-                  className="w-full h-12 pl-11 pr-4 rounded-xl border border-[#dbe1e6] bg-white text-[14px] text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all appearance-none cursor-pointer"
+                  className="w-full h-10 pl-11 pr-4 rounded-lg border border-[#dbe1e6] bg-white text-xs text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all appearance-none cursor-pointer"
                   onChange={(e) => setFormData({...formData, department: e.target.value})}
                 >
                   <option value="">Select Department</option>
@@ -148,13 +148,13 @@ const RegisterPage: React.FC = () => {
 
             {/* Password */}
             <div className="space-y-2">
-              <label className="text-[#111518] text-[13px] font-bold ml-1">Password</label>
+              <label className="text-[#111518] text-xs font-bold ml-1">Password</label>
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-5 group-focus-within:text-[#399aef] transition-colors" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#617789] size-3.5 group-focus-within:text-[#399aef] transition-colors" />
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Min. 8 characters"
-                  className="w-full h-12 pl-11 pr-12 rounded-xl border border-[#dbe1e6] bg-white text-[14px] text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
+                  className="w-full h-10 pl-11 pr-12 rounded-lg border border-[#dbe1e6] bg-white text-xs text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                 />
                 <button 
@@ -162,22 +162,22 @@ const RegisterPage: React.FC = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-[#617789] hover:text-[#399aef] transition-colors"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full h-12 bg-[#399aef] text-white text-sm font-bold rounded-xl hover:bg-[#3289d6] shadow-lg shadow-[#399aef]/20 active:scale-[0.98] transition-all mt-4"
+              className="w-full h-10 bg-[#399aef] text-white text-xs font-bold rounded-lg hover:bg-[#3289d6] shadow-lg shadow-[#399aef]/20 active:scale-[0.98] transition-all mt-4"
             >
               Create Account
             </button>
           </form>
 
           {/* Footer Link */}
-          <div className="mt-8 pt-6 border-t border-[#f0f2f4] text-center">
-            <p className="text-[#617789] text-[13px] font-medium">
+          <div className="mt-8 pt-6 border-t border-neutral-border text-center">
+            <p className="text-[#617789] text-xs font-medium">
               Already have an account?
               <Link
                 href="/sign-in"
