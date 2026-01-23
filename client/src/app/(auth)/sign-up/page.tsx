@@ -48,17 +48,17 @@ const RegisterPage: React.FC = () => {
       <main className="flex-1 flex items-center justify-center p-6 py-12">
         <div className="w-full max-w-120 bg-white/60 backdrop-blur-sm rounded-2xl shadow-xl shadow-[#399aef]/10 p-8 border border-white">
           
-          <div className="mb-8 text-center">
+          <div className="mb-5 text-center">
             <h1 className="text-[#111518] tracking-tight text-xl sm:text-2xl font-bold pb-1">
               Create Account
             </h1>
-            <p className="text-[#617789] text-xs sm:text-xs font-medium">
+            <p className="text-neutral-600 text-xs sm:text-xs font-semibold">
               Join ClassFlow to track your academic progress
             </p>
           </div>
 
           {/* Role Toggle */}
-          <div className="flex mb-8 bg-[#F0F2F4] p-1 rounded-xl">
+          <div className="flex mb-5 bg-[#F0F2F4] p-1 rounded-xl">
             {ROLES.map((r) => (
               <button
                 key={r.label}
@@ -86,7 +86,7 @@ const RegisterPage: React.FC = () => {
             ))}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {/* Full Name */}
             <div className="space-y-2">
               <label className="text-[#111518] text-xs font-bold ml-1">Full Name</label>
@@ -176,7 +176,7 @@ const RegisterPage: React.FC = () => {
           </form>
 
           {/* Footer Link */}
-          <div className="mt-8 pt-6 border-t border-neutral-border text-center">
+          <div className="mt-5 pt-4 border-t border-neutral-border text-center">
             <p className="text-[#617789] text-xs font-medium">
               Already have an account?
               <Link
