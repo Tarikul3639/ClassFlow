@@ -21,11 +21,11 @@ const AccountField = ({
         <Icon size={16} />
       </div>
       <div className="flex flex-col gap-0 min-w-0">
-        <span className="text-xxxs md:text-[9px] font-black text-gray-400 uppercase tracking-widest">
+        <span className="text-xxxs md:text-xxs font-black text-gray-400 uppercase tracking-widest">
           {label}
         </span>
         <p
-          className={`text-[#111518] font-bold truncate ${isPassword ? "tracking-[0.2em] text-[12px] md:text-[14px]" : "text-[12px] md:text-[13px]"}`}
+          className={`text-[#111518] font-bold truncate ${isPassword ? "tracking-[0.2em] text-xxs md:text-xs" : "text-[12px] md:text-[13px]"}`}
         >
           {value}
         </p>
@@ -37,7 +37,7 @@ const AccountField = ({
       className="ml-2 p-2 md:p-1.5 text-gray-400 hover:text-[#399aef] hover:bg-white rounded-lg border border-[#dbe1e6] md:border-transparent md:hover:border-[#dbe1e6] transition-all flex items-center gap-1.5 shrink-0 md:opacity-0 md:group-hover:opacity-100"
     >
       <Edit3 size={12} />
-      <span className="text-[9px] md:text-xxs font-black hidden xs:block">
+      <span className="text-xxxs md:text-xxs font-black hidden xs:block">
         Change
       </span>
     </button>
