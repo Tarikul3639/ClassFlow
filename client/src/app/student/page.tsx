@@ -10,6 +10,7 @@ import Footer from "./_components/Footer";
 
 import { Event } from "@/types/event";
 import { EVENT_UI } from "@/config/event-ui";
+import { useSortedEvents } from "@/hooks/useSortedEvents";
 
 const StudentView = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -97,32 +98,10 @@ const StudentView = () => {
     },
   ];
 
-  // Separate active and completed
-  const activeEvents = events.filter((e) => !e.isCompleted);
-  const completedEvents = events.filter((e) => e.isCompleted);
-
-  const now = new Date();
-
-  activeEvents.sort((a, b) => {
-    const aStart = new Date(a.startAt).getTime();
-    const bStart = new Date(b.startAt).getTime();
-
-    const aIsFuture = aStart > now.getTime();
-    const bIsFuture = bStart > now.getTime();
-
-    // 1. Future events first
-    if (aIsFuture && !bIsFuture) return -1;
-    if (!aIsFuture && bIsFuture) return 1;
-
-    // 2. If both future, sort by soonest first
-    if (aIsFuture && bIsFuture) return aStart - bStart;
-
-    // 3. If both past, sort by most recent past first (optional)
-    return bStart - aStart;
-  });
+  const { activeEvents, completedEvents } = useSortedEvents(events);
 
   // Detect next upcoming event
-  const nextEvent = activeEvents.find((e) => new Date(e.startAt) > now);
+  const nextEvent = activeEvents.find((e) => new Date(e.startAt) > new Date());
 
   // Group active events by date
   const groupedEvents: Record<string, Event[]> = activeEvents.reduce(
@@ -207,26 +186,42 @@ const StudentView = () => {
             </div>
 
             <section className="space-y-3">
-              {completedEvents.map((event) => (
-                <article
-                  key={event.id}
-                  className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-white border border-dashed border-[#dbe1e6] opacity-60 grayscale"
-                >
-                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                    <Check size={20} />
-                  </div>
+              {completedEvents.map((event) => {
+                const eventDate = new Date(event.startAt);
 
-                  <div>
-                    <h3 className="text-sm font-bold text-[#617789] line-through">
-                      {event.title}
-                    </h3>
-                    <p className="text-xs text-gray-400 font-medium">
-                      {formatTime(event.startAt)}
-                      {event.endAt && ` - ${formatTime(event.endAt)}`}
-                    </p>
-                  </div>
-                </article>
-              ))}
+                return (
+                  <article
+                    key={event.id}
+                    className="flex items-center gap-4 px-5 sm:px-6 py-3 sm:py-4 rounded-2xl bg-white border border-dashed border-[#dbe1e6] opacity-60 grayscale"
+                  >
+                    {/* Icon */}
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 shrink-0">
+                      <Check size={18} className="sm:size-5" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="space-y-0.5">
+                      <h3 className="text-xs sm:text-sm font-bold text-[#617789] line-through">
+                        {event.title}
+                      </h3>
+
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2 text-[11px] sm:text-xs text-gray-400 font-medium">
+                        {/* Date */}
+                        <span>{formatDate(eventDate.toDateString())}</span>
+
+                        {/* Divider */}
+                        <span className="hidden sm:inline">•</span>
+
+                        {/* Time */}
+                        <span>
+                          {formatTime(event.startAt)}
+                          {event.endAt && ` - ${formatTime(event.endAt)}`}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
             </section>
           </>
         )}
