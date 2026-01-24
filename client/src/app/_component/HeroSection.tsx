@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative pt-32 pb-24 lg:pb-32">
+    <section className="relative h-screen flex flex-col justify-center items-center text-center px-4">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xxs xs:text-xs font-bold uppercase tracking-wider mb-6">
           <span className="relative flex h-2 w-2">
