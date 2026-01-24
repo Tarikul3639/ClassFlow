@@ -1,3 +1,5 @@
+"use client";
+
 import { PlusCircle } from "lucide-react";
 
 export const GeneralInfoSection = () => (

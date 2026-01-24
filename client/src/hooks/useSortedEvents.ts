@@ -1,12 +1,12 @@
 import { useMemo } from "react";
-import { Event } from "@/types/event";
+import { IEvent } from "@/types/event";
 
 interface UseSortedEventsResult {
-  activeEvents: Event[];
-  completedEvents: Event[];
+  activeEvents: IEvent[];
+  completedEvents: IEvent[];
 }
 
-export const useSortedEvents = (events: Event[]): UseSortedEventsResult => {
+export const useSortedEvents = (events: IEvent[]): UseSortedEventsResult => {
   return useMemo(() => {
     const now = new Date();
 

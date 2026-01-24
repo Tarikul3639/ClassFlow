@@ -8,16 +8,16 @@ import Navbar from "./_components/Navbar";
 import EventCard from "./_components/EventCard";
 import Footer from "./_components/Footer";
 
-import { Event } from "@/types/event";
+import { IEvent } from "@/types/event";
 import { EVENT_UI } from "@/config/event-ui";
 import { useSortedEvents } from "@/hooks/useSortedEvents";
 
 const StudentView = () => {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const events: Event[] = [
+  const events: IEvent[] = [
     {
-      id: 1,
+      _id: "1",
       type: "ct",
       title: "CT: Algorithms",
       date: "2026-01-24",
@@ -26,13 +26,13 @@ const StudentView = () => {
       location: "Room 304",
       topics: ["Bresenham Algorithm", "Circle Generation"],
       materials: [
-        { name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
-        { name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
+        { _id: "1", name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
+        { _id: "2", name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
       ],
       isCompleted: false,
     },
     {
-      id: 7,
+      _id: "7",
       type: "quiz",
       title: "Quiz: Algorithms",
       date: "2026-01-23",
@@ -41,13 +41,13 @@ const StudentView = () => {
       location: "Room 304",
       topics: ["Bresenham Algorithm", "Circle Generation"],
       materials: [
-        { name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
-        { name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
+        { _id: "1", name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
+        { _id: "2", name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
       ],
       isCompleted: false,
     },
     {
-      id: 6,
+      _id: "6",
       type: "quiz",
       title: "Quiz: Algorithms",
       date: "2026-01-25",
@@ -56,13 +56,13 @@ const StudentView = () => {
       location: "Room 304",
       topics: ["Bresenham Algorithm", "Circle Generation"],
       materials: [
-        { name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
-        { name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
+        { _id: "1", name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
+        { _id: "2", name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
       ],
       isCompleted: false,
     },
     {
-      id: 2,
+      _id: "2",
       type: "assignment",
       title: "Assignment: Data Structures",
       date: "2026-01-23",
@@ -71,13 +71,13 @@ const StudentView = () => {
       location: "Online Submission",
       topics: ["Linked Lists", "Trees"],
       materials: [
-        { name: "Assignment.pdf", type: "pdf", url: "/files/assignment.pdf" },
-        { name: "Sample Code.docx", type: "docx", url: "/files/sample.docx" },
+        { _id: "1", name: "Assignment.pdf", type: "pdf", url: "/files/assignment.pdf" },
+        { _id: "2", name: "Sample Code.docx", type: "docx", url: "/files/sample.docx" },
       ],
       isCompleted: false,
     },
     {
-      id: 5,
+      _id: "5",
       type: "quiz",
       title: "Quiz: Computer Networks",
       date: "2026-01-23",
@@ -87,7 +87,7 @@ const StudentView = () => {
       isCompleted: false,
     },
     {
-      id: 4,
+      _id: "4",
       type: "lecture",
       title: "Lecture: Operating Systems",
       date: "2026-01-22",
@@ -104,14 +104,14 @@ const StudentView = () => {
   const nextEvent = activeEvents.find((e) => new Date(e.startAt) > new Date());
 
   // Group active events by date
-  const groupedEvents: Record<string, Event[]> = activeEvents.reduce(
+  const groupedEvents: Record<string, IEvent[]> = activeEvents.reduce(
     (acc, event) => {
       const dateKey = new Date(event.startAt).toDateString();
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(event);
       return acc;
     },
-    {} as Record<string, Event[]>,
+    {} as Record<string, IEvent[]>,
   );
 
   const formatDate = (dateStr: string) =>
@@ -154,17 +154,17 @@ const StudentView = () => {
             {eventsOnDate.map((event) => {
               const ui = EVENT_UI[event.type];
               const Icon = ui.icon;
-              const isNext = nextEvent?.id === event.id;
+              const isNext = nextEvent?._id === event._id;
 
               return (
                 <EventCard
-                  key={event.id}
+                  key={event._id}
                   event={event}
                   color={ui.color}
                   icon={<Icon size={22} />}
-                  isExpanded={expandedId === event.id}
+                  isExpanded={expandedId === event._id}
                   onToggle={() =>
-                    setExpandedId(expandedId === event.id ? null : event.id)
+                    setExpandedId(expandedId === event._id ? null : event._id)
                   }
                   highlight={isNext}
                   formatTime={formatTime}
@@ -191,7 +191,7 @@ const StudentView = () => {
 
                 return (
                   <article
-                    key={event.id}
+                    key={event._id}
                     className="flex items-center gap-4 px-5 sm:px-6 py-3 sm:py-4 rounded-2xl bg-white border border-dashed border-[#dbe1e6] opacity-60 grayscale"
                   >
                     {/* Icon */}

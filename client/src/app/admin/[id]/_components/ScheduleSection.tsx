@@ -1,3 +1,5 @@
+"use client";
+
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, X } from "lucide-react";
 interface ScheduleSectionProps {
   topics: string[];

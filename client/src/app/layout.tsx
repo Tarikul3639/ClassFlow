@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 
+// All Providers
+import { Providers } from "./providers";
+
 // Configure Manrope font
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -31,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${manrope.variable} antialiased font-sans`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -10,7 +10,7 @@ import {
   LucideIcon
 } from "lucide-react";
 
-import { EventType } from "@/types/event";
+import { IEventType } from "@/types/event";
 
 type EventUIConfig = {
   color: string;
@@ -18,7 +18,7 @@ type EventUIConfig = {
   label: string;
 };
 
-export const EVENT_UI: Record<EventType, EventUIConfig> = {
+export const EVENT_UI: Record<IEventType, EventUIConfig> = {
   quiz: {
     color: "#3b82f6", // blue
     icon: FileQuestion, // quiz-related icon

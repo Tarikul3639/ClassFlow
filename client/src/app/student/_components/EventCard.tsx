@@ -14,11 +14,11 @@ import {
   Check,
 } from "lucide-react";
 
-import { Event } from "@/types/event";
+import { IEvent } from "@/types/event";
 import { useEventTime } from "@/hooks/useEventTime";
 
 interface EventCardProps {
-  event: Event;
+  event: IEvent;
   color: string;
   icon: React.ReactNode;
   isExpanded: boolean;

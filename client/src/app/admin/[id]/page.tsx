@@ -41,9 +41,7 @@ export default function Page() {
 
       <div className="px-5 sm:px-10 py-8 space-y-12">
         <GeneralInfoSection />
-
         <ScheduleSection topics={topics} setTopics={setTopics} />
-
         <MaterialsSection materials={materials} setMaterials={setMaterials} />
       </div>
 
