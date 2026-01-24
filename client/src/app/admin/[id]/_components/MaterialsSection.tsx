@@ -11,10 +11,10 @@ interface MaterialsSectionProps {
 
 export const MaterialsSection = ({ materials, setMaterials }: MaterialsSectionProps) => {
   const addMaterial = () => {
-    // setMaterials([
-    //   ...materials,
-    //   { _id: Date.now().toString(), type: "", name: "", url: "" },
-    // ]);
+    setMaterials([
+      ...materials,
+      { _id: Date.now().toString(), type: "pdf", name: "", url: "" },
+    ]);
   };
 
   const removeMaterial = (id: string) => {
@@ -77,7 +77,7 @@ export const MaterialsSection = ({ materials, setMaterials }: MaterialsSectionPr
                 onChange={(e) => updateMaterial(m._id, "url", e.target.value)}
                 type="url"
                 className="w-full bg-transparent font-medium text-xxs md:text-xs lg:text-xsm text-[#399aef] outline-none"
-                placeholder="https://drive.google.com/..."
+                placeholder="https://google.com/..."
               />
             </div>
 

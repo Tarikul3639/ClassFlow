@@ -9,46 +9,13 @@ import { AdminEventCompletedItem } from "./_components/AdminEventCompletedItem";
 import { useSortedEvents } from "@/hooks/useSortedEvents";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { IEvent } from "@/types/event";
-
-const events: IEvent[] = [
-  {
-    _id: "1",
-    type: "ct",
-    title: "Algorithms CT-1",
-    date: "2026-01-24",
-    startAt: "2026-01-24T10:00",
-    endAt: "2026-01-24T11:30",
-    isCompleted: true,
-  },
-  {
-    _id: "2",
-    type: "quiz",
-    title: "Data Structures Quiz",
-    date: "2026-01-26",
-    startAt: "2026-01-26T14:00",
-    isCompleted: true,
-  },
-  {
-    _id: "3",
-    type: "assignment",
-    title: "OS Kernel Project",
-    date: "2026-02-02",
-    startAt: "2026-02-02T23:59",
-    isCompleted: false,
-  },
-  {
-    _id: "4",
-    type: "lecture",
-    title: "Advanced DB Lecture",
-    date: "2026-01-30",
-    startAt: "2026-01-30T09:00",
-    isCompleted: false,
-  },
-];
+import { useAppSelector } from "@/redux/hooks";
 
 const Page = () => {
   const [activeCategory, setActiveCategory] = useState("All Events");
   const [searchQuery, setSearchQuery] = useState("");
+  // Fetch events from Redux store
+  const events = useAppSelector((state) => state.admin.events);
 
   // 1. Logic for Filtering by Category and Search
   const filteredEvents = useMemo(() => {
@@ -65,13 +32,13 @@ const Page = () => {
         activeCategory === "All Events" ||
         event.type === categoryMap[activeCategory];
 
-      const matchesSearch = event.title
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) || event.type.toString().includes(searchQuery.toLowerCase());
+      const matchesSearch =
+        event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.type.toString().includes(searchQuery.toLowerCase());
 
       return matchesCategory && matchesSearch;
     });
-  }, [searchQuery, activeCategory]);
+  }, [searchQuery, activeCategory, events]);
 
   // 2. Sort the filtered events into Active and Completed
   const { activeEvents, completedEvents } = useSortedEvents(filteredEvents) as {

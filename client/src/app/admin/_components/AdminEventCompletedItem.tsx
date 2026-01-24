@@ -2,7 +2,6 @@
 import { CheckCircle2, Calendar, Clock } from "lucide-react";
 import { AdminActionButtons } from "./AdminActionButtons";
 import { IEvent } from "@/types/event";
-import { useRouter } from "next/navigation";
 
 interface Props {
   event: IEvent;
@@ -15,15 +14,10 @@ export const AdminEventCompletedItem = ({
   formatDate,
   formatTime,
 }: Props) => {
-  const router = useRouter();
-  const onDelete = () => {
-    // Implement delete logic here
-    console.log("Delete completed event with ID:", event._id);
-  };
   return (
     <article className="group relative flex items-center gap-3 sm:gap-5 px-4 sm:px-6 py-3 rounded-3xl bg-[#fdfdfd] border border-[#f0f3f1] opacity-75 hover:opacity-100 transition-all duration-300">
       {/* Dimmed Check Icon - Soft Greenish Tint */}
-      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 bg-[#f1f4f2] text-[#86948E] transition-colors group-hover:bg-[#ebf7f0] group-hover:text-[#4ade80]">
+      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 bg-[#f1f4f2] text-[#86948E] transition-colors group-hover:bg-primary/5 group-hover:text-primary">
         <CheckCircle2
           size={22}
           strokeWidth={2.5}
@@ -57,11 +51,7 @@ export const AdminEventCompletedItem = ({
 
       {/* Action Buttons - Compact Style */}
       <div className="shrink-0 ml-auto sm:ml-0 opacity-40 group-hover:opacity-100 transition-opacity">
-        <AdminActionButtons
-          id={event._id}
-          onEdit={() => router.push(`/admin/${event._id}`)} // simple /admin/1
-          onDelete={onDelete}
-        />
+        <AdminActionButtons id={event._id} />
       </div>
     </article>
   );

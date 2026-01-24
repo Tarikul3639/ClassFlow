@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import adminReducer from "@/redux/slices/adminSlice";
+import adminEventsReducer from "@/redux/slices/adminEventsSlice";
 
 export const store = configureStore({
   reducer: {
-    admin: adminReducer,
+    admin: adminEventsReducer,
   },
 });
 

@@ -4,7 +4,6 @@ import { useEventTime } from "@/hooks/useEventTime";
 import { AdminActionButtons } from "./AdminActionButtons";
 import { IEvent } from "@/types/event";
 import { EVENT_UI } from "@/config/event-ui";
-import { useRouter } from "next/navigation";
 
 interface Props {
   event: IEvent;
@@ -22,11 +21,6 @@ export const AdminEventItem = ({
   const eventTime = useEventTime(event.date, event.startAt, event.endAt);
   const ui = EVENT_UI[event.type] || EVENT_UI.lecture;
   const Icon = ui.icon;
-  const router = useRouter();
-  const onDelete = () => {
-    // Implement delete logic here
-    console.log("Delete event with ID:", event._id);
-  }
 
   return (
     <article className="group relative flex items-center gap-3 sm:gap-5 px-4 sm:px-6 py-4 rounded-3xl bg-white border border-[#edf1f4] hover:border-[#399aef]/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300">
@@ -104,8 +98,6 @@ export const AdminEventItem = ({
         <div className="shrink-0 ml-auto sm:ml-0">
           <AdminActionButtons
             id={event._id}
-            onEdit={() => router.push(`/admin/${event._id}`)} // simple /admin/1
-            onDelete={onDelete}
           />
         </div>
       </div>
