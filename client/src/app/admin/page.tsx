@@ -8,11 +8,11 @@ import { AdminEventItem } from "./_components/AdminEventItem";
 import { AdminEventCompletedItem } from "./_components/AdminEventCompletedItem";
 import { useSortedEvents } from "@/hooks/useSortedEvents";
 import { SectionDivider } from "@/components/ui/SectionDivider";
-import { Event } from "@/types/event";
+import { IEvent } from "@/types/event";
 
-const events: Event[] = [
+const events: IEvent[] = [
   {
-    id: 1,
+    _id: "1",
     type: "ct",
     title: "Algorithms CT-1",
     date: "2026-01-24",
@@ -21,7 +21,7 @@ const events: Event[] = [
     isCompleted: true,
   },
   {
-    id: 2,
+    _id: "2",
     type: "quiz",
     title: "Data Structures Quiz",
     date: "2026-01-26",
@@ -29,7 +29,7 @@ const events: Event[] = [
     isCompleted: true,
   },
   {
-    id: 3,
+    _id: "3",
     type: "assignment",
     title: "OS Kernel Project",
     date: "2026-02-02",
@@ -37,7 +37,7 @@ const events: Event[] = [
     isCompleted: false,
   },
   {
-    id: 4,
+    _id: "4",
     type: "lecture",
     title: "Advanced DB Lecture",
     date: "2026-01-30",
@@ -46,7 +46,7 @@ const events: Event[] = [
   },
 ];
 
-const ClassFlowAdmin = () => {
+const Page = () => {
   const [activeCategory, setActiveCategory] = useState("All Events");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -74,7 +74,10 @@ const ClassFlowAdmin = () => {
   }, [searchQuery, activeCategory]);
 
   // 2. Sort the filtered events into Active and Completed
-  const { activeEvents, completedEvents } = useSortedEvents(filteredEvents);
+  const { activeEvents, completedEvents } = useSortedEvents(filteredEvents) as {
+    activeEvents: IEvent[];
+    completedEvents: IEvent[];
+  };
 
   // Detect next upcoming event
   const nextEvent = activeEvents.find((e) => new Date(e.startAt) > new Date());
@@ -145,9 +148,9 @@ const ClassFlowAdmin = () => {
           {/* Active Events */}
           {activeEvents.map((event) => (
             <AdminEventItem
-              key={event.id}
+              key={event._id}
               event={event}
-              highlight={nextEvent?.id === event.id}
+              highlight={nextEvent?._id === event._id}
               formatDate={formatDate}
               formatTime={formatTime}
             />
@@ -170,7 +173,7 @@ const ClassFlowAdmin = () => {
           {/* Completed Events */}
           {completedEvents.map((event) => (
             <AdminEventCompletedItem
-              key={event.id}
+              key={event._id}
               event={event}
               formatDate={formatDate}
               formatTime={formatTime}
@@ -182,4 +185,4 @@ const ClassFlowAdmin = () => {
   );
 };
 
-export default ClassFlowAdmin;
+export default Page;

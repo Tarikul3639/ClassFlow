@@ -1,10 +1,11 @@
 // _components/AdminEventCompletedItem.tsx
 import { CheckCircle2, Calendar, Clock } from "lucide-react";
 import { AdminActionButtons } from "./AdminActionButtons";
-import { Event } from "@/types/event";
+import { IEvent } from "@/types/event";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  event: Event;
+  event: IEvent;
   formatDate: (d: string) => string;
   formatTime: (t: string) => string;
 }
@@ -14,12 +15,20 @@ export const AdminEventCompletedItem = ({
   formatDate,
   formatTime,
 }: Props) => {
+  const router = useRouter();
+  const onDelete = () => {
+    // Implement delete logic here
+    console.log("Delete completed event with ID:", event._id);
+  };
   return (
     <article className="group relative flex items-center gap-3 sm:gap-5 px-4 sm:px-6 py-3 rounded-3xl bg-[#fdfdfd] border border-[#f0f3f1] opacity-75 hover:opacity-100 transition-all duration-300">
-      
       {/* Dimmed Check Icon - Soft Greenish Tint */}
       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 bg-[#f1f4f2] text-[#86948E] transition-colors group-hover:bg-[#ebf7f0] group-hover:text-[#4ade80]">
-        <CheckCircle2 size={22} strokeWidth={2.5} className="size-5 sm:size-5.5" />
+        <CheckCircle2
+          size={22}
+          strokeWidth={2.5}
+          className="size-5 sm:size-5.5"
+        />
       </div>
 
       {/* De-emphasized Content */}
@@ -28,7 +37,7 @@ export const AdminEventCompletedItem = ({
           <h3 className="text-[14px] sm:text-[16px] font-bold text-[#64748b] truncate leading-tight line-through decoration-[#94a3b8]/50">
             {event.title}
           </h3>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-tighter bg-[#f1f5f9] text-[#94a3b8] border border-[#e2e8f0]">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xxxxs font-black uppercase tracking-tighter bg-[#f1f5f9] text-[#94a3b8] border border-[#e2e8f0]">
             Archived
           </span>
         </div>
@@ -49,9 +58,9 @@ export const AdminEventCompletedItem = ({
       {/* Action Buttons - Compact Style */}
       <div className="shrink-0 ml-auto sm:ml-0 opacity-40 group-hover:opacity-100 transition-opacity">
         <AdminActionButtons
-          id={event.id}
-          onEdit={(id) => console.log("Editing Archived ID:", id)}
-          onDelete={(id) => console.log("Deleting Archived ID:", id)}
+          id={event._id}
+          onEdit={() => router.push(`/admin/${event._id}`)} // simple /admin/1
+          onDelete={onDelete}
         />
       </div>
     </article>

@@ -1,6 +1,6 @@
 // types/event.ts
 
-export type EventType =
+export type IEventType =
   | "quiz"
   | "assignment"
   | "presentation"
@@ -9,17 +9,18 @@ export type EventType =
   | "seminar"
   | "lecture";
 
-export type MaterialType = "pdf" | "docx" | "image";
+export type IMaterialType = "pdf" | "docx" | "image";
 
-export interface Material {
+export interface IMaterial {
+  _id: string;         // unique identifier
   name: string;       // file name, e.g. "Lecture1.pdf"
-  type: MaterialType; // pdf, docx, image
+  type: IMaterialType; // pdf, docx, image
   url?: string;       // optional: file URL / path for download
 }
 
-export interface Event {
-  id: number;
-  type: EventType;
+export interface IEvent {
+  _id: string;
+  type: IEventType;
   title: string;
 
   /** ISO date: "2026-01-23" */
@@ -32,7 +33,7 @@ export interface Event {
   location?: string;
 
   topics?: string[];
-  materials?: Material[];
+  materials?: IMaterial[];
 
   isCompleted: boolean;
 }

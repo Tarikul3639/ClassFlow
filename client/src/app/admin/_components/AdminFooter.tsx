@@ -11,12 +11,12 @@ export const AdminFooter: React.FC<AdminFooterProps> = ({
   studentRoute = "/student",
 }) => {
   return (
-    <footer className="mt-8 pt-8 border-t border-[#dbe1e6]/60 flex flex-col sm:flex-row gap-6 items-center justify-between">
+    <footer className="py-8 border-t border-[#dbe1e6]/60 flex flex-col sm:flex-row gap-6 items-center justify-between">
       {/* Developer Branding Section */}
       <div className="flex flex-col items-center sm:items-start gap-1.5">
         <div className="flex items-center gap-2.5">
           {/* Logo with Initial T */}
-          <div className="w-7 h-7 rounded-lg bg-[#399aef] flex items-center justify-center text-white shadow-lg shadow-blue-100 ring-2 ring-white transition-transform hover:scale-110">
+          <div className="w-7 h-7 rounded-md bg-[#399aef] flex items-center justify-center text-white shadow-lg shadow-blue-100 ring-2 ring-white transition-transform hover:scale-110">
             <span className="text-xs font-black">T</span>
           </div>
           <div className="flex flex-col">
@@ -35,10 +35,9 @@ export const AdminFooter: React.FC<AdminFooterProps> = ({
 
       {/* Modern Switcher Button */}
       <Link href={studentRoute} className="relative group">
-        <div className="flex items-center gap-3 pl-3 pr-5 py-2 rounded-2xl bg-white/50 border border-[#dbe1e6] group-hover:border-[#399aef] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:shadow-[0_8px_20px_rgba(57,154,239,0.1)] group-active:scale-95 overflow-hidden">
-          
-          {/* Avatar/Icon Indicator */}
-          <div className="w-8 h-8 rounded-xl bg-[#f8fafc] group-hover:bg-[#399aef] flex items-center justify-center text-[#617789] group-hover:text-white transition-colors duration-300">
+        <div className="flex items-center gap-3 pl-2 pr-5 py-2 rounded-2xl bg-white/50 border border-[#efe9e9] group-hover:border-[#399aef] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:shadow-[0_8px_20px_rgba(57,154,239,0.1)] group-active:scale-95 overflow-hidden">
+          {/* Avatar Icon */}
+          <div className="w-8 h-8 rounded-lg bg-[#f8fafc] group-hover:bg-[#399aef] flex items-center justify-center text-[#617789] group-hover:text-white transition-all duration-500 group-hover:rotate-12">
             <User size={16} strokeWidth={2.5} />
           </div>
 
@@ -46,16 +45,16 @@ export const AdminFooter: React.FC<AdminFooterProps> = ({
             <span className="text-xxxs font-black text-[#399aef] uppercase tracking-tighter leading-none">
               Switch Mode
             </span>
-            <span className="text-xxs font-bold text-[#617789] uppercase tracking-widest mt-0.5 group-hover:text-[#111518]">
+            <span className="text-xs font-bold text-[#617789] uppercase tracking-widest mt-1 group-hover:text-[#111518] transition-colors">
               Student View
             </span>
           </div>
 
           {/* Floating Arrow Icon */}
-          <div className="ml-2 transform translate-x-0 group-hover:translate-x-1 transition-transform">
+          <div className="ml-3 transform translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300">
             <ArrowLeftRight
               size={14}
-              className="text-[#dbe1e6] group-hover:text-[#399aef]"
+              className="text-[#cbd5e1] group-hover:text-[#399aef]"
             />
           </div>
         </div>

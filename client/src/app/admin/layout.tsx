@@ -11,7 +11,7 @@ export default function LayoutDashboard({
       <Navbar />
       {children}
       {/* Add it at the very bottom of the main container or inside the main wrapper */}
-      <div className="w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl mx-auto px-6 pb-6 bg-linear-to-r from-transparent via-blue-50 to-transparent]">
+      <div className="w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl mx-auto">
         <AdminFooter studentRoute="/student" />
       </div>
     </div>
