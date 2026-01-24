@@ -156,10 +156,10 @@ const StudentView = () => {
       <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
         {/* Header */}
         <header className="space-y-1">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
             {formatDate(nextEvent?.startAt ?? new Date().toISOString())}
           </h1>
-          <div className="flex items-center gap-2 text-[#399aef] font-bold text-sm">
+          <div className="flex items-center gap-2 text-[#399aef] font-bold text-xsm sm:text-sm">
             <span className="flex w-2 h-2 rounded-full bg-[#399aef] animate-pulse" />
             <p>{activeEvents.length} events remaining</p>
           </div>

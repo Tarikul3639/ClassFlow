@@ -7,11 +7,12 @@ import { useMemo } from "react";
 export const useEventTime = (
   date: string,
   startAt: string,
-  endAt?: string
+  endAt?: string,
 ): string => {
   return useMemo(() => {
     const now = new Date();
     const start = new Date(startAt);
+    const end = endAt ? new Date(endAt) : null;
 
     const diffMs = start.getTime() - now.getTime(); // milliseconds
     const diffMinutes = Math.floor(diffMs / 1000 / 60);
@@ -20,8 +21,10 @@ export const useEventTime = (
 
     // Today
     if (diffDays === 0 && start.getDate() === now.getDate()) {
-      if (diffHours >= 1) return `In ${diffHours} hour${diffHours > 1 ? "s" : ""}`;
-      if (diffMinutes >= 1) return `In ${diffMinutes} min${diffMinutes > 1 ? "s" : ""}`;
+      if (diffHours >= 1)
+        return `In ${diffHours} hour${diffHours > 1 ? "s" : ""}`;
+      if (diffMinutes >= 1)
+        return `In ${diffMinutes} min${diffMinutes > 1 ? "s" : ""}`;
       return "Now";
     }
 
@@ -35,6 +38,11 @@ export const useEventTime = (
     // If within next 7 days
     if (diffDays > 0 && diffDays < 7) {
       return `In ${diffDays} day${diffDays > 1 ? "s" : ""}`;
+    }
+
+    //Now
+    if (diffMs >= -end?.getTime()! && diffMs <= 0) {
+      return "Now";
     }
 
     // If past event

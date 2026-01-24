@@ -1,9 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GraduationCap, CloudSun, Bell } from "lucide-react";
 import Link from "next/link";
 
 const Navbar: React.FC = () => {
+  const [weather, setWeather] = useState<{ temp: number; desc: string } | null>(
+    null,
+  );
+
+  useEffect(() => {
+    fetch(
+      "https://api.openweathermap.org/data/2.5/weather?q=Dhaka&appid=YOUR_API_KEY&units=metric",
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setWeather({ temp: data.main.temp, desc: data.weather[0].description });
+      });
+  }, []);
+
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl">
       <div className="bg-white/70 backdrop-blur-md border border-blue-100 px-4 md:px-6 py-2.5 md:py-3 rounded-full shadow-lg shadow-[#399aef]/5 flex justify-between items-center">
@@ -26,8 +40,10 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-2 text-xxs md:text-[12px] font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
             <CloudSun size={14} className="text-[#399aef] shrink-0" />
             <span className="truncate">
-              <span className="inline md:hidden">18°C</span> {/* Mobile View */}
-              <span className="hidden md:inline">Partly Cloudy, 18°C</span>{" "}
+              <span className="inline md:hidden">{weather?.temp}°C</span>
+              <span className="hidden md:inline">
+                {weather?.desc}, {weather?.temp}°C
+              </span>
               {/* Desktop View */}
             </span>
           </div>

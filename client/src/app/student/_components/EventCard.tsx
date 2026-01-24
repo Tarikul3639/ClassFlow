@@ -23,11 +23,7 @@ interface EventCardProps {
   icon: React.ReactNode;
   isExpanded: boolean;
   onToggle: () => void;
-
-  /** If true, highlights this card as the next upcoming event */
   highlight?: boolean;
-
-  /** Function to format startAt/endAt datetime into readable string */
   formatTime?: (iso: string) => string;
 }
 
@@ -48,7 +44,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
   return (
     <article
-      className={`relative rounded-2xl shadow-sm border transition-all duration-300 overflow-hidden`}
+      className="relative rounded-2xl shadow-sm border transition-all duration-300 overflow-hidden"
       style={{
         borderLeftWidth: "5px",
         borderColor: `${color}50`,
@@ -57,28 +53,27 @@ const EventCard: React.FC<EventCardProps> = ({
       }}
     >
       {/* Header */}
-      <div className="p-6 flex flex-col sm:flex-row sm:items-center gap-5 relative">
+      <div className="p-6 flex flex-col sm:flex-row sm:items-center gap-3.5 sm:gap-5 relative">
         <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+          className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
           style={{ backgroundColor: `${color}10`, color }}
         >
           {icon}
         </div>
 
         <div className="flex-1">
-          <h2 className="text-lg font-bold leading-tight flex items-center gap-2">
+          <h2 className="text-base sm:text-lg font-bold leading-tight flex items-center gap-2">
             {event.title}
 
             {highlight && (
-              <span className="text-xs font-black text-[#399aef] uppercase tracking-widest bg-[#399aef]15 px-2 py-0.5 rounded">
+              <span className="text-xxxs sm:text-xxs font-black text-[#399aef] uppercase tracking-widest bg-[#399aef]15 px-2 py-0.5 rounded">
                 NEXT
               </span>
             )}
 
-            {/* Top-right comedown / deadline */}
             {eventTime && (
               <span
-                className="max-xs:absolute top-2 right-4 text-xxs font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
+                className="max-xs:absolute top-2 right-4 text-xxxs font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-lg"
                 style={{
                   backgroundColor: `${color}20`,
                   color: color,
@@ -89,7 +84,7 @@ const EventCard: React.FC<EventCardProps> = ({
             )}
           </h2>
 
-          <div className="flex flex-col xs:flex-row xs:items-center xs:gap-3 mt-1.5 text-[13px] font-medium text-[#617789]">
+          <div className="flex flex-col xs:flex-row xs:items-center xs:gap-3 mt-1.5 text-xs sm:text-xsm font-medium text-[#617789]">
             <span className="flex items-center gap-1.5">
               <Clock size={14} />
               {formatTime(event.startAt)}
@@ -110,7 +105,7 @@ const EventCard: React.FC<EventCardProps> = ({
 
         <button
           onClick={onToggle}
-          className="sm:self-center px-4 py-2 rounded-xl bg-[#F0F2F4] hover:bg-[#e5e7eb] text-[#111518] text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95"
+          className="sm:self-center px-4 py-2 rounded-xl bg-[#F0F2F4] hover:bg-[#e5e7eb] text-[#111518] text-[11px] sm:text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95"
         >
           {isExpanded ? "Close" : "Details"}
           {isExpanded ? <ChevronUp size={16} /> : <ChevronRight size={16} />}
@@ -133,14 +128,14 @@ const EventCard: React.FC<EventCardProps> = ({
               {/* Topics */}
               {event.topics && (
                 <div className="space-y-3">
-                  <h3 className="text-[11px] font-black text-[#617789] uppercase tracking-widest flex items-center gap-2">
+                  <h3 className="text-xxs sm:text-[11px] font-black text-[#617789] uppercase tracking-widest flex items-center gap-2">
                     <BookOpen size={14} /> Topics Covered
                   </h3>
                   <ul className="space-y-2.5">
                     {event.topics.map((t, i) => (
                       <li
                         key={i}
-                        className="flex items-start gap-2 text-sm font-bold text-[#445668]"
+                        className="flex items-start gap-2 text-xs sm:text-sm font-bold text-[#445668]"
                       >
                         <CheckCircle2
                           size={16}
@@ -156,7 +151,7 @@ const EventCard: React.FC<EventCardProps> = ({
               {/* Materials */}
               {event.materials && (
                 <div className="space-y-3 md:col-span-2">
-                  <h3 className="text-[11px] font-black text-[#617789] uppercase tracking-widest flex items-center gap-2">
+                  <h3 className="text-xxs sm:text-[11px] font-black text-[#617789] uppercase tracking-widest flex items-center gap-2">
                     <Folder size={14} /> Materials
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -170,7 +165,7 @@ const EventCard: React.FC<EventCardProps> = ({
                             : undefined
                         }
                         target={m.type === "image" ? "_blank" : "_self"}
-                        className="flex items-center gap-2 px-3 py-2 bg-white border border-[#dbe1e6] rounded-xl text-xs font-bold hover:border-[#399aef] hover:text-[#399aef] transition-all group"
+                        className="flex items-center gap-2 px-3 py-2 bg-white border border-[#dbe1e6] rounded-xl text-[11px] sm:text-xs font-bold hover:border-[#399aef] hover:text-[#399aef] transition-all group"
                       >
                         <FileText size={14} />
                         {m.name}
@@ -192,7 +187,7 @@ const EventCard: React.FC<EventCardProps> = ({
                       strokeWidth={4}
                     />
                   </div>
-                  <span className="text-sm font-bold text-[#617789] group-hover:text-[#111518]">
+                  <span className="text-xs sm:text-sm font-bold text-[#617789] group-hover:text-[#111518]">
                     Mark as Prepared
                   </span>
                 </label>
