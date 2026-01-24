@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { GraduationCap, CloudSun, Bell } from "lucide-react";
+import { CloudSun, Bell } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 import Link from "next/link";
 
 const Navbar: React.FC = () => {
@@ -14,7 +15,7 @@ const Navbar: React.FC = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        setWeather({ temp: data.main.temp, desc: data.weather[0].description });
+        // setWeather({ temp: data.main.temp, desc: data.weather[0].description });
       });
   }, []);
 
@@ -22,27 +23,18 @@ const Navbar: React.FC = () => {
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl">
       <div className="bg-white/70 backdrop-blur-md border border-blue-100 px-4 md:px-6 py-2.5 md:py-3 rounded-full shadow-lg shadow-[#399aef]/5 flex justify-between items-center">
         {/* Logo Section */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 md:gap-2.5 text-[#399aef] shrink-0"
-        >
-          <div className="bg-[#399aef] p-1.5 rounded-lg text-white">
-            <GraduationCap size={18} className="md:w-5 md:h-5" />
-          </div>
-          <span className="text-base md:text-lg font-black tracking-tight text-[#111518]">
-            ClassFlow
-          </span>
-        </Link>
-
+        <Logo />
         {/* Right Actions */}
         <div className="flex items-center gap-2 md:gap-4">
           {/* Weather Section - Optimized for Mobile & Desktop */}
-          <div className="flex items-center gap-2 text-xxs md:text-[12px] font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
+          <div className="flex items-center gap-2 text-xxs md:text-xxsm font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
             <CloudSun size={14} className="text-[#399aef] shrink-0" />
             <span className="truncate">
-              <span className="inline md:hidden">{weather?.temp}°C</span>
+              <span className="inline md:hidden">
+                {weather?.temp || "18"}°C
+              </span>
               <span className="hidden md:inline">
-                {weather?.desc}, {weather?.temp}°C
+                {weather?.desc || "Clear"}, {weather?.temp || "18"}°C
               </span>
               {/* Desktop View */}
             </span>

@@ -1,4 +1,6 @@
-import { GraduationCap, ArrowRight } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
+import { ArrowRight } from "lucide-react";
+
 import Link from "next/link";
 
 import React from "react";
@@ -8,14 +10,8 @@ export const Navbar: React.FC = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-blue-50/50 sm:bg-blue-50/50 backdrop-blur-sm sm:backdrop-blur-md border-b border-blue-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary">
-              <GraduationCap size={24} strokeWidth={2} />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-text-main">
-              ClassFlow
-            </span>
-          </Link>
+          {/* Logo Section */}
+          <Logo />
           <div className="flex items-center gap-4">
             <Link
               href="#feature"
