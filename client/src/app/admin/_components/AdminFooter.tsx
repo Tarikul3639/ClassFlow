@@ -35,7 +35,7 @@ export const AdminFooter: React.FC<AdminFooterProps> = ({
 
       {/* Modern Switcher Button */}
       <Link href={studentRoute} className="relative group">
-        <div className="flex items-center gap-3 pl-3 pr-5 py-2 rounded-2xl bg-white border border-[#dbe1e6] group-hover:border-[#399aef] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:shadow-[0_8px_20px_rgba(57,154,239,0.1)] group-active:scale-95 overflow-hidden">
+        <div className="flex items-center gap-3 pl-3 pr-5 py-2 rounded-2xl bg-white/50 border border-[#dbe1e6] group-hover:border-[#399aef] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:shadow-[0_8px_20px_rgba(57,154,239,0.1)] group-active:scale-95 overflow-hidden">
           
           {/* Avatar/Icon Indicator */}
           <div className="w-8 h-8 rounded-xl bg-[#f8fafc] group-hover:bg-[#399aef] flex items-center justify-center text-[#617789] group-hover:text-white transition-colors duration-300">

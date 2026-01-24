@@ -103,7 +103,7 @@ const ClassFlowAdmin = () => {
   return (
     <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
       <Navbar />
-      <div className="h-14 sm:h-24" />
+      <div className="h-16" />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
         <AdminHeader count={filteredEvents.length} />
@@ -128,7 +128,7 @@ const ClassFlowAdmin = () => {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-xxs sm:text-[11px] font-black uppercase tracking-widest transition-all border whitespace-nowrap ${
+                className={`px-4 py-2 rounded-xl text-xxxs sm:text-xxxs font-black uppercase tracking-widest transition-all border whitespace-nowrap ${
                   activeCategory === cat
                     ? "bg-[#399aef] text-white border-[#399aef]"
                     : "bg-white text-[#617789] border-[#dbe1e6] hover:border-[#399aef]"
