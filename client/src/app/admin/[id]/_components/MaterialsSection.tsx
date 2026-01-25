@@ -2,31 +2,39 @@
 
 import React from "react";
 import { Link as LinkIcon, PlusCircle, Trash2 } from "lucide-react";
-import { IMaterial } from "@/types/event";
+import { IEvent, IMaterial } from "@/types/event";
 
 interface MaterialsSectionProps {
-  materials: IMaterial[];
-  setMaterials: React.Dispatch<React.SetStateAction<IMaterial[]>>;
+  form: IEvent;
+  setForm: React.Dispatch<React.SetStateAction<IEvent>>;
 }
 
-export const MaterialsSection = ({ materials, setMaterials }: MaterialsSectionProps) => {
+export const MaterialsSection = ({ form, setForm }: MaterialsSectionProps) => {
   const addMaterial = () => {
-    setMaterials([
-      ...materials,
-      { _id: Date.now().toString(), type: "pdf", name: "", url: "" },
-    ]);
+    setForm({
+      ...form,
+      materials: [
+        ...(form.materials || []),
+        { _id: Date.now().toString(), type: "pdf", name: "", url: "" },
+      ],
+    });
   };
 
   const removeMaterial = (id: string) => {
-    setMaterials(materials.filter((m) => m._id !== id));
+    setForm({
+      ...form,
+      materials: form.materials?.filter((m) => m._id !== id) || [],
+    });
   };
 
   const updateMaterial = (id: string, field: keyof IMaterial, value: string) => {
-    setMaterials(
-      materials.map((m) => (m._id === id ? { ...m, [field]: value } : m))
-    );
+    setForm({
+      ...form,
+      materials: form.materials?.map((m) => (m._id === id ? { ...m, [field]: value } : m)) || [],
+    });
   };
-
+  
+  const materials = form.materials || [];
   return (
     <section className="space-y-3 sm:space-y-5 lg:space-y-6">
       {/* Section Header */}

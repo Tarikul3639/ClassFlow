@@ -7,7 +7,8 @@ export type IEventType =
   | "ct"
   | "lab"
   | "seminar"
-  | "lecture";
+  | "lecture"
+  | "Class";
 
 export type IMaterialType = "pdf" | "docx" | "image";
 

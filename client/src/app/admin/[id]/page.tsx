@@ -1,37 +1,53 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AdminHeader } from "./_components/AdminHeader";
 import { GeneralInfoSection } from "./_components/GeneralInfoSection";
 import { ScheduleSection } from "./_components/ScheduleSection";
 import { MaterialsSection } from "./_components/MaterialsSection";
 import { ActionFooter } from "./_components/ActionFooter";
-import { IMaterial } from "@/types/event";
+import { IEvent, IMaterial } from "@/types/event";
+import { selectEventForEditById } from "@/redux/slices/admin/events/thunks/selectEventForEditById";
+import { useAppDispatch } from "@/redux/hooks";
 
 export default function Page() {
   const params = useParams();
   const id = params.id as string;
+  const [form, setForm] = useState<IEvent>({
+    _id: id,
+    title: "",
+    type: "lecture",
+    date: "",
+    startAt: "",
+    location: "",
+    topics: [],
+    materials: [],
+    endAt: "",
+    isCompleted: false,
+  });
 
   if (!id) {
     return <div>Invalid Event ID</div>;
   }
 
-  const [topics, setTopics] = useState(["Calculus", "Derivatives"]);
-  const [materials, setMaterials] = useState<IMaterial[]>([
-    {
-      _id: "1",
-      type: "pdf",
-      name: "Revision Notes - Module 2",
-      url: "https://classflow.edu/resources/m2-notes.pdf",
-    },
-    {
-      _id: "2",
-      type: "pdf",
-      name: "Formula Sheet",
-      url: "https://classflow.edu/resources/formulae.pdf",
-    },
-  ]);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (id === "new") return;
+    const fetchEvent = async () => {
+      try {
+        const event = await dispatch(selectEventForEditById(id));
+        if (event.payload) {
+          setForm(event.payload as IEvent);
+        }
+      } catch (err) {
+        console.error("Failed to fetch event:", err);
+      }
+    };
+
+    fetchEvent();
+  }, [dispatch, id]);
 
   return (
     <div className="min-h-screen max-w-2xl mx-auto overflow-hidden">
@@ -40,12 +56,12 @@ export default function Page() {
       <AdminHeader id={id} />
 
       <div className="px-5 sm:px-10 py-8 space-y-12">
-        <GeneralInfoSection />
-        <ScheduleSection topics={topics} setTopics={setTopics} />
-        <MaterialsSection materials={materials} setMaterials={setMaterials} />
+        <GeneralInfoSection form={form} setForm={setForm} />
+        <ScheduleSection form={form} setForm={setForm} />
+        <MaterialsSection form={form} setForm={setForm} />
       </div>
 
-      <ActionFooter />
+      <ActionFooter form={form} />
     </div>
   );
 }

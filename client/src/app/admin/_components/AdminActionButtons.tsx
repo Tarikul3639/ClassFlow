@@ -4,10 +4,9 @@ import React, { useState } from "react";
 import { Edit3, Trash2, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { deleteEventThunk } from "@/redux/slices/adminEventsSlice";
+import { deleteEventThunk } from "@/redux/slices/admin/events/thunks/deleteEventThunks";
 import { Dialog } from "@/components/ui/Dialog";
 import { toast } from "sonner";
-import { tr } from "motion/react-client";
 
 interface AdminActionButtonsProps {
   id: string | number;

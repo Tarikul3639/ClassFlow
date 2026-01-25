@@ -1,8 +1,9 @@
 "use client";
 
+import { IEvent, IEventType } from "@/types/event";
 import { PlusCircle } from "lucide-react";
 
-export const GeneralInfoSection = () => (
+export const GeneralInfoSection = ({ form, setForm }: { form: IEvent; setForm: React.Dispatch<React.SetStateAction<IEvent>> }) => (
   <section className="space-y-3 sm:space-y-5 lg:space-y-6">
     {/* Section Header */}
     <div className="flex items-center gap-2 lg:gap-3">
@@ -23,6 +24,8 @@ export const GeneralInfoSection = () => (
         </label>
         <input
           type="text"
+          value={form.title ?? ""}
+          onChange={(e) => setForm({ ...form, title: e.target.value })}
           className="w-full h-11 sm:h-12 lg:h-14 px-5 lg:px-6 rounded-lg lg:rounded-xl border border-[#dbe1e6] bg-[#f8fafc] focus:bg-white focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] transition-all outline-none font-bold text-[#111518] text-xxsm md:text-xsm lg:text-sm"
           placeholder="e.g. Mid-term Assessment Preparation"
         />
@@ -34,7 +37,10 @@ export const GeneralInfoSection = () => (
           Event Type
         </label>
         <div className="relative group">
-          <select className="w-full h-11 sm:h-12 lg:h-14 px-5 lg:px-6 rounded-lg lg:rounded-xl border border-[#dbe1e6] bg-[#f8fafc] focus:bg-white focus:ring-4 focus:ring-[#399aef]/10 transition-all outline-none font-bold text-[#111518] appearance-none text-xxsm md:text-xsm lg:text-sm cursor-pointer">
+          <select
+           value={form.type ?? "lecture"}
+           onChange={(e) => setForm({ ...form, type: e.target.value as IEventType })}
+           className="w-full h-11 sm:h-12 lg:h-14 px-5 lg:px-6 rounded-lg lg:rounded-xl border border-[#dbe1e6] bg-[#f8fafc] focus:bg-white focus:ring-4 focus:ring-[#399aef]/10 transition-all outline-none font-bold text-[#111518] appearance-none text-xxsm md:text-xsm lg:text-sm cursor-pointer">
             <option value="lecture">Lecture</option>
             <option value="quiz">Quiz</option>
             <option value="assignment">Assignment</option>
@@ -55,6 +61,8 @@ export const GeneralInfoSection = () => (
         </label>
         <input
           type="text"
+          value={form.location ?? ""}
+          onChange={(e) => setForm({ ...form, location: e.target.value })}
           className="w-full h-11 sm:h-12 lg:h-14 px-5 lg:px-6 rounded-lg lg:rounded-xl border border-[#dbe1e6] bg-[#f8fafc] focus:bg-white focus:ring-4 focus:ring-[#399aef]/10 transition-all outline-none font-bold text-[#111518] text-xxsm md:text-xsm lg:text-sm"
           placeholder="Room or URL"
         />
