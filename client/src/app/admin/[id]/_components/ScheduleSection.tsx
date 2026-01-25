@@ -136,6 +136,9 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
                 </div>
               ))}
 
+
+              {/* topic array remove kore text add korte hobe */}
+
               {/* Inline Input Field */}
               <input
                 type="text"
