@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 
 @import "tailwindcss";
 
 @theme {
   /* --- Font Families --- */
-  --font-sans: "Manrope", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Manrope", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
 
   /* --- ClassFlow Colors --- */
   --color-primary: #4999df;
@@ -91,4 +91,32 @@
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
+}
+
+
+/* Custom Scrollbar Styles */
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #399aefb2 #fdfcfc; /* thumb, track */
+}
+
+*::-webkit-scrollbar {
+  width: 2px; /* vertical scroll */
+  height: 2px; /* horizontal scroll */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #399aef;
+  border-radius: 6px;
+  border: 1px solid #f1f1f1;
+  transition: background-color 0.2s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #399aefaa;
 }

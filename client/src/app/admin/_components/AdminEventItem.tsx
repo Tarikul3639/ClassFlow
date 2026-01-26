@@ -41,7 +41,7 @@ export const AdminEventItem = ({
       {/* Content Area */}
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <h3 className="text-[15px] sm:text-[17px] font-bold text-[#111518] truncate tracking-tight">
+          <h3 className="text-2sm sm:text-[17px] font-bold text-[#111518] truncate tracking-tight">
             {event.title}
           </h3>
 

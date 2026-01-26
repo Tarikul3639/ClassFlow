@@ -1,102 +1,31 @@
-// StudentView.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 
 import Navbar from "./_components/Navbar";
 import EventCard from "./_components/EventCard";
 import Footer from "./_components/Footer";
+import StudentViewSkeleton from "./_components/StudentViewSkeleton";
 
 import { IEvent } from "@/types/event";
 import { EVENT_UI } from "@/config/event-ui";
 import { useSortedEvents } from "@/hooks/useSortedEvents";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { fetchEventsFromServer } from "@/redux/slices/client/events/thunks/fetchEventsFromServer";
 
-const StudentView = () => {
+const Page = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const events = useAppSelector((state) => state.client.events);
+  const isLoading = useAppSelector(
+    (state) => state.client.status["all"]?.fetching,
+  );
 
-  const events: IEvent[] = [
-    {
-      _id: "1",
-      type: "ct",
-      title: "CT: Algorithms",
-      date: "2026-01-27",
-      startAt: "2026-01-27T10:00",
-      endAt: "2026-01-27T11:30",
-      location: "Room 304",
-      topics: "In this CT, we will cover the fundamental concepts of Bresenham Algorithm including derivation and implementation. Also, be prepared for Circle Generation algorithms. We will focus specifically on Mid-point and Bresenham's approaches, ensuring you understand the pixel selection process for smooth curve rendering. Please bring your notes on Cartesian coordinate systems as we will be using them extensively.",
-      materials: [
-        { _id: "1", name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
-        { _id: "2", name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
-      ],
-      isCompleted: false,
-    },
-    {
-      _id: "7",
-      type: "quiz",
-      title: "Quiz: Algorithms",
-      date: "2026-01-27",
-      startAt: "2026-01-27T23:30",
-      endAt: "2026-01-27T23:30",
-      location: "Room 304",
-      topics: "Bresenham Algorithm and Circle Generation",
-      materials: [
-        { _id: "1", name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
-        { _id: "2", name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
-      ],
-      isCompleted: false,
-    },
-    {
-      _id: "6",
-      type: "quiz",
-      title: "Quiz: Algorithms",
-      date: "2026-01-25",
-      startAt: "2026-01-25T10:00",
-      endAt: "2026-01-25T11:30",
-      location: "Room 304",
-      topics: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      materials: [
-        { _id: "1", name: "Slides.pdf", type: "pdf", url: "/files/slides.pdf" },
-        { _id: "2", name: "Lecture Notes.docx", type: "docx", url: "/files/notes.docx" },
-      ],
-      isCompleted: false,
-    },
-    {
-      _id: "2",
-      type: "assignment",
-      title: "Assignment: Data Structures",
-      date: "2026-01-23",
-      startAt: "2026-01-23T12:00",
-      endAt: "2026-01-23T13:00",
-      location: "Online Submission",
-      topics: "Implement linked lists and binary trees in your preferred programming language.",
-      materials: [
-        { _id: "1", name: "Assignment.pdf", type: "pdf", url: "/files/assignment.pdf" },
-        { _id: "2", name: "Sample Code.docx", type: "docx", url: "/files/sample.docx" },
-      ],
-      isCompleted: false,
-    },
-    {
-      _id: "5",
-      type: "quiz",
-      title: "Quiz: Computer Networks",
-      date: "2026-01-23",
-      startAt: "2026-01-23T15:00",
-      endAt: "2026-01-23T16:00",
-      location: "Room 210",
-      isCompleted: false,
-    },
-    {
-      _id: "4",
-      type: "lecture",
-      title: "Lecture: Operating Systems",
-      date: "2026-01-22",
-      startAt: "2026-01-22T09:00",
-      endAt: "2026-01-22T10:00",
-      location: "Hall A",
-      isCompleted: true,
-    },
-  ];
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchEventsFromServer());
+  }, [dispatch]);
 
   const { activeEvents, completedEvents } = useSortedEvents(events);
 
@@ -126,6 +55,20 @@ const StudentView = () => {
       hour: "numeric",
       minute: "2-digit",
     });
+
+  // Loading state
+  if (isLoading && events.length === 0)
+    return (
+      <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
+        <Navbar />
+        <div className="h-14 sm:h-24" />
+
+        <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
+          <StudentViewSkeleton />
+        </main>
+        <Footer />
+      </div>
+    );
 
   return (
     <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
@@ -232,4 +175,4 @@ const StudentView = () => {
   );
 };
 
-export default StudentView;
+export default Page;

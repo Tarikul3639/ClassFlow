@@ -15,6 +15,9 @@ import {
 
 import { IEvent } from "@/types/event";
 import { useEventTime } from "@/hooks/useEventTime";
+import { useAppDispatch } from "@/redux/hooks";
+import { markAsPrepared } from "@/redux/slices/client/events/thunks/markAsPrepared";
+import { useAppSelector } from "@/redux/hooks";
 
 interface EventCardProps {
   event: IEvent;
@@ -40,6 +43,10 @@ const EventCard: React.FC<EventCardProps> = ({
     }),
 }) => {
   const eventTime = useEventTime(event.date, event.startAt, event.endAt);
+  const dispatch = useAppDispatch();
+  const updating = useAppSelector(
+    (state) => state.client.status[event._id]?.updating,
+  );
 
   return (
     <article
@@ -83,7 +90,7 @@ const EventCard: React.FC<EventCardProps> = ({
             )}
           </h2>
 
-          <div className="flex flex-col xs:flex-row xs:items-center xs:gap-3 mt-1.5 text-xs sm:text-xsm font-medium text-[#617789]">
+          <div className="flex flex-col xs:flex-row xs:items-center gap-1.5 xs:gap-3 mt-1.5 text-xs sm:text-xsm font-medium text-[#617789]">
             <span className="flex items-center gap-1.5">
               <Clock size={14} />
               {formatTime(event.startAt)}
@@ -171,7 +178,13 @@ const EventCard: React.FC<EventCardProps> = ({
               <div className="md:col-span-2 pt-4 border-t border-[#dbe1e6]">
                 <label className="flex items-center gap-3 cursor-pointer group">
                   <div className="relative flex items-center justify-center">
-                    <input type="checkbox" className="peer sr-only" />
+                    <input
+                      type="checkbox"
+                      className="peer sr-only"
+                      checked={event.isCompleted}
+                      disabled={updating}
+                      onChange={() => dispatch(markAsPrepared(event._id))}
+                    />
                     <div className="w-5 h-5 border-2 border-[#dbe1e6] rounded-lg peer-checked:bg-blue-500 peer-checked:border-blue-500 transition-all" />
                     <Check
                       size={14}

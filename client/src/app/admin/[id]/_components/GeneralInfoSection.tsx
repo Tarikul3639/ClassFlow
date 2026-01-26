@@ -65,6 +65,7 @@ export const GeneralInfoSection = ({ form, setForm }: { form: IEvent; setForm: R
             className="w-full h-11 sm:h-12 px-5 lg:px-6 rounded-lg border border-[#dbe1e6] bg-[#f8fafc] focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-[#111518] appearance-none text-xxsm md:text-xsm lg:text-sm cursor-pointer">
             <option value="lecture">Lecture</option>
             <option value="quiz">Quiz</option>
+            <option value="class">Class</option>
             <option value="assignment">Assignment</option>
             <option value="ct">Class Test</option>
           </select>

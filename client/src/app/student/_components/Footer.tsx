@@ -44,7 +44,7 @@ const Footer = () => {
         <Link href="/admin" className="group">
           <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-[#f8fafc] border border-[#dbe1e6] group-hover:border-[#399aef] transition-all active:scale-95">
             <div className="flex flex-col items-end">
-              <span className="text-[8px] font-black text-[#399aef] uppercase tracking-tighter leading-none">
+              <span className="text-xxxxs font-black text-[#399aef] uppercase tracking-tighter leading-none">
                 Master Control
               </span>
               <span className="text-xxs font-bold text-[#617789] uppercase tracking-widest mt-0.5 group-hover:text-[#111518]">

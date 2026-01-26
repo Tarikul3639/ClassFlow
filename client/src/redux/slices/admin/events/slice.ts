@@ -6,52 +6,10 @@ import { deleteEventThunk } from "./thunks/deleteEventThunks";
 import { selectEventForEditById } from "./thunks/selectEventForEditById";
 import { createNewEventThunk } from "./thunks/createNewEventThunks";
 import { updateEventThunk } from "./thunks/updateEventThunks";
+import { fetchEventsFromServer } from "./thunks/fetchEventsFromServer";
 
 const initialState: AdminEventsState = {
-  events: [
-    {
-      _id: "1",
-      type: "ct",
-      title: "Algorithms CT-1",
-      date: "2026-01-24",
-      startAt: "2026-01-24T10:00",
-      endAt: "2026-01-24T11:30",
-      topics: "Bresenham Algorithm and Circle Generation",
-      materials: [
-        {
-          _id: "m1",
-          name: "CT_Syllabus.pdf",
-          type: "pdf",
-          url: "https://example.com/ct_syllabus.pdf",
-        },
-      ],
-      isCompleted: true,
-    },
-    {
-      _id: "2",
-      type: "quiz",
-      title: "Data Structures Quiz",
-      date: "2026-01-26",
-      startAt: "2026-01-26T14:00",
-      isCompleted: true,
-    },
-    {
-      _id: "3",
-      type: "assignment",
-      title: "OS Kernel Project",
-      date: "2026-02-02",
-      startAt: "2026-02-02T23:59",
-      isCompleted: false,
-    },
-    {
-      _id: "4",
-      type: "lecture",
-      title: "Advanced DB Lecture",
-      date: "2026-01-30",
-      startAt: "2026-01-30T09:00",
-      isCompleted: false,
-    },
-  ],
+  events: [],
   status: {},
 };
 
@@ -127,14 +85,34 @@ const adminEventsSlice = createSlice({
     builder.addCase(updateEventThunk.pending, (state, action) => {
       state.status[action.meta.arg._id] = { updating: true };
     });
-    builder.addCase(updateEventThunk.fulfilled, (state, action: PayloadAction<IEvent>) => {
-      delete state.status[action.payload._id];
-      const index = state.events.findIndex((e) => e._id === action.payload._id);
-      if (index !== -1) state.events[index] = action.payload;
-    });
+    builder.addCase(
+      updateEventThunk.fulfilled,
+      (state, action: PayloadAction<IEvent>) => {
+        delete state.status[action.payload._id];
+        const index = state.events.findIndex(
+          (e) => e._id === action.payload._id,
+        );
+        if (index !== -1) state.events[index] = action.payload;
+      },
+    );
     builder.addCase(updateEventThunk.rejected, (state, action) => {
       delete state.status[action.meta.arg._id];
       state.status[action.meta.arg._id] = { error: action.payload as string };
+    });
+
+    // Fetch Events from Server
+    builder.addCase(fetchEventsFromServer.pending, (state) => {
+      state.status["all"] = { fetching: true };
+    });
+    builder.addCase(
+      fetchEventsFromServer.fulfilled,
+      (state, action: PayloadAction<IEvent[]>) => {
+        delete state.status["all"];
+        state.events = action.payload;
+      },
+    );
+    builder.addCase(fetchEventsFromServer.rejected, (state, action) => {
+      state.status["all"] = { error: action.payload as string };
     });
   },
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AdminHeader } from "./_components/AdminHeader";
 import { GeneralInfoSection } from "./_components/GeneralInfoSection";
@@ -22,7 +22,7 @@ export default function Page() {
     startAt: "",
     location: "",
     topics: "",
-    materials: [],
+    materials: [] as IMaterial[],
     endAt: "",
     isCompleted: false,
   });
