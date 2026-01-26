@@ -29,6 +29,7 @@ export const ActionFooter = ({ form }: ActionFooterProps) => {
         router.push("/admin");
       } else {
         await dispatch(updateEventThunk(form)).unwrap();
+        router.push("/admin");
         console.log("Event updated:", form);
       }
     } catch (err) {

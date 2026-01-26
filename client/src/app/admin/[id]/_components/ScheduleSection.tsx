@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  Calendar as CalendarIcon,
-  ChevronLeft,
-  ChevronRight,
-  X,
-} from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { IEvent } from "@/types/event";
+import { Calendar } from "@/components/ui/calendar";
 interface ScheduleSectionProps {
   form: IEvent;
   setForm: React.Dispatch<React.SetStateAction<IEvent>>;
@@ -28,42 +24,28 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 sm:gap-10">
-        {/* Mock Calendar */}
-        <div className="w-full lg:w-80 bg-[#f8fafc] border border-[#dbe1e6] rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6">
-          <div className="flex items-center justify-between mb-4 lg:mb-6 px-1">
-            <button className="p-1 hover:bg-white rounded-lg transition-colors">
-              <ChevronLeft size={16} className="lg:w-5 lg:h-5" />
-            </button>
-            <span className="text-xxxs sm:text-xxs lg:text-xs font-black uppercase tracking-widest text-[#111518]">
-              Oct 2023
-            </span>
-            <button className="p-1 hover:bg-white rounded-lg transition-colors">
-              <ChevronRight size={16} className="lg:w-5 lg:h-5" />
-            </button>
-          </div>
-          <div className="grid grid-cols-7 gap-1 lg:gap-1.5 text-center">
-            {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-              <span
-                key={`${d}-${i}`}
-                className="text-xxxxs sm:text-xxxxs lg:text-xxxs font-black text-[#617789] pb-2"
-              >
-                {d}
-              </span>
-            ))}
-            {Array.from({ length: 31 }).map((_, i) => (
-              <div
-                key={i}
-                className={`h-7 sm:h-8 lg:h-9 flex items-center justify-center text-xxsm sm:text-xsm lg:text-sm font-bold rounded-lg cursor-pointer transition-all ${
-                  i === 4
-                    ? "bg-[#399aef] text-white shadow-lg shadow-[#399aef]/20"
-                    : "hover:bg-white text-[#111518]"
-                }`}
-              >
-                {i + 1}
-              </div>
-            ))}
-          </div>
-        </div>
+        <Calendar
+          mode="single"
+          selected={form.date ? new Date(form.date + "T00:00:00") : undefined}
+          onSelect={(date) => {
+            if (!date) return;
+
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+
+            setForm({
+              ...form,
+              date: `${yyyy}-${mm}-${dd}`,
+            });
+          }}
+          className="w-full lg:w-80 bg-[#f8fafc] border border-[#dbe1e6] rounded-xl lg:rounded-2xl p-4 sm:p-5 lg:p-6"
+          classNames={{
+            today: "bg-[#8f9499] rounded-md text-white",
+            outside: "text-muted-foreground opacity-40",
+            disabled: "opacity-50 cursor-not-allowed",
+          }}
+        />
 
         <div className="flex-1 space-y-4 sm:space-y-6 lg:space-y-8">
           {/* Time Inputs */}
@@ -81,7 +63,7 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
                     startAt: `${form.date}T${e.target.value}`,
                   })
                 }
-                className="w-full h-11 sm:h-12 lg:h-14 px-4 lg:px-6 rounded-lg lg:rounded-xl border border-[#dbe1e6] bg-[#f8fafc] font-bold outline-none focus:border-[#399aef] transition-colors text-xxsm md:text-xsm lg:text-sm"
+                className="w-full h-11 sm:h-12 px-4 lg:px-6 rounded-lg border border-[#dbe1e6] bg-[#f8fafc] font-semibold outline-none focus:border-[#399aef] transition-colors text-xxsm md:text-xsm lg:text-sm"
               />
             </div>
             <div className="space-y-2">
@@ -94,7 +76,7 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
                 onChange={(e) =>
                   setForm({ ...form, endAt: `${form.date}T${e.target.value}` })
                 }
-                className="w-full h-11 sm:h-12 lg:h-14 px-4 lg:px-6 rounded-lg lg:rounded-xl border border-[#dbe1e6] bg-[#f8fafc] font-bold outline-none focus:border-[#399aef] transition-colors text-xxsm md:text-xsm lg:text-sm"
+                className="w-full h-11 sm:h-12 px-4 lg:px-6 rounded-lg border border-[#dbe1e6] bg-[#f8fafc] font-semibold outline-none focus:border-[#399aef] transition-colors text-xxsm md:text-xsm lg:text-sm"
               />
             </div>
           </div>
