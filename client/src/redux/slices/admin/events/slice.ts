@@ -16,7 +16,7 @@ const initialState: AdminEventsState = {
       date: "2026-01-24",
       startAt: "2026-01-24T10:00",
       endAt: "2026-01-24T11:30",
-      topics: ["Sorting Algorithms", "Graph Theory"],
+      topics: "Bresenham Algorithm and Circle Generation",
       materials: [
         {
           _id: "m1",

@@ -1,0 +1,2 @@
+# Ignore any files named demo.html anywhere
+**/demo.html

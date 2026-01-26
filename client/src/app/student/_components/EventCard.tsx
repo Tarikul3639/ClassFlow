@@ -7,11 +7,10 @@ import {
   MapPin,
   ChevronUp,
   ChevronRight,
-  BookOpen,
-  CheckCircle2,
   Folder,
   FileText,
   Check,
+  MessageSquare,
 } from "lucide-react";
 
 import { IEvent } from "@/types/event";
@@ -122,31 +121,24 @@ const EventCard: React.FC<EventCardProps> = ({
             className="px-6 pb-6"
           >
             <div
-              className="rounded-xl p-5 border border-[#dbe1e6] grid md:grid-cols-2 gap-6"
+              className="rounded-xl p-5 border border-[#dbe1e6] grid gap-6"
               style={{ backgroundColor: `${color}05` }}
             >
-              {/* Topics */}
-              {event.topics && (
-                <div className="space-y-3">
-                  <h3 className="text-xxs sm:text-[11px] font-black text-[#617789] uppercase tracking-widest flex items-center gap-2">
-                    <BookOpen size={14} /> Topics Covered
-                  </h3>
-                  <ul className="space-y-2.5">
-                    {event.topics.map((t, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-2 text-xs sm:text-sm font-bold text-[#445668]"
-                      >
-                        <CheckCircle2
-                          size={16}
-                          className="text-[#399aef] mt-0.5 shrink-0"
-                        />
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
+              {/* Topic Details Section (ClassFlow Style) */}
+              <div className="space-y-3">
+                <h3 className="text-xxs font-black text-[#617789] uppercase tracking-[0.15em] flex items-center gap-2">
+                  <MessageSquare size={14} className="text-[#617789]" /> Topic
+                  Details
+                </h3>
+                <div
+                  className="text-sm sm:text-2sm leading-relaxed text-gray-700 italic p-4 rounded-lg border-l-2 border-accent-red/30"
+                  style={{ borderLeftColor: `${color}50` }}
+                >
+                  {event.topics && event.topics.length > 0
+                    ? event.topics + "."
+                    : "No specific details provided for this event."}
                 </div>
-              )}
+              </div>
 
               {/* Materials */}
               {event.materials && (

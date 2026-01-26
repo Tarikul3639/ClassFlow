@@ -105,69 +105,12 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
               Topics
             </label>
 
-            {/* Main Container: Overflows handled with flex-wrap */}
-            <div className="w-full flex flex-wrap items-center gap-2 p-3 lg:p-4 rounded-xl lg:rounded-2xl bg-[#f8fafc] border border-[#dbe1e6] min-h-14 focus-within:border-[#399aef] focus-within:ring-1 focus-within:ring-[#399aef]/10 transition-all">
-              {/* Topic Chips */}
-              {form.topics?.map((topic: string, i: number) => (
-                <div
-                  key={i}
-                  className="group flex items-center max-w-full bg-white border border-[#dbe1e6] rounded-lg px-2.5 py-1.5 shadow-sm hover:border-[#399aef]/30 transition-all"
-                >
-                  {/* Text Area: break-all mobile-e boro text ke niche pathabe */}
-                  <span className="text-[11px] sm:text-xxxs lg:text-xxs font-bold text-[#111518] uppercase tracking-tight break-all leading-tight">
-                    {topic}
-                  </span>
-
-                  {/* Delete Icon */}
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm({
-                        ...form,
-                        topics: form.topics?.filter(
-                          (_: string, idx: number) => idx !== i,
-                        ),
-                      })
-                    }
-                    className="ml-2 p-0.5 rounded-md text-[#617789] hover:bg-red-50 hover:text-red-500 transition-colors shrink-0"
-                  >
-                    <X size={12} strokeWidth={3} />
-                  </button>
-                </div>
-              ))}
-
-
-              {/* topic array remove kore text add korte hobe */}
-
-              {/* Inline Input Field */}
-              <input
-                type="text"
-                placeholder={"Add topics..."}
-                className="flex-1 min-w-30 bg-transparent border-none outline-none text-xxsm font-semibold py-1 placeholder:text-[#94a3b8] focus:ring-0"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    if (e.shiftKey) {
-                      // Shift+Enter → newline, allow default behavior
-                      return;
-                    }
-                    // Enter without shift → add topic
-                    e.preventDefault();
-                    const val = e.currentTarget.value.trim();
-                    if (val && !form.topics?.includes(val)) {
-                      setForm({
-                        ...form,
-                        topics: [...(form.topics || []), val],
-                      });
-                    }
-                    e.currentTarget.value = "";
-                  }
-                }}
-              />
-            </div>
-
-            <p className="text-xxs text-[#94a3b8] font-medium italic">
-              Press Enter to add a new topic.
-            </p>
+            <textarea
+              value={form.topics}
+              onChange={(e) => setForm({ ...form, topics: e.target.value })}
+              className="form-textarea flex w-full rounded-lg text-[#111518] border border-[#dbe1e6] bg-white min-h-40 p-4 text-base font-normal focus:ring-2 focus:ring-primary/20 focus:outline-primary/50 resize-none"
+              placeholder="Enter detailed topics or instructions for students here..."
+            />
           </div>
         </div>
       </div>

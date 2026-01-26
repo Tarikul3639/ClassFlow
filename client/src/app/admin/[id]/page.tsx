@@ -21,7 +21,7 @@ export default function Page() {
     date: "",
     startAt: "",
     location: "",
-    topics: [],
+    topics: "",
     materials: [],
     endAt: "",
     isCompleted: false,

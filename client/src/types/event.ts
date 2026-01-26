@@ -33,7 +33,7 @@ export interface IEvent {
 
   location?: string;
 
-  topics?: string[];
+  topics?: string;
   materials?: IMaterial[];
 
   isCompleted: boolean;
