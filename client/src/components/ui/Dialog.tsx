@@ -64,7 +64,7 @@ export const Dialog = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-100 bg-[#111518]/10 backdrop-blur-md"
+            className="fixed top-0 left-0 w-screen h-screen z-100 bg-[#111518]/10 backdrop-blur-md"
           />
 
           {/* Dialog Container */}
@@ -90,7 +90,7 @@ export const Dialog = ({
                   <h3 className="text-sm sm:text-2sm font-black text-[#111518] uppercase tracking-[0.08em]">
                     {title}
                   </h3>
-                  <p className="text-xs font-bold text-[#617789] leading-relaxed tracking-wide px-3 opacity-80">
+                  <p className="text-xxsm text-[#617789] leading-relaxed tracking-wide px-3 opacity-80">
                     {description}
                   </p>
                 </div>
