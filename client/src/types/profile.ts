@@ -32,6 +32,7 @@ export interface IStudentProfile extends IBaseProfile {
   
   // Additional profile fields
   phoneNumber?: string;
+  password?: string;
   dateOfBirth?: string;
   gender?: string;
   address?: string;
