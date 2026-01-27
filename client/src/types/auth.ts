@@ -1,24 +1,33 @@
 // =====================
-// AUTH & USER
+// AUTH & USER (PRODUCTION READY)
 // =====================
+
 import { IClassSectionSummary } from "./academic";
 
-/* ---------- Request Status ---------- */
+/* =======================
+   REQUEST STATUS (GLOBAL)
+======================= */
+
 export interface IRequestStatus {
   [key: string]: {
     fetching?: boolean;
     creating?: boolean;
-    adding?: boolean;
-    deleting?: boolean;
     updating?: boolean;
+    deleting?: boolean;
     error?: string | null;
   };
 }
 
-/* ---------- User Roles ---------- */
+/* =======================
+   USER ROLES
+======================= */
+
 export type UserRole = "student" | "admin";
 
-/* ---------- Base User ---------- */
+/* =======================
+   BASE USER
+======================= */
+
 export interface IBaseUser {
   _id: string;
   name: string;
@@ -27,42 +36,108 @@ export interface IBaseUser {
   avatarUrl?: string;
 }
 
-/* ---------- Student ---------- */
+/* =======================
+   STUDENT USER
+======================= */
+
 export interface IStudentProfile extends IBaseUser {
   role: "student";
-  studentId: string;
 
-  // 🔑 reference
+  studentId: string;
+  department: string;
+
+  // backend reference
   classSectionId: string;
 
-  // UI display only (optional)
+  // frontend display only
   classInfo?: IClassSectionSummary;
 }
 
-/* ---------- Admin ---------- */
+/* =======================
+   ADMIN USER
+======================= */
+
 export interface IAdminProfile extends IBaseUser {
   role: "admin";
   adminId: string;
 }
 
-/* ---------- Union ---------- */
+/* =======================
+   AUTH USER (UNION)
+======================= */
+
 export type AuthUser = IStudentProfile | IAdminProfile;
 
-/* ---------- Auth State ---------- */
+/* =======================
+   AUTH STATE (REDUX)
+======================= */
+
 export interface AuthState {
   user: AuthUser | null;
   token: string | null;
   isAuthenticated: boolean;
+
+  // signIn | signUp | logout | refresh
   requestStatus: IRequestStatus;
 }
 
-/* ---------- API ---------- */
-export interface LoginPayload {
+/* =======================
+   AUTH PAYLOADS
+======================= */
+
+/* ---------- Sign In ---------- */
+export interface SignInPayload {
   email: string;
   password: string;
 }
 
-export interface LoginResponse {
+/* ---------- Sign Up (Base) ---------- */
+interface IBaseSignUpPayload {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
+/* ---------- Student Sign Up ---------- */
+export interface StudentSignUpPayload extends IBaseSignUpPayload {
+  role: "student";
+  studentId: string;
+  department: string;
+  classSectionId: string;
+}
+
+/* ---------- Admin Sign Up ---------- */
+export interface AdminSignUpPayload extends IBaseSignUpPayload {
+  role: "admin";
+  adminId: string;
+}
+
+/* ---------- Union ---------- */
+export type SignUpPayload =
+  | StudentSignUpPayload
+  | AdminSignUpPayload;
+
+/* =======================
+   AUTH RESPONSE (API)
+======================= */
+
+export interface AuthResponse {
   token: string;
   user: AuthUser;
+}
+
+// =======================
+// SIGN UP FORM STATE
+// =======================
+
+export interface SignUpFormState {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  studentId?: string;
+  adminId?: string;
+  department?: string;
+  classSectionId?: string;
 }

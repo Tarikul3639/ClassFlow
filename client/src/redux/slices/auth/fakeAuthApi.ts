@@ -1,5 +1,5 @@
 // src/store/auth/fakeAuthApi.ts
-import { AuthUser, IStudentProfile, IAdminProfile, LoginPayload } from "@/types/auth";
+import { AuthUser, IStudentProfile, IAdminProfile, SignInPayload } from "@/types/auth";
 
 interface SignUpPayload {
   name: string;
@@ -10,7 +10,7 @@ interface SignUpPayload {
   classSectionId?: string;
 }
 
-export const fakeSignInApi = async (data: LoginPayload): Promise<{ token: string; user: AuthUser }> => {
+export const fakeSignInApi = async (data: SignInPayload): Promise<{ token: string; user: AuthUser }> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (data.password !== "123456") return reject(new Error("Invalid password"));

@@ -16,8 +16,11 @@ import Link from "next/link";
 import { signInThunk } from "@/redux/slices/auth/thunks/auth.thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { SignInPayload } from "@/types/auth";
 
 const SignInPage: React.FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(
     (state) => state.auth?.requestStatus?.signIn?.fetching,
@@ -27,19 +30,23 @@ const SignInPage: React.FC = () => {
   );
 
   const [showPassword, setShowPassword] = useState(false); // Toggle State
-  const [formData, setFormData] = useState({
-    identifier: "",
+  const [formData, setFormData] = useState<SignInPayload>({
+    email: "",
     password: "",
   });
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(
-      signInThunk({
-        email: formData.identifier,
-        password: formData.password,
-      }),
-    );
+    dispatch(signInThunk(formData))
+      .unwrap()
+      .then((e) => {
+        if (e.user.role === "student") {
+          router.push("/student");
+        } else if (e.user.role === "admin") {
+          router.push("/admin");
+        }
+      })
+      .catch(() => {});
   };
 
   return (
@@ -117,7 +124,7 @@ const SignInPage: React.FC = () => {
                   placeholder="name@example.com"
                   className="w-full h-11 sm:h-12 pl-10 sm:pl-11 pr-4 rounded-xl border border-[#dbe1e6] bg-white text-xsm sm:text-[14px] text-black focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-gray-400"
                   onChange={(e) =>
-                    setFormData({ ...formData, identifier: e.target.value })
+                    setFormData({ ...formData, email: e.target.value })
                   }
                 />
               </div>

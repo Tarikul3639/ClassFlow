@@ -1,11 +1,11 @@
 // src/store/auth/auth.thunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { LoginPayload } from "@/types/auth";
+import { SignInPayload } from "@/types/auth";
 import { fakeSignInApi, fakeSignUpApi } from "../fakeAuthApi";
 
 export const signInThunk = createAsyncThunk(
   "auth/sign-in",
-  async (data: LoginPayload, { rejectWithValue }) => {
+  async (data: SignInPayload, { rejectWithValue }) => {
     try {
       const res = await fakeSignInApi(data);
       return res;
@@ -21,6 +21,8 @@ export interface SignUpPayload {
   password: string;
   role: "student" | "admin";
   studentId?: string;
+  adminId?: string;
+  department?: string;
   classSectionId?: string;
 }
 
