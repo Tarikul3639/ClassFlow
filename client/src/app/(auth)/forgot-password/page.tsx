@@ -27,7 +27,7 @@ const ForgotPasswordPage: React.FC = () => {
             <h1 className="text-[#111518] text-2xl font-bold pb-2">
               Reset Password
             </h1>
-            <p className="text-[#617789] text-[13px] font-medium leading-relaxed">
+            <p className="text-[#617789] text-xsm font-medium leading-relaxed">
               Enter your email address below and we'll send you a link to reset
               your password.
             </p>
@@ -41,7 +41,7 @@ const ForgotPasswordPage: React.FC = () => {
             className="space-y-6 text-left"
           >
             <div className="space-y-2">
-              <label className="text-[#111518] text-[13px] font-bold ml-1">
+              <label className="text-[#111518] text-xsm font-bold ml-1">
                 Email Address
               </label>
               <div className="relative group">
@@ -103,7 +103,7 @@ const ForgotPasswordSuccess: React.FC<{ email: string }> = ({ email }) => {
             <h1 className="text-[#111518] text-2xl font-bold pb-2">
               Check your Email
             </h1>
-            <p className="text-[#617789] text-[13px] font-medium leading-relaxed">
+            <p className="text-[#617789] text-xsm font-medium leading-relaxed">
               We have sent a password recovery link to <br />
               <span className="text-[#111518] font-bold">
                 {email || "your email"}
@@ -120,12 +120,12 @@ const ForgotPasswordSuccess: React.FC<{ email: string }> = ({ email }) => {
             </Link>
 
             <div className="mt-4 flex flex-col items-center gap-2">
-              <p className="text-[#617789] text-[12px] font-medium">
+              <p className="text-[#617789] text-xxsm font-medium">
                 Didn't receive the email?
               </p>
               <button
                 type="button"
-                className="flex items-center gap-1.5 text-[#399aef] text-[12px] font-bold hover:text-[#3289d6] transition-colors group cursor-pointer"
+                className="flex items-center gap-1.5 text-[#399aef] text-xxsm font-bold hover:text-[#3289d6] transition-colors group cursor-pointer"
               >
                 <RefreshCcw
                   size={14}

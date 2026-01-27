@@ -82,7 +82,10 @@ const Navbar: React.FC = () => {
             <div className="h-6 w-px bg-[#dbe1e6] hidden md:block"></div>
 
             {/* Notification Bell */}
-            <button className="p-2 rounded-xl hover:bg-gray-100 relative transition-colors text-[#617789] group">
+            <button
+              onClick={() => setIsOpen(true)}
+              className="p-2 rounded-xl hover:bg-gray-100 relative transition-colors text-[#617789] group"
+            >
               <Bell
                 size={18}
                 className="md:w-5 md:h-5 group-hover:rotate-12 transition-transform"
