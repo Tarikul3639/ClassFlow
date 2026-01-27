@@ -3,9 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 
-import Navbar from "./_components/Navbar";
 import EventCard from "./_components/EventCard";
-import Footer from "./_components/Footer";
 import StudentViewSkeleton from "./_components/StudentViewSkeleton";
 
 import { IEvent } from "@/types/event";
@@ -60,20 +58,18 @@ const Page = () => {
   if (isLoading && events.length === 0)
     return (
       <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
-        <Navbar />
         <div className="h-14 sm:h-24" />
 
         <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
           <StudentViewSkeleton />
         </main>
-        <Footer />
       </div>
     );
 
   return (
     <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
-      <Navbar />
-      <div className="h-14 sm:h-24" />
+      
+      <div className="h-16" />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
         {/* Header */}
@@ -169,8 +165,6 @@ const Page = () => {
           </>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 };

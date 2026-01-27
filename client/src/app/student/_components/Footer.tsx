@@ -3,7 +3,7 @@ import React from "react";
 import { GraduationCap, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
-const Footer = () => {
+export const StudentFooter = () => {
   return (
     <footer className="py-8 text-center border-t border-[#dbe1e6] bg-white">
       <div className="max-w-4xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
@@ -61,5 +61,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-export default Footer;

@@ -8,7 +8,7 @@ interface ProfileEditModalProps {
   onClose: () => void;
   currentData: {
     name: string;
-    avatar: string;
+    avatarUrl?: string;
   };
 }
 
@@ -18,7 +18,7 @@ const ProfileEditModal = ({
   currentData,
 }: ProfileEditModalProps) => {
   if (!isOpen) return null;
-  const [preview, setPreview] = useState(currentData.avatar);
+  const [preview, setPreview] = useState(currentData.avatarUrl);
   const [name, setName] = useState(currentData.name);
   const [loading, setLoading] = useState(false);
 
@@ -54,7 +54,7 @@ const ProfileEditModal = ({
             <div className="w-6 h-6 rounded-md bg-[#399aef] flex items-center justify-center text-white">
               <User size={14} />
             </div>
-            <h3 className="text-[12px] font-black uppercase tracking-widest text-gray-500">
+            <h3 className="text-xxsm font-black uppercase tracking-widest text-gray-500">
               Edit Profile
             </h3>
           </div>
@@ -74,7 +74,7 @@ const ProfileEditModal = ({
                 <img
                   src={
                     preview ||
-                    currentData.avatar ||
+                    currentData.avatarUrl ||
                     "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
                   }
                   alt="Preview"

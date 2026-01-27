@@ -25,7 +25,7 @@ const AccountField = ({
           {label}
         </span>
         <p
-          className={`text-[#111518] font-bold truncate ${isPassword ? "tracking-[0.2em] text-xxs md:text-xs" : "text-[12px] md:text-[13px]"}`}
+          className={`text-[#111518] font-bold truncate ${isPassword ? "tracking-[0.2em] text-xxs md:text-xs" : "text-xxsm md:text-xsm"}`}
         >
           {value}
         </p>

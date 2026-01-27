@@ -22,7 +22,7 @@ const EditModal = ({ field, onClose }: EditModalProps) => (
       className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden"
     >
       <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-        <h3 className="text-[12px] font-black uppercase tracking-widest text-gray-500">
+        <h3 className="text-xxsm font-black uppercase tracking-widest text-gray-500">
           Edit {field.label}
         </h3>
         <button
@@ -40,7 +40,7 @@ const EditModal = ({ field, onClose }: EditModalProps) => (
           <input
             autoFocus
             defaultValue={field.value}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-[#dbe1e6] rounded-xl text-[13px] font-bold focus:outline-none focus:ring-2 focus:ring-[#399aef]/20 focus:border-[#399aef] transition-all"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-[#dbe1e6] rounded-xl text-xsm font-bold focus:outline-none focus:ring-2 focus:ring-[#399aef]/20 focus:border-[#399aef] transition-all"
           />
         </div>
         <div className="flex gap-2 pt-2">

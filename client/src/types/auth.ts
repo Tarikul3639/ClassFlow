@@ -22,7 +22,7 @@ export interface IRequestStatus {
    USER ROLES
 ======================= */
 
-export type UserRole = "student" | "admin";
+export type UserRole = "student" | "admin" | "co_admin";
 
 /* =======================
    BASE USER

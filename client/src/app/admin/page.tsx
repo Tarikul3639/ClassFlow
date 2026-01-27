@@ -16,7 +16,7 @@ import { fetchEventsFromServer } from "@/redux/slices/admin/events/thunks/fetchE
 const Page = () => {
   const [activeCategory, setActiveCategory] = useState("All Events");
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // Fetch events from Redux store
   const events = useAppSelector((state) => state.admin.events);
   const status = useAppSelector((state) => state.admin.status["all"]);
