@@ -70,7 +70,12 @@ export interface IAdminProfile extends IBaseProfile {
 
   // optional: user management logs (for frontend convenience)
   managedStudents?: {
-    studentId: string;
+    _id: string;
+    studentId?: string;
+    adminId?: string;
+    name: string;
+    email: string;
+    avatarUrl?: string;
     blocked: boolean;
     role: "student" | "co_admin";
   }[];
