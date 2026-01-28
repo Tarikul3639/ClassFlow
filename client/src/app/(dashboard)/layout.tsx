@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import Navbar from "./_components/Navbar";
-import { AdminFooter } from "./_components/AdminFooter";
+import Navbar from "@/components/Navbar/Navbar";
 export default function LayoutDashboard({
   children,
 }: {
@@ -12,9 +11,6 @@ export default function LayoutDashboard({
       <Navbar />
       {children}
       {/* Add it at the very bottom of the main container or inside the main wrapper */}
-      <div className="w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl mx-auto">
-        <AdminFooter studentRoute="/student" />
-      </div>
     </div>
   );
 }

@@ -8,6 +8,7 @@ const initialState: AuthState = {
   token: null,
   isAuthenticated: false,
   requestStatus: {},
+  viewMode: "student",
 };
 
 const authSlice = createSlice({
@@ -18,7 +19,11 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+      state.viewMode = "student";
       if (typeof window !== "undefined") localStorage.removeItem("token");
+    },
+    setViewMode(state, action: PayloadAction<"admin" | "student">) {
+      state.viewMode = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -32,6 +37,11 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        state.viewMode =
+          action.payload.user.role === "admin" ||
+          action.payload.user.role === "co_admin"
+            ? "admin"
+            : "student";
         state.requestStatus["signIn"] = { fetching: false, error: null };
         if (typeof window !== "undefined")
           localStorage.setItem("token", action.payload.token);
@@ -57,6 +67,11 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        state.viewMode =
+          action.payload.user.role === "admin" ||
+          action.payload.user.role === "co_admin"
+            ? "admin"
+            : "student";
         state.requestStatus["signUp"] = { fetching: false, error: null };
         if (typeof window !== "undefined")
           localStorage.setItem("token", action.payload.token);
@@ -74,5 +89,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setViewMode } = authSlice.actions;
 export default authSlice.reducer;

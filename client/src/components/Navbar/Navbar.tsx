@@ -3,15 +3,26 @@ import React, { useEffect, useState } from "react";
 import { CloudSun, Bell, LayoutDashboard } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Dialog } from "@/components/ui/Dialog";
+import NavbarSkeleton from "./NavbarSkeleton";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, viewMode } = useAppSelector((state) => state.auth);
+  const loading = useAppSelector(
+    (state) => state.auth.requestStatus.signIn?.fetching,
+  );
   const pathname = usePathname();
   const [weather, setWeather] = useState<{ temp: number; desc: string } | null>(
     null,
   );
+
+  const dashboardHref =
+    user && (user.role === "admin" || user.role === "co_admin")
+      ? viewMode // admin can toggle
+      : "student"; // student always
 
   useEffect(() => {
     // Demo data for weather since real API needs a key
@@ -19,6 +30,11 @@ const Navbar: React.FC = () => {
   }, []);
 
   const isActive = (path: string) => pathname === path;
+
+  // Show skeleton while loading
+  if (loading) {
+    return <NavbarSkeleton />;
+  }
 
   return (
     <>
@@ -31,11 +47,11 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-2 md:gap-4">
             {/* Dashboard Link - Optimized Glass Pill Style */}
             <Link
-              href="/student"
+              href={`/${dashboardHref}`}
               className={`
     flex items-center gap-2.5 px-4 py-2 rounded-full transition-all duration-500 group relative
     ${
-      isActive("/student")
+      isActive(`/${dashboardHref}`)
         ? "bg-linear-to-r from-[#399aef]/10 to-[#399aef]/5 text-[#399aef] shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
         : "text-[#617789] hover:bg-linear-to-r hover:from-[#399aef]/10 hover:to-[#399aef]/5 hover:text-[#399aef] hover:shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
     }
@@ -43,9 +59,9 @@ const Navbar: React.FC = () => {
             >
               <LayoutDashboard
                 size={17}
-                strokeWidth={isActive("/student") ? 2.5 : 2}
+                strokeWidth={isActive(`/${dashboardHref}`) ? 2.5 : 2}
                 className={
-                  isActive("/student")
+                  isActive(`/${dashboardHref}`)
                     ? "animate-pulse-subtle"
                     : "opacity-70 group-hover:opacity-100"
                 }
@@ -54,7 +70,7 @@ const Navbar: React.FC = () => {
               <span
                 className={`
     hidden sm:flex text-xxs font-black uppercase tracking-[0.12em] transition-opacity
-    ${isActive("/student") ? "opacity-100" : "opacity-70 group-hover:opacity-100"}
+    ${isActive("/admin") ? "opacity-100" : "opacity-70 group-hover:opacity-100"}
   `}
               >
                 Dashboard
@@ -95,9 +111,9 @@ const Navbar: React.FC = () => {
 
             {/* Profile Avatar Link */}
             <Link
-              href="/student/profile"
+              href="/profile"
               className={`relative w-8 h-8 md:w-9 md:h-9 rounded-full transition-all shrink-0 border-2 ${
-                isActive("/student/profile")
+                isActive("/profile")
                   ? "ring-2 ring-[#399aef] ring-offset-2 border-[#399aef] scale-105"
                   : "border-[#dbe1e6] hover:border-[#399aef] hover:scale-105"
               }`}

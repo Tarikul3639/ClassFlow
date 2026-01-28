@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import Navbar from "./_components/Navbar";
 import { AdminHeader } from "./_components/AdminHeader";
 import { AdminEventItem } from "./_components/AdminEventItem";
 import { AdminEventCompletedItem } from "./_components/AdminEventCompletedItem";
@@ -85,7 +84,6 @@ const Page = () => {
 
   return (
     <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
-      <Navbar />
       <div className="h-16" />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">

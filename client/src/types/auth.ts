@@ -1,8 +1,5 @@
-// =====================
-// AUTH & USER (PRODUCTION READY)
-// =====================
 
-import { IClassSectionSummary } from "./academic";
+import { IUserProfile } from "./profile";
 
 /* =======================
    REQUEST STATUS (GLOBAL)
@@ -25,60 +22,18 @@ export interface IRequestStatus {
 export type UserRole = "student" | "admin" | "co_admin";
 
 /* =======================
-   BASE USER
-======================= */
-
-export interface IBaseUser {
-  _id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  avatarUrl?: string;
-}
-
-/* =======================
-   STUDENT USER
-======================= */
-
-export interface IStudentProfile extends IBaseUser {
-  role: "student";
-
-  studentId: string;
-  department: string;
-
-  // backend reference
-  classSectionId: string;
-
-  // frontend display only
-  classInfo?: IClassSectionSummary;
-}
-
-/* =======================
-   ADMIN USER
-======================= */
-
-export interface IAdminProfile extends IBaseUser {
-  role: "admin";
-  adminId: string;
-}
-
-/* =======================
-   AUTH USER (UNION)
-======================= */
-
-export type AuthUser = IStudentProfile | IAdminProfile;
-
-/* =======================
    AUTH STATE (REDUX)
 ======================= */
 
 export interface AuthState {
-  user: AuthUser | null;
+  user: IUserProfile | null;
   token: string | null;
   isAuthenticated: boolean;
 
   // signIn | signUp | logout | refresh
   requestStatus: IRequestStatus;
+
+  viewMode: "admin" | "student"
 }
 
 /* =======================
@@ -124,7 +79,7 @@ export type SignUpPayload =
 
 export interface AuthResponse {
   token: string;
-  user: AuthUser;
+  user: IUserProfile;
 }
 
 // =======================

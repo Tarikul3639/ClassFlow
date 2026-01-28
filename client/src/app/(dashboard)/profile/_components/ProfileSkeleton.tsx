@@ -1,7 +1,8 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { UserRole } from "@/types/auth";
 
 interface ProfileSkeletonProps {
-  type: "student" | "admin";
+  type: UserRole;
 }
 
 const ProfileSkeleton = ({ type }: ProfileSkeletonProps) => {

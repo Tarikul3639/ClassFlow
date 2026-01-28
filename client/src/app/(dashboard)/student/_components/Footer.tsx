@@ -1,9 +1,16 @@
 // components/Footer.tsx
 import React from "react";
 import { GraduationCap, ShieldCheck } from "lucide-react";
-import Link from "next/link";
+import { useAppDispatch } from "@/redux/hooks";
+import { setViewMode } from "@/redux/slices/auth/slice";
 
 export const StudentFooter = () => {
+  const dispatch = useAppDispatch();
+
+  const handleChangeViewMode = (mode: "admin" | "student") => {
+    // Dispatch action to change view mode
+    dispatch(setViewMode(mode));
+  }
   return (
     <footer className="py-8 text-center border-t border-[#dbe1e6] bg-white">
       <div className="max-w-4xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
@@ -41,8 +48,8 @@ export const StudentFooter = () => {
         </div>
 
         {/* Admin Switcher - Industrial Style */}
-        <Link href="/admin" className="group">
-          <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-[#f8fafc] border border-[#dbe1e6] group-hover:border-[#399aef] transition-all active:scale-95">
+        <button onClick={() => handleChangeViewMode("admin")} className="group">
+          <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-[#f8fafc] border border-[#dbe1e6] group-hover:border-[#399aef] transition-all active:scale-95 cursor-pointer">
             <div className="flex flex-col items-end">
               <span className="text-xxxxs font-black text-[#399aef] uppercase tracking-tighter leading-none">
                 Master Control
@@ -55,7 +62,7 @@ export const StudentFooter = () => {
               <ShieldCheck size={16} strokeWidth={2.5} />
             </div>
           </div>
-        </Link>
+        </button>
 
       </div>
     </footer>

@@ -1,15 +1,16 @@
 // _components/AdminFooter.tsx
 import React from "react";
 import { ArrowLeftRight, User } from "lucide-react";
-import Link from "next/link";
+import { useAppDispatch } from "@/redux/hooks";
+import { setViewMode } from "@/redux/slices/auth/slice";
 
-interface AdminFooterProps {
-  studentRoute?: string;
-}
+export const AdminFooter: React.FC = () => {
+  const dispatch = useAppDispatch();
 
-export const AdminFooter: React.FC<AdminFooterProps> = ({
-  studentRoute = "/student",
-}) => {
+  const handleChangeViewMode = (mode: "admin" | "student") => {
+    // Dispatch action to change view mode
+    dispatch(setViewMode(mode));
+  };
   return (
     <footer className="py-8 border-t border-[#dbe1e6]/60 flex flex-col sm:flex-row gap-6 items-center justify-between">
       {/* Developer Branding Section */}
@@ -34,7 +35,10 @@ export const AdminFooter: React.FC<AdminFooterProps> = ({
       </div>
 
       {/* Modern Switcher Button */}
-      <Link href={studentRoute} className="relative group">
+      <button
+        onClick={() => handleChangeViewMode("student")}
+        className="relative group"
+      >
         <div className="flex items-center gap-3 pl-2 pr-5 py-2 rounded-2xl bg-white/50 border border-[#efe9e9] group-hover:border-[#399aef] transition-all duration-300 shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:shadow-[0_8px_20px_rgba(57,154,239,0.1)] group-active:scale-95 overflow-hidden">
           {/* Avatar Icon */}
           <div className="w-8 h-8 rounded-lg bg-[#f8fafc] group-hover:bg-[#399aef] flex items-center justify-center text-[#617789] group-hover:text-white transition-all duration-500 group-hover:rotate-12">
@@ -61,7 +65,7 @@ export const AdminFooter: React.FC<AdminFooterProps> = ({
 
         {/* Outer Glow Effect */}
         <div className="absolute inset-0 rounded-2xl bg-[#399aef] opacity-0 group-hover:opacity-[0.03] transition-opacity pointer-events-none" />
-      </Link>
+      </button>
     </footer>
   );
 };
