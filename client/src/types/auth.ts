@@ -32,8 +32,6 @@ export interface AuthState {
 
   // signIn | signUp | logout | refresh
   requestStatus: IRequestStatus;
-
-  viewMode: "admin" | "student"
 }
 
 /* =======================

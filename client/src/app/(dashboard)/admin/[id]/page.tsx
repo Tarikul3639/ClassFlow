@@ -25,6 +25,9 @@ export default function Page() {
     materials: [] as IMaterial[],
     endAt: "",
     isCompleted: false,
+    createdBy: { _id: "", name: "", email: "" },
+    createdAt: "",
+    updatedAt: "",
   });
 
   if (!id) {

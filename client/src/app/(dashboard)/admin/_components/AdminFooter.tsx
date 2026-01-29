@@ -2,14 +2,14 @@
 import React from "react";
 import { ArrowLeftRight, User } from "lucide-react";
 import { useAppDispatch } from "@/redux/hooks";
-import { setViewMode } from "@/redux/slices/auth/slice";
+// import { setViewMode } from "@/redux/slices/auth/slice";
 
 export const AdminFooter: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleChangeViewMode = (mode: "admin" | "student") => {
     // Dispatch action to change view mode
-    dispatch(setViewMode(mode));
+    // dispatch(setViewMode(mode));
   };
   return (
     <footer className="py-8 border-t border-[#dbe1e6]/60 flex flex-col sm:flex-row gap-6 items-center justify-between">

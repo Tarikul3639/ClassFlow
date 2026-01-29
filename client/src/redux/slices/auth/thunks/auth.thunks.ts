@@ -1,39 +1,47 @@
-// src/store/auth/auth.thunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { SignInPayload } from "@/types/auth";
-import { fakeSignInApi, fakeSignUpApi } from "../fakeAuthApi";
+import { authApi, SignInPayload, SignUpPayload } from "@/lib/api/auth.api";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
+/**
+ * Sign in user
+ */
 export const signInThunk = createAsyncThunk(
   "auth/sign-in",
   async (data: SignInPayload, { rejectWithValue }) => {
     try {
-      const res = await fakeSignInApi(data);
-      return res;
-    } catch (err: any) {
-      return rejectWithValue(err.message || "Sign in failed");
+      return await authApi.signIn(data);
+    } catch (error) {
+      return rejectWithValue(extractErrorMessage(error, "Sign in failed"));
     }
-  }
+  },
 );
 
-export interface SignUpPayload {
-  name: string;
-  email: string;
-  password: string;
-  role: "student" | "admin";
-  studentId?: string;
-  adminId?: string;
-  department?: string;
-  classSectionId?: string;
-}
-
+/**
+ * Sign up new user
+ */
 export const signUpThunk = createAsyncThunk(
   "auth/sign-up",
   async (data: SignUpPayload, { rejectWithValue }) => {
     try {
-      const res = await fakeSignUpApi(data);
-      return res;
-    } catch (err: any) {
-      return rejectWithValue(err.message || "Sign up failed");
+      return await authApi.signUp(data);
+    } catch (error) {
+      return rejectWithValue(extractErrorMessage(error, "Sign up failed"));
     }
-  }
+  },
+);
+
+/**
+ * Get current user profile
+ */
+export const getProfileThunk = createAsyncThunk(
+  "auth/get-profile",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await authApi.getProfile();
+    } catch (error) {
+      return rejectWithValue(
+        extractErrorMessage(error, "Failed to fetch profile"),
+      );
+    }
+  },
 );

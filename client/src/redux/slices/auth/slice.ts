@@ -1,14 +1,17 @@
-// src/store/auth/auth.slice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "@/types/auth";
-import { signInThunk, signUpThunk } from "./thunks//auth.thunks";
+import {
+  signInThunk,
+  signUpThunk,
+  getProfileThunk,
+} from "./thunks/auth.thunks";
+import { setAuthToken } from "@/lib/api/axios";
 
 const initialState: AuthState = {
   user: null,
   token: null,
   isAuthenticated: false,
   requestStatus: {},
-  viewMode: "student",
 };
 
 const authSlice = createSlice({
@@ -19,15 +22,15 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-      state.viewMode = "student";
-      if (typeof window !== "undefined") localStorage.removeItem("token");
-    },
-    setViewMode(state, action: PayloadAction<"admin" | "student">) {
-      state.viewMode = action.payload;
+
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+        setAuthToken(null);
+      }
     },
   },
   extraReducers: (builder) => {
-    // ---------- SIGN IN ----------
+    // Sign In
     builder.addCase(signInThunk.pending, (state) => {
       state.requestStatus["signIn"] = { fetching: true, error: null };
     });
@@ -37,14 +40,12 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
-        state.viewMode =
-          action.payload.user.role === "admin" ||
-          action.payload.user.role === "co_admin"
-            ? "admin"
-            : "student";
         state.requestStatus["signIn"] = { fetching: false, error: null };
-        if (typeof window !== "undefined")
+
+        if (typeof window !== "undefined") {
           localStorage.setItem("token", action.payload.token);
+          setAuthToken(action.payload.token);
+        }
       },
     );
     builder.addCase(
@@ -57,7 +58,7 @@ const authSlice = createSlice({
       },
     );
 
-    // ---------- SIGN UP ----------
+    // Sign Up
     builder.addCase(signUpThunk.pending, (state) => {
       state.requestStatus["signUp"] = { fetching: true, error: null };
     });
@@ -67,14 +68,12 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
-        state.viewMode =
-          action.payload.user.role === "admin" ||
-          action.payload.user.role === "co_admin"
-            ? "admin"
-            : "student";
         state.requestStatus["signUp"] = { fetching: false, error: null };
-        if (typeof window !== "undefined")
+
+        if (typeof window !== "undefined") {
           localStorage.setItem("token", action.payload.token);
+          setAuthToken(action.payload.token);
+        }
       },
     );
     builder.addCase(
@@ -86,8 +85,37 @@ const authSlice = createSlice({
         };
       },
     );
+
+    // Get Profile
+    builder.addCase(getProfileThunk.pending, (state) => {
+      state.requestStatus["getProfile"] = { fetching: true, error: null };
+    });
+    builder.addCase(
+      getProfileThunk.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.user = action.payload;
+        state.isAuthenticated = true;
+        state.requestStatus["getProfile"] = { fetching: false, error: null };
+      },
+    );
+    builder.addCase(
+      getProfileThunk.rejected,
+      (state, action: PayloadAction<any>) => {
+        state.user = null;
+        state.isAuthenticated = false;
+        state.requestStatus["getProfile"] = {
+          fetching: false,
+          error: action.payload || "Failed to fetch profile",
+        };
+
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          setAuthToken(null);
+        }
+      },
+    );
   },
 });
 
-export const { logout, setViewMode } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

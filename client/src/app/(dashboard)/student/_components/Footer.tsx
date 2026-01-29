@@ -2,14 +2,14 @@
 import React from "react";
 import { GraduationCap, ShieldCheck } from "lucide-react";
 import { useAppDispatch } from "@/redux/hooks";
-import { setViewMode } from "@/redux/slices/auth/slice";
+// import { setViewMode } from "@/redux/slices/auth/slice";
 
 export const StudentFooter = () => {
   const dispatch = useAppDispatch();
 
   const handleChangeViewMode = (mode: "admin" | "student") => {
     // Dispatch action to change view mode
-    dispatch(setViewMode(mode));
+    // dispatch(setViewMode(mode));
   }
   return (
     <footer className="py-8 text-center border-t border-[#dbe1e6] bg-white">

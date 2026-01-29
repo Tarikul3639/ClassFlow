@@ -1,6 +1,6 @@
 // fetchEventsFromServer thunk
 
-import { ADMIN_EVENT } from "@/data/adminEvents";
+import { events as ADMIN_EVENT } from "@/data/events";
 import { IEvent } from "@/types/event";
 import { createAsyncThunk } from "@reduxjs/toolkit/react";
 
