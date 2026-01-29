@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Event, EventSchema } from './event.schema';
 
 export type ClassroomDocument = Classroom & Document;
 
@@ -20,13 +21,13 @@ export class ClassroomMember {
   role: ClassroomRole;
 
   @Prop({ default: false })
-  isBlocked: boolean; // 🆕 Block status for this classroom
+  isBlocked: boolean;
+
+  @Prop({ type: Types.ObjectId, ref: 'User' })
+  blockedBy?: Types.ObjectId;
 
   @Prop()
-  blockedBy?: Types.ObjectId; // 🆕 Who blocked this user
-
-  @Prop()
-  blockedAt?: Date; // 🆕 When user was blocked
+  blockedAt?: Date;
 
   @Prop({ default: Date.now })
   joinedAt: Date;
@@ -38,7 +39,7 @@ const ClassroomMemberSchema = SchemaFactory.createForClass(ClassroomMember);
 @Schema({ timestamps: true })
 export class Classroom {
   @Prop({ required: true, trim: true })
-  name?: string;
+  name: string;
 
   @Prop({ trim: true })
   description?: string;
@@ -56,20 +57,24 @@ export class Classroom {
   @Prop({ trim: true })
   section?: string;
 
-  // Join Code for inviting users
+  // Join Code
   @Prop({ required: true, unique: true, uppercase: true })
   joinCode: string;
 
   @Prop({ default: true })
   isJoinCodeActive: boolean;
 
-  // Creator/Owner of the classroom
+  // Creator
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   createdBy: Types.ObjectId;
 
-  // Members array with roles
+  // Members
   @Prop({ type: [ClassroomMemberSchema], default: [] })
   members: ClassroomMember[];
+
+  // 🆕 Events
+  @Prop({ type: [EventSchema], default: [] })
+  events: Event[];
 
   // Settings
   @Prop({ default: true })
@@ -89,7 +94,10 @@ export class Classroom {
   totalAdmins: number;
 
   @Prop({ default: 0 })
-  totalBlockedMembers: number; // 🆕 Track blocked members count
+  totalBlockedMembers: number;
+
+  @Prop({ default: 0 })
+  totalEvents: number; // 🆕
 
   createdAt: Date;
   updatedAt: Date;
@@ -97,46 +105,54 @@ export class Classroom {
 
 export const ClassroomSchema = SchemaFactory.createForClass(Classroom);
 
-// Indexes for better performance
-ClassroomSchema.index({ joinCode: 1 });
+// Indexes
+ClassroomSchema.index({ joinCode: 1 }, { unique: true });
 ClassroomSchema.index({ createdBy: 1 });
 ClassroomSchema.index({ 'members.userId': 1 });
-ClassroomSchema.index({ 'members.isBlocked': 1 }); // 🆕 Index for blocked users
+ClassroomSchema.index({ 'members.isBlocked': 1 });
 ClassroomSchema.index({ institute: 1, department: 1, intake: 1, section: 1 });
 ClassroomSchema.index({ isActive: 1, isArchived: 1 });
+ClassroomSchema.index({ 'events.date': 1 }); // 🆕
+ClassroomSchema.index({ 'events.startAt': 1 }); // 🆕
 
-// Virtual for admins only
+// Virtuals
 ClassroomSchema.virtual('admins').get(function (this: ClassroomDocument) {
   return this.members.filter(
     (m) => m.role === ClassroomRole.ADMIN || m.role === ClassroomRole.CO_ADMIN,
   );
 });
 
-// Virtual for regular members
 ClassroomSchema.virtual('regularMembers').get(function (this: ClassroomDocument) {
   return this.members.filter((m) => m.role === ClassroomRole.MEMBER);
 });
 
-// 🆕 Virtual for blocked members
 ClassroomSchema.virtual('blockedMembers').get(function (this: ClassroomDocument) {
   return this.members.filter((m) => m.isBlocked);
 });
 
-// 🆕 Virtual for active (non-blocked) members
 ClassroomSchema.virtual('activeMembers').get(function (this: ClassroomDocument) {
   return this.members.filter((m) => !m.isBlocked);
 });
 
-// Pre-save middleware to update member counts
+// 🆕 Upcoming events virtual
+ClassroomSchema.virtual('upcomingEvents').get(function (this: ClassroomDocument) {
+  const now = new Date().toISOString();
+  return this.events
+    .filter((e) => e.startAt >= now && !e.isCompleted)
+    .sort((a, b) => a.startAt.localeCompare(b.startAt));
+});
+
+// Pre-save middleware
 ClassroomSchema.pre('save', function (next: Function) {
   this.totalMembers = this.members.length;
   this.totalAdmins = this.members.filter(
     (m) => m.role === ClassroomRole.ADMIN || m.role === ClassroomRole.CO_ADMIN,
   ).length;
-  this.totalBlockedMembers = this.members.filter((m) => m.isBlocked).length; // 🆕
+  this.totalBlockedMembers = this.members.filter((m) => m.isBlocked).length;
+  this.totalEvents = this.events.length; 
   next();
 });
 
-// Enable virtuals in JSON
+// Enable virtuals
 ClassroomSchema.set('toJSON', { virtuals: true });
 ClassroomSchema.set('toObject', { virtuals: true });

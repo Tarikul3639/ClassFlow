@@ -14,6 +14,8 @@ import { UpdateClassroomDto } from './dto/update-classroom.dto';
 import { JoinClassroomDto } from './dto/join-classroom.dto';
 import { AssignAdminDto } from './dto/assign-admin.dto';
 import { BlockMemberDto } from './dto/block-member.dto';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 
 @Injectable()
 export class ClassroomsService {
@@ -579,6 +581,251 @@ export class ClassroomsService {
         userMember?.role === ClassroomRole.ADMIN ||
         userMember?.role === ClassroomRole.CO_ADMIN,
       isBlocked: userMember?.isBlocked || false,
+    };
+  }
+
+  // ==================== CREATE EVENT ====================
+  async createEvent(
+    classroomId: string,
+    createEventDto: CreateEventDto,
+    userId: string,
+  ) {
+    const classroom = await this.classroomModel.findById(classroomId);
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check admin privileges
+    this.checkAdminPrivileges(classroom, userId);
+
+    // Create event
+    const event = {
+      ...createEventDto,
+      createdBy: new Types.ObjectId(userId),
+    };
+
+    classroom.events.push(event as any);
+    await classroom.save();
+
+    return {
+      message: 'Event created successfully',
+      event: classroom.events[classroom.events.length - 1],
+    };
+  }
+
+  // ==================== GET ALL EVENTS ====================
+  async getEvents(classroomId: string, userId: string, query?: any) {
+    const classroom = await this.classroomModel
+      .findById(classroomId)
+      .populate('events.createdBy', 'name email avatarUrl')
+      .lean();
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check if user is member and not blocked
+    const member = classroom.members.find(
+      (m: any) => m.userId.toString() === userId,
+    );
+
+    if (!member) {
+      throw new ForbiddenException('You are not a member of this classroom');
+    }
+
+    if (member.isBlocked) {
+      throw new ForbiddenException('You are blocked from this classroom');
+    }
+
+    let events = classroom.events;
+
+    // Filter by type
+    if (query?.type) {
+      events = events.filter((e: any) => e.type === query.type);
+    }
+
+    // Filter by completion status
+    if (query?.isCompleted !== undefined) {
+      const isCompleted = query.isCompleted === 'true';
+      events = events.filter((e: any) => e.isCompleted === isCompleted);
+    }
+
+    // Filter by date range
+    if (query?.startDate && query?.endDate) {
+      events = events.filter(
+        (e: any) => e.date >= query.startDate && e.date <= query.endDate,
+      );
+    }
+
+    // Sort by startAt (ascending by default)
+    events.sort((a: any, b: any) => a.startAt.localeCompare(b.startAt));
+
+    return {
+      classroomId: classroom._id,
+      classroomName: classroom.name,
+      totalEvents: events.length,
+      events,
+    };
+  }
+
+  // ==================== GET SINGLE EVENT ====================
+  async getEvent(classroomId: string, eventId: string, userId: string) {
+    const classroom = await this.classroomModel
+      .findById(classroomId)
+      .populate('events.createdBy', 'name email avatarUrl')
+      .lean();
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check if user is member and not blocked
+    const member = classroom.members.find(
+      (m: any) => m.userId.toString() === userId,
+    );
+
+    if (!member) {
+      throw new ForbiddenException('You are not a member of this classroom');
+    }
+
+    if (member.isBlocked) {
+      throw new ForbiddenException('You are blocked from this classroom');
+    }
+
+    const event = classroom.events.find((e: any) => e._id.toString() === eventId);
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    return event;
+  }
+
+  // ==================== UPDATE EVENT ====================
+  async updateEvent(
+    classroomId: string,
+    eventId: string,
+    updateEventDto: UpdateEventDto,
+    userId: string,
+  ) {
+    const classroom = await this.classroomModel.findById(classroomId);
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check admin privileges
+    this.checkAdminPrivileges(classroom, userId);
+
+    const event = classroom.events.find((e: any) => e._id.toString() === eventId);
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    // Update event fields
+    Object.assign(event, updateEventDto);
+
+    await classroom.save();
+
+    return {
+      message: 'Event updated successfully',
+      event,
+    };
+  }
+
+  // ==================== DELETE EVENT ====================
+  async deleteEvent(classroomId: string, eventId: string, userId: string) {
+    const classroom = await this.classroomModel.findById(classroomId);
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check admin privileges
+    this.checkAdminPrivileges(classroom, userId);
+
+    const eventIndex = classroom.events.findIndex(
+      (e: any) => e._id.toString() === eventId,
+    );
+
+    if (eventIndex === -1) {
+      throw new NotFoundException('Event not found');
+    }
+
+    classroom.events.splice(eventIndex, 1);
+    await classroom.save();
+
+    return {
+      message: 'Event deleted successfully',
+    };
+  }
+
+  // ==================== MARK EVENT AS COMPLETED ====================
+  async markEventCompleted(
+    classroomId: string,
+    eventId: string,
+    userId: string,
+  ) {
+    const classroom = await this.classroomModel.findById(classroomId);
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check admin privileges
+    this.checkAdminPrivileges(classroom, userId);
+
+    const event = classroom.events.find((e: any) => e._id.toString() === eventId);
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    event.isCompleted = true;
+    await classroom.save();
+
+    return {
+      message: 'Event marked as completed',
+      event,
+    };
+  }
+
+  // ==================== GET UPCOMING EVENTS ====================
+  async getUpcomingEvents(classroomId: string, userId: string) {
+    const classroom = await this.classroomModel
+      .findById(classroomId)
+      .populate('events.createdBy', 'name email avatarUrl')
+      .lean();
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    // Check if user is member and not blocked
+    const member = classroom.members.find(
+      (m: any) => m.userId.toString() === userId,
+    );
+
+    if (!member) {
+      throw new ForbiddenException('You are not a member of this classroom');
+    }
+
+    if (member.isBlocked) {
+      throw new ForbiddenException('You are blocked from this classroom');
+    }
+
+    const now = new Date().toISOString();
+    const upcomingEvents = classroom.events
+      .filter((e: any) => e.startAt >= now && !e.isCompleted)
+      .sort((a: any, b: any) => a.startAt.localeCompare(b.startAt));
+
+    return {
+      classroomId: classroom._id,
+      classroomName: classroom.name,
+      totalUpcomingEvents: upcomingEvents.length,
+      upcomingEvents,
     };
   }
 }

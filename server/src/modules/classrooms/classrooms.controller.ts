@@ -7,7 +7,10 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 import { ClassroomsService } from './classrooms.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
@@ -17,6 +20,7 @@ import { BlockMemberDto } from './dto/block-member.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { ClassroomMember } from '../../common/decorators/classroom-member.decorator';
+import { ClassroomAccessGuard } from '@/common/guards/classroom-access.guard';
 
 @Controller('classrooms')
 @UseGuards(JwtAuthGuard)
@@ -91,7 +95,11 @@ export class ClassroomsController {
     @Body() blockMemberDto: BlockMemberDto,
     @CurrentUser() user: any,
   ) {
-    return this.classroomsService.unblockMember(id, blockMemberDto, user.userId);
+    return this.classroomsService.unblockMember(
+      id,
+      blockMemberDto,
+      user.userId,
+    );
   }
 
   @Get(':id/members/blocked')
@@ -126,5 +134,79 @@ export class ClassroomsController {
   @ClassroomMember()
   delete(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomsService.delete(id, user.userId);
+  }
+
+  // ==================== EVENT ENDPOINTS ====================
+
+  @Post(':id/events')
+  @ClassroomMember()
+  createEvent(
+    @Param('id') id: string,
+    @Body() createEventDto: CreateEventDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.createEvent(id, createEventDto, user.userId);
+  }
+
+  @Get(':id/events')
+  @ClassroomMember()
+  getEvents(
+    @Param('id') id: string,
+    @Query() query: any,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.getEvents(id, user.userId, query);
+  }
+
+  @Get(':id/events/upcoming')
+  @ClassroomMember()
+  getUpcomingEvents(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.classroomsService.getUpcomingEvents(id, user.userId);
+  }
+
+  @Get(':id/events/:eventId')
+  @ClassroomMember()
+  getEvent(
+    @Param('id') id: string,
+    @Param('eventId') eventId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.getEvent(id, eventId, user.userId);
+  }
+
+  @Patch(':id/events/:eventId')
+  @ClassroomMember()
+  updateEvent(
+    @Param('id') id: string,
+    @Param('eventId') eventId: string,
+    @Body() updateEventDto: UpdateEventDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.updateEvent(
+      id,
+      eventId,
+      updateEventDto,
+      user.userId,
+    );
+  }
+
+  @Delete(':id/events/:eventId')
+  @ClassroomMember()
+  deleteEvent(
+    @Param('id') id: string,
+    @Param('eventId') eventId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.deleteEvent(id, eventId, user.userId);
+  }
+
+  @Patch(':id/events/:eventId/complete')
+  @ClassroomMember()
+  markEventCompleted(
+    @Param('id') id: string,
+    @Param('eventId') eventId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.markEventCompleted(id, eventId, user.userId);
   }
 }
