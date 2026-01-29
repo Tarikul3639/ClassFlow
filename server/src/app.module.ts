@@ -25,12 +25,11 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('DATABASE_URL'),
         retryWrites: true,
-        w: 'majority',
-        // Connection pool settings for production
-        maxPoolSize: 10,
-        minPoolSize: 5,
+
+        // 🔐 TLS FIX
+        tls: true,
+        tlsAllowInvalidCertificates: false,
         serverSelectionTimeoutMS: 5000,
-        socketTimeoutMS: 45000,
       }),
       inject: [ConfigService],
     }),
@@ -41,7 +40,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
   ],
 
   providers: [
-    // Global JWT Authentication Guard
+    // Global JWT Authentication Guard (only this one)
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

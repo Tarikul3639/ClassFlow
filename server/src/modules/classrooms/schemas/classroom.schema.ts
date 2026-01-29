@@ -98,7 +98,7 @@ export class Classroom {
 export const ClassroomSchema = SchemaFactory.createForClass(Classroom);
 
 // Indexes for better performance
-ClassroomSchema.index({ joinCode: 1 }, { unique: true });
+ClassroomSchema.index({ joinCode: 1 });
 ClassroomSchema.index({ createdBy: 1 });
 ClassroomSchema.index({ 'members.userId': 1 });
 ClassroomSchema.index({ 'members.isBlocked': 1 }); // 🆕 Index for blocked users

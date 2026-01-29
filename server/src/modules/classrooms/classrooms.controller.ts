@@ -16,12 +16,14 @@ import { AssignAdminDto } from './dto/assign-admin.dto';
 import { BlockMemberDto } from './dto/block-member.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { ClassroomMember } from '../../common/decorators/classroom-member.decorator';
 
 @Controller('classrooms')
 @UseGuards(JwtAuthGuard)
 export class ClassroomsController {
   constructor(private readonly classroomsService: ClassroomsService) {}
 
+  // No ClassroomAccessGuard - creating new classroom
   @Post()
   create(
     @Body() createClassroomDto: CreateClassroomDto,
@@ -30,25 +32,7 @@ export class ClassroomsController {
     return this.classroomsService.create(createClassroomDto, user.userId);
   }
 
-  @Get('my')
-  findUserClassrooms(@CurrentUser() user: any) {
-    return this.classroomsService.findUserClassrooms(user.userId);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string, @CurrentUser() user: any) {
-    return this.classroomsService.findOne(id, user.userId);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateClassroomDto: UpdateClassroomDto,
-    @CurrentUser() user: any,
-  ) {
-    return this.classroomsService.update(id, updateClassroomDto, user.userId);
-  }
-
+  // No ClassroomAccessGuard - joining with code
   @Post('join')
   joinClassroom(
     @Body() joinClassroomDto: JoinClassroomDto,
@@ -57,7 +41,31 @@ export class ClassroomsController {
     return this.classroomsService.joinClassroom(joinClassroomDto, user.userId);
   }
 
+  // No ClassroomAccessGuard - getting user's own classrooms
+  @Get('my')
+  findUserClassrooms(@CurrentUser() user: any) {
+    return this.classroomsService.findUserClassrooms(user.userId);
+  }
+
+  // ✅ Use ClassroomAccessGuard for routes accessing specific classroom
+  @Get(':id')
+  @ClassroomMember()
+  findOne(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.classroomsService.findOne(id, user.userId);
+  }
+
+  @Patch(':id')
+  @ClassroomMember()
+  update(
+    @Param('id') id: string,
+    @Body() updateClassroomDto: UpdateClassroomDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.classroomsService.update(id, updateClassroomDto, user.userId);
+  }
+
   @Patch(':id/assign-role')
+  @ClassroomMember()
   assignRole(
     @Param('id') id: string,
     @Body() assignAdminDto: AssignAdminDto,
@@ -67,6 +75,7 @@ export class ClassroomsController {
   }
 
   @Patch(':id/members/block')
+  @ClassroomMember()
   blockMember(
     @Param('id') id: string,
     @Body() blockMemberDto: BlockMemberDto,
@@ -76,6 +85,7 @@ export class ClassroomsController {
   }
 
   @Patch(':id/members/unblock')
+  @ClassroomMember()
   unblockMember(
     @Param('id') id: string,
     @Body() blockMemberDto: BlockMemberDto,
@@ -85,11 +95,13 @@ export class ClassroomsController {
   }
 
   @Get(':id/members/blocked')
+  @ClassroomMember()
   getBlockedMembers(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomsService.getBlockedMembers(id, user.userId);
   }
 
   @Delete(':id/members/:memberId')
+  @ClassroomMember()
   removeMember(
     @Param('id') id: string,
     @Param('memberId') memberId: string,
@@ -99,16 +111,19 @@ export class ClassroomsController {
   }
 
   @Post(':id/leave')
+  @ClassroomMember()
   leaveClassroom(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomsService.leaveClassroom(id, user.userId);
   }
 
   @Post(':id/regenerate-code')
+  @ClassroomMember()
   regenerateJoinCode(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomsService.regenerateJoinCode(id, user.userId);
   }
 
   @Delete(':id')
+  @ClassroomMember()
   delete(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomsService.delete(id, user.userId);
   }
