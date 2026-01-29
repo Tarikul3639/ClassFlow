@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { APP_GUARD } from '@nestjs/core';
 
 // Modules
+import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { ClassroomsModule } from './modules/classrooms/classrooms.module';
 
@@ -35,6 +36,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     }),
 
     // Feature Modules
+    AuthModule,
     UsersModule,
     ClassroomsModule,
   ],

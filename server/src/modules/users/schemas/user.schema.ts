@@ -20,9 +20,6 @@ export class User {
   @Prop({ default: null })
   avatarUrl?: string;
 
-  @Prop({ default: false })
-  isBlocked: boolean;
-
   // References to classrooms the user is associated with
   @Prop({
     type: [{ type: Types.ObjectId, ref: 'Classroom' }],
