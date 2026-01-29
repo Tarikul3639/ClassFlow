@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { UserRole } from '@/common/enums/user-role.enum';
+import { Document, Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema({ 
+@Schema({
   timestamps: true,
   discriminatorKey: 'role',
 })
@@ -18,26 +17,18 @@ export class User {
   @Prop({ required: true, select: false })
   password: string;
 
-  @Prop({ required: true, enum: UserRole })
-  role: UserRole;
-
-  @Prop()
+  @Prop({ default: null })
   avatarUrl?: string;
 
   @Prop({ default: false })
   isBlocked: boolean;
 
-  @Prop()
-  phoneNumber?: string;
-
-  @Prop()
-  dateOfBirth?: Date;
-
-  @Prop({ enum: ['male', 'female', 'other'] })
-  gender?: string;
-
-  @Prop()
-  address?: string;
+  // References to classrooms the user is associated with
+  @Prop({
+    type: [{ type: Types.ObjectId, ref: 'Classroom' }],
+    default: [],
+  })
+  classrooms: Types.ObjectId[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -45,6 +36,6 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// Index for performance
+// Indexes for performance
 UserSchema.index({ email: 1 });
-UserSchema.index({ role: 1 });
+UserSchema.index({ classrooms: 1 });
