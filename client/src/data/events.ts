@@ -1,4 +1,4 @@
-import { IEvent } from "@/types/event";
+import { IEvent } from "@/redux/slices/classroom/types";
 
 export const events: IEvent[] = [
   {
@@ -22,6 +22,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
+      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -49,6 +50,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
+      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -80,6 +82,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_002",
       name: "Prof. Michael Chen",
+      role: "admin",
       email: "michael.chen@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
     },
@@ -113,6 +116,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
+      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -146,6 +150,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_003",
       name: "Dr. Emily Rodriguez",
+      role: "admin",
       email: "emily.rodriguez@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
     },
@@ -173,6 +178,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_002",
       name: "Prof. Michael Chen",
+      role: "admin",
       email: "michael.chen@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
     },
@@ -193,6 +199,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
+      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -226,6 +233,7 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_003",
       name: "Dr. Emily Rodriguez",
+      role: "admin",
       email: "emily.rodriguez@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
     },

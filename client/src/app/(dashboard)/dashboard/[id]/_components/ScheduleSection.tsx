@@ -1,7 +1,7 @@
 "use client";
 
 import { Calendar as CalendarIcon } from "lucide-react";
-import { IEvent } from "@/types/event";
+import { IEvent } from "@/redux/slices/classroom/types";
 import { Calendar } from "@/components/ui/calendar";
 interface ScheduleSectionProps {
   form: IEvent;

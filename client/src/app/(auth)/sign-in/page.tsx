@@ -23,7 +23,7 @@ const SignInPage: React.FC = () => {
   const dispatch = useAppDispatch();
   
   const isLoading = useAppSelector(
-    (state) => state.auth?.requestStatus?.signIn?.fetching,
+    (state) => state.auth?.requestStatus.signIn?.loading,
   );
   const error = useAppSelector(
     (state) => state.auth?.requestStatus?.signIn?.error,

@@ -1,6 +1,6 @@
 "use client";
 
-import { IEvent, IEventType } from "@/types/event";
+import { IEvent, EventType } from "@/redux/slices/classroom/types";
 import { PlusCircle, CheckCircle2, Circle } from "lucide-react";
 
 export const GeneralInfoSection = ({ form, setForm }: { form: IEvent; setForm: React.Dispatch<React.SetStateAction<IEvent>> }) => (
@@ -61,7 +61,7 @@ export const GeneralInfoSection = ({ form, setForm }: { form: IEvent; setForm: R
         <div className="relative group">
           <select
             value={form.type ?? "lecture"}
-            onChange={(e) => setForm({ ...form, type: e.target.value as IEventType })}
+            onChange={(e) => setForm({ ...form, type: e.target.value as EventType })}
             className="w-full h-11 sm:h-12 px-5 lg:px-6 rounded-lg border border-[#dbe1e6] bg-[#f8fafc] focus:bg-white focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-[#111518] appearance-none text-xxsm md:text-xsm lg:text-sm cursor-pointer">
             <option value="lecture">Lecture</option>
             <option value="quiz">Quiz</option>

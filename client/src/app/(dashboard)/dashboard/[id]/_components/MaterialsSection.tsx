@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Link as LinkIcon, PlusCircle, Trash2 } from "lucide-react";
-import { IEvent, IMaterial } from "@/types/event";
+import { IEvent, IMaterial } from "@/redux/slices/classroom/types";
 
 interface MaterialsSectionProps {
   form: IEvent;

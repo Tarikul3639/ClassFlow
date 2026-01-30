@@ -36,7 +36,7 @@ const ProfilePage = () => {
     setEditingField({ label, value });
   };
 
-  if (requestStatus.signIn?.fetching) {
+  if (requestStatus.signIn.loading) {
     return (
       <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased text-[#111518]">
         <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10 flex flex-col gap-6">
@@ -53,7 +53,7 @@ const ProfilePage = () => {
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased text-[#111518]">
       <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10 flex flex-col gap-6">
-        <ProfileHeader data={user} />
+        {/* <ProfileHeader data={user} /> */}
         {user.role === "student" && (
           <>
             <StudentAccountSection
@@ -89,10 +89,10 @@ const ProfilePage = () => {
         )}
 
         <ProfileActions />
-        <MetadataSection
+        {/* <MetadataSection
           createdAt={user.createdAt}
           updatedAt={user.updatedAt}
-        />
+        /> */}
         {/* Modal Logic with Animation Support */}
         <AnimatePresence>
           {editingField && (

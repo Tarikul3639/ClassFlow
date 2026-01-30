@@ -29,7 +29,7 @@ interface SignUpFormData {
 const RegisterPage: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { fetching: isLoading, error } = useAppSelector(
+  const { loading: isLoading, error } = useAppSelector(
     (state) => state.auth?.requestStatus?.signUp || {},
   );
 

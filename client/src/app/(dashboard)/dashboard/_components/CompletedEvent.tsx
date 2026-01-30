@@ -1,6 +1,6 @@
 import { CheckCircle2, Calendar, Clock } from "lucide-react";
 import { ActionButtons } from "./ActionButtons";
-import { IEvent } from "@/types/event";
+import { IEvent } from "@/redux/slices/classroom/types";
 import { EVENT_UI } from "@/config/event-ui";
 
 interface Props {
