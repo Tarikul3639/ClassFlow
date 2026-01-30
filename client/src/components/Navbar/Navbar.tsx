@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { CloudSun, Bell, LayoutDashboard } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
@@ -10,19 +11,16 @@ import { useAppSelector } from "@/redux/hooks";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, viewMode } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const loading = useAppSelector(
-    (state) => state.auth.requestStatus.signIn?.fetching,
+    (state) => state.auth.requestStatus.refresh.loading
   );
   const pathname = usePathname();
   const [weather, setWeather] = useState<{ temp: number; desc: string } | null>(
-    null,
+    null
   );
 
-  const dashboardHref =
-    user && (user.role === "admin" || user.role === "co_admin")
-      ? viewMode // admin can toggle
-      : "student"; // student always
+  const dashboard = user?.role === "admin" ? "/admin" : "/dashboard";
 
   useEffect(() => {
     // Demo data for weather since real API needs a key
@@ -40,28 +38,30 @@ const Navbar: React.FC = () => {
     <>
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl font-display">
         <div className="bg-white/70 backdrop-blur-md border border-blue-100 px-4 md:px-6 py-2.5 md:py-3 rounded-full shadow-lg shadow-[#399aef]/5 flex justify-between items-center text-[#111518]">
+          
           {/* Logo Section */}
           <Logo />
 
           {/* Right Actions */}
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Dashboard Link - Optimized Glass Pill Style */}
+            
+            {/* Dashboard Link */}
             <Link
-              href={`/${dashboardHref}`}
+              href={dashboard}
               className={`
-    flex items-center gap-2.5 px-4 py-2 rounded-full transition-all duration-500 group relative
-    ${
-      isActive(`/${dashboardHref}`)
-        ? "bg-linear-to-r from-[#399aef]/10 to-[#399aef]/5 text-[#399aef] shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
-        : "text-[#617789] hover:bg-linear-to-r hover:from-[#399aef]/10 hover:to-[#399aef]/5 hover:text-[#399aef] hover:shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
-    }
-  `}
+                flex items-center gap-2.5 px-4 py-2 rounded-full transition-all duration-500 group relative
+                ${
+                  isActive(dashboard)
+                    ? "bg-linear-to-r from-[#399aef]/10 to-[#399aef]/5 text-[#399aef] shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
+                    : "text-[#617789] hover:bg-linear-to-r hover:from-[#399aef]/10 hover:to-[#399aef]/5 hover:text-[#399aef] hover:shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
+                }
+              `}
             >
               <LayoutDashboard
                 size={17}
-                strokeWidth={isActive(`/${dashboardHref}`) ? 2.5 : 2}
+                strokeWidth={isActive(`/dashboard`) ? 2.5 : 2}
                 className={
-                  isActive(`/${dashboardHref}`)
+                  isActive(`/dashboard`)
                     ? "animate-pulse-subtle"
                     : "opacity-70 group-hover:opacity-100"
                 }
@@ -69,15 +69,15 @@ const Navbar: React.FC = () => {
 
               <span
                 className={`
-    hidden sm:flex text-xxs font-black uppercase tracking-[0.12em] transition-opacity
-    ${isActive("/admin") ? "opacity-100" : "opacity-70 group-hover:opacity-100"}
-  `}
+                  hidden sm:flex text-xxs font-black uppercase tracking-[0.12em] transition-opacity
+                  ${isActive(dashboard) ? "opacity-100" : "opacity-70 group-hover:opacity-100"}
+                `}
               >
                 Dashboard
               </span>
 
               {/* Active state indicator line */}
-              {isActive("/admin") && (
+              {isActive(dashboard) && (
                 <span className="absolute inset-x-4 -bottom-px h-px bg-linear-to-r from-transparent via-[#399aef]/40 to-transparent" />
               )}
             </Link>
@@ -86,9 +86,7 @@ const Navbar: React.FC = () => {
             <div className="hidden xs:flex items-center gap-2 text-xxs md:text-[11px] font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
               <CloudSun size={14} className="text-[#399aef] shrink-0" />
               <span className="truncate">
-                <span className="inline md:hidden">
-                  {weather?.temp || "18"}°C
-                </span>
+                <span className="inline md:hidden">{weather?.temp || "18"}°C</span>
                 <span className="hidden md:inline">
                   {weather?.desc || "Clear"}, {weather?.temp || "18"}°C
                 </span>

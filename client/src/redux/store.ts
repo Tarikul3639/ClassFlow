@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import adminEventsReducer from "@/redux/slices/admin/events/slice";
-import clientEventsReducer from "@/redux/slices/client/events/slice";
-import authenticationReducer from "@/redux/slices/auth/slice";
+import authReducer from "./slices/auth/slice";
+import classroomReducer from "./slices/classroom/slice";
 
 export const store = configureStore({
   reducer: {
-    admin: adminEventsReducer,
-    client: clientEventsReducer,
-    auth: authenticationReducer,
+    auth: authReducer,
+    classroom: classroomReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

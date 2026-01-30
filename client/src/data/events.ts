@@ -8,7 +8,7 @@ export const events: IEvent[] = [
     date: "2026-01-29",
     startAt: "2026-01-29T10:00:00",
     endAt: "2026-01-29T11:30:00",
-    topics: "Bresenham Algorithm and Circle Generation",
+    topics: "Bresenham Algorithm and Circle Generation Algorithm. lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     location: "Room 204, Engineering Building",
     materials: [
       {
@@ -36,7 +36,7 @@ export const events: IEvent[] = [
     startAt: "2026-01-26T14:00:00",
     endAt: "2026-01-26T15:00:00",
     location: "Room 305",
-    topics: "Trees, Graphs, Hash Tables",
+    topics: "Trees, Graphs, Hash Tables lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     materials: [
       {
         _id: "m2",
@@ -61,7 +61,7 @@ export const events: IEvent[] = [
     title: "OS Kernel Project",
     date: "2026-02-02",
     startAt: "2026-02-02T23:59:00",
-    topics: "Process Scheduling, Memory Management",
+    topics: "Process Scheduling, Memory Management lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     materials: [
       {
         _id: "m3",
@@ -94,7 +94,7 @@ export const events: IEvent[] = [
     startAt: "2026-01-30T09:00:00",
     endAt: "2026-01-30T10:30:00",
     location: "Auditorium A",
-    topics: "NoSQL Databases, MongoDB, Redis",
+    topics: "NoSQL Databases, MongoDB, Redis lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     materials: [
       {
         _id: "m5",

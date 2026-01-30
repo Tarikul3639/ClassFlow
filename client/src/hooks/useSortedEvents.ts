@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { IEvent } from "@/types/event";
+import { IEvent } from "@/redux/slices/classroom/types";
 
 interface UseSortedEventsResult {
   activeEvents: IEvent[];

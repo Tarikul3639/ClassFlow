@@ -10,18 +10,26 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { joinClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/joinClassroomThunk";
+import { setJoinClassroomError } from "@/redux/slices/classroom/slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 const JoinClassroomPage: React.FC = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [code, setCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const error = useAppSelector(
+    (state) => state.classroom.requestStatus.joinClassroom.error,
+  );
+  const isLoading = useAppSelector(
+    (state) => state.classroom.requestStatus.joinClassroom.loading,
+  );
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "");
     if (value.length <= 6) {
       setCode(value);
-      setError("");
+      dispatch(setJoinClassroomError(""));
     }
   };
 
@@ -29,23 +37,18 @@ const JoinClassroomPage: React.FC = () => {
     e.preventDefault();
 
     if (code.length !== 6) {
-      setError("Code must be 6 characters");
+      dispatch(setJoinClassroomError("Code must be 6 characters"));
       return;
     }
 
-    setIsLoading(true);
-    setError("");
+    dispatch(setJoinClassroomError(""));
 
     try {
-      // TODO: API call to join classroom
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
+      await dispatch(joinClassroomThunk(code));
       // Success - redirect to classroom
       router.push(`/classroom/${code}`);
     } catch (err) {
-      setError("Invalid code. Please try again.");
-    } finally {
-      setIsLoading(false);
+      dispatch(setJoinClassroomError("Invalid code. Please try again."));
     }
   };
 

@@ -31,7 +31,7 @@ export const HeroSection: React.FC = () => {
         {/* Action Buttons */}
         <div className="flex flex-col xs:flex-row items-center justify-center gap-4">
           <Link
-            href="/student"
+            href="/dashboard"
             className="w-full xs:w-auto h-12 px-8 bg-primary hover:bg-blue-400 text-white text-sm sm:text-base font-semibold rounded-full shadow-soft-blue transition-all duration-200 transform hover:scale-[1.01] cursor-pointer flex items-center justify-center"
           >
             Get Started

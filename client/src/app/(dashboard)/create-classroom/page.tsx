@@ -15,22 +15,22 @@ import {
   FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface CreateClassroomForm {
-  name: string;
-  description: string;
-  institute: string;
-  department: string;
-  intake: string;
-  section: string;
-}
+import { CreateClassroomPayload } from "@/types/classroom/create.classroom";
+import { createClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/createClassroomThunk";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setCreateClassroomError } from "@/redux/slices/classroom/slice";
 
 const CreateClassroomPage: React.FC = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(
+    (state) => state.classroom.requestStatus.createClassroom.loading,
+  );
+  const error = useAppSelector(
+    (state) => state.classroom.requestStatus.createClassroom.error,
+  );
 
-  const [formData, setFormData] = useState<CreateClassroomForm>({
+  const [formData, setFormData] = useState<CreateClassroomPayload>({
     name: "",
     description: "",
     institute: "",
@@ -40,11 +40,10 @@ const CreateClassroomPage: React.FC = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setError("");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,35 +51,33 @@ const CreateClassroomPage: React.FC = () => {
 
     // Validation
     if (!formData.name.trim()) {
-      setError("Classroom name is required");
+      dispatch(setCreateClassroomError("Classroom name is required"));
       return;
     }
     if (!formData.institute.trim()) {
-      setError("Institute name is required");
+      dispatch(setCreateClassroomError("Institute name is required"));
       return;
     }
     if (!formData.department.trim()) {
-      setError("Department is required");
+      dispatch(setCreateClassroomError("Department is required"));
       return;
     }
     if (!formData.intake.trim()) {
-      setError("Intake is required");
+      dispatch(setCreateClassroomError("Intake is required"));
       return;
     }
 
-    setIsLoading(true);
-    setError("");
-
     try {
-      // TODO: API call to create classroom
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await dispatch(createClassroomThunk(formData)).unwrap();
 
       // Success - redirect to classroom
       router.push("/dashboard");
     } catch (err) {
-      setError("Failed to create classroom. Please try again.");
-    } finally {
-      setIsLoading(false);
+      dispatch(
+        setCreateClassroomError(
+          "Failed to create classroom. Please try again.",
+        ),
+      );
     }
   };
 
@@ -136,7 +133,9 @@ const CreateClassroomPage: React.FC = () => {
               >
                 <div className="flex items-center gap-2 py-2.5 px-3 rounded-lg bg-red-50 border border-red-200">
                   <AlertCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-red-600" />
-                  <p className="text-red-700 text-xs sm:text-xsm font-medium">{error}</p>
+                  <p className="text-red-700 text-xs sm:text-xsm font-medium">
+                    {error}
+                  </p>
                 </div>
               </motion.div>
             )}
@@ -294,9 +293,9 @@ const CreateClassroomPage: React.FC = () => {
                 What happens next?
               </h4>
               <p className="text-xxs sm:text-xs text-[#6b7280] leading-relaxed">
-                After creating the classroom, you'll receive a unique 6-character
-                code. Share this code with students so they can join your
-                classroom.
+                After creating the classroom, you'll receive a unique
+                6-character code. Share this code with students so they can join
+                your classroom.
               </p>
             </div>
           </div>
