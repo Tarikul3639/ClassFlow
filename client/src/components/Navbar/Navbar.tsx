@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { CloudSun, Bell, LayoutDashboard, User } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog } from "@/components/ui/Dialog";
 import NavbarSkeleton from "./NavbarSkeleton";
 import Link from "next/link";
@@ -162,14 +162,8 @@ const Navbar: React.FC = () => {
                   "
                 >
                   {user?.name
-                    ? user.name
-                        .trim()
-                        .split(/\s+/)
-                        .map((n) => n[0])
-                        .slice(0, 2)
-                        .join("")
-                        .toUpperCase()
-                    : "UN"}
+                    ? user.name.substring(0, 2).toUpperCase()
+                    : ""}
                 </AvatarFallback>
               </Avatar>
 
