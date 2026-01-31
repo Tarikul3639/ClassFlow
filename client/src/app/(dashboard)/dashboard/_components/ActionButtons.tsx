@@ -30,12 +30,12 @@ interface ActionButtonsProps {
   isAdmin?: boolean; // New prop to differentiate admin/user
 }
 
-export const ActionButtons: React.FC<ActionButtonsProps> = ({
+export function ActionButtons({
   _id,
   isExpanded,
   onToggleExpand,
   isAdmin = true,
-}) => {
+}: ActionButtonsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
