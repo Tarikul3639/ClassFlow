@@ -45,12 +45,12 @@ const SignInPage: React.FC = () => {
       .then((data) => {
         if (data.user) {
           if(data.user.classrooms.length === 0){
-            router.push("/dashboard/get-started");
+            router.push("/classroom");
             return;
           }
           router.push("/");
         } else if (data.user) {
-          router.push("/dashboard");
+          router.push("/classroom");
         }
       })
       .catch(() => {});
