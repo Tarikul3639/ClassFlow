@@ -47,6 +47,14 @@ const ProfilePage = () => {
   const [isAssignCoAdminModalOpen, setIsAssignCoAdminModalOpen] =
     useState(false);
 
+  const refreshing = useAppSelector(
+    (state) => state.auth.requestStatus.refresh.loading,
+  );
+
+  const isLoading = useAppSelector(
+    (state) => state.classroom.requestStatus.fetchClassroom.loading,
+  );
+
   const handleEdit = (
     label: string,
     value: string,
@@ -93,19 +101,14 @@ const ProfilePage = () => {
   };
 
   // Loading state
-  // if (isAuthenticated && !profileUser) {
-  //   return (
-  //     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased">
-  //       <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10">
-  //         <ProfileSkeleton type="admin" />
-  //       </main>
-  //     </div>
-  //   );
-  // }
-
-  // Not authenticated
-  if (!isAuthenticated || !profileUser) {
-    return <AuthRequired />;
+  if (isLoading || refreshing || !profileUser) {
+    return (
+      <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased">
+        <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10">
+          <ProfileSkeleton />
+        </main>
+      </div>
+    );
   }
 
   return (

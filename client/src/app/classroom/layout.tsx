@@ -22,9 +22,10 @@ export default function LayoutDashboard({
     dispatch(verifyAuthThunk());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (isLoading && !children) {
     return <Loader />; // or a loading spinner
   }
+
   return (
     <div className="min-h-screen bg-white font-display antialiased text-[#111518]">
       <Navbar />
