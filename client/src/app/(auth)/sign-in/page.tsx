@@ -13,10 +13,13 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { signInThunk } from "@/redux/slices/auth/thunks/auth.thunks";
+import { signInThunk } from "@/redux/slices/auth/thunks/signInThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
-import { SignInPayload } from "@/types/auth";
+interface SignInPayload {
+  email: string;
+  password: string;
+}
 
 const SignInPage: React.FC = () => {
   const router = useRouter();
@@ -35,15 +38,15 @@ const SignInPage: React.FC = () => {
     password: "",
   });
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(signInThunk(formData))
       .unwrap()
       .then((data) => {
-        if (data.user.role === "student") {
-          router.push("/student");
-        } else if (data.user.role === "admin") {
-          router.push("/admin");
+        if (data.user) {
+          router.push("/dashboard");
+        } else if (data.user) {
+          router.push("/dashboard");
         }
       })
       .catch(() => {});
@@ -89,7 +92,7 @@ const SignInPage: React.FC = () => {
             )}
           </AnimatePresence>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleSignIn} className="space-y-5">
             <div className="space-y-4">
               {/* Email Field */}
               <div className="space-y-1.5">

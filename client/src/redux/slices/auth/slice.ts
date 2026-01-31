@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IAuthState } from "@/redux/slices/auth/types";
-import { loginThunk } from "./thunks/loginThunk";
-import { registerThunk } from "./thunks/registerThunk";
+import { signInThunk } from "./thunks/signInThunk";
+import { signUpThunk } from "./thunks/signUpThunk";
 import { logoutThunk } from "./thunks/logoutThunk";
 import { verifyAuthThunk } from "./thunks/verifyAuthThunk";
 
@@ -10,6 +10,8 @@ const demo = {
     name: "Aminul Islam",
     email: "aminul@mail.com",
     avatarUrl: "https://i.pravatar.cc/150?img=3",
+    createdAt: "2023-01-01T00:00:00Z",
+    updatedAt: "2023-01-01T00:00:00Z",
 };
 
 const initialState: IAuthState = {
@@ -33,34 +35,34 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     // Login
     builder
-      .addCase(loginThunk.pending, (state) => {
+      .addCase(signInThunk.pending, (state) => {
         state.requestStatus.signIn.loading = true;
         state.requestStatus.signIn.error = null;
       })
-      .addCase(loginThunk.fulfilled, (state, action) => {
+      .addCase(signInThunk.fulfilled, (state, action) => {
         state.requestStatus.signIn.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
       })
-      .addCase(loginThunk.rejected, (state, action) => {
+      .addCase(signInThunk.rejected, (state, action) => {
         state.requestStatus.signIn.loading = false;
         state.requestStatus.signIn.error = action.payload as string;
       });
 
     // Register
     builder
-      .addCase(registerThunk.pending, (state) => {
+      .addCase(signUpThunk.pending, (state) => {
         state.requestStatus.signUp.loading = true;
         state.requestStatus.signUp.error = null;
       })
-      .addCase(registerThunk.fulfilled, (state, action) => {
+      .addCase(signUpThunk.fulfilled, (state, action) => {
         state.requestStatus.signUp.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
       })
-      .addCase(registerThunk.rejected, (state, action) => {
+      .addCase(signUpThunk.rejected, (state, action) => {
         state.requestStatus.signUp.loading = false;
         state.requestStatus.signUp.error = action.payload as string;
       });

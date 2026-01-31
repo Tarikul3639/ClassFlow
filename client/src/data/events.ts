@@ -22,7 +22,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
-      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -50,7 +49,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
-      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -82,7 +80,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_002",
       name: "Prof. Michael Chen",
-      role: "admin",
       email: "michael.chen@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
     },
@@ -116,7 +113,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
-      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -150,7 +146,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_003",
       name: "Dr. Emily Rodriguez",
-      role: "admin",
       email: "emily.rodriguez@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
     },
@@ -178,7 +173,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_002",
       name: "Prof. Michael Chen",
-      role: "admin",
       email: "michael.chen@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
     },
@@ -199,7 +193,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_001",
       name: "Dr. Sarah Johnson",
-      role: "admin",
       email: "sarah.johnson@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     },
@@ -208,7 +201,7 @@ export const events: IEvent[] = [
   },
   {
     _id: "8",
-    type: "Class",
+    type: "class",
     title: "Data Science Class",
     date: "2026-02-01",
     startAt: "2026-02-01T11:00:00",
@@ -233,7 +226,6 @@ export const events: IEvent[] = [
     createdBy: {
       _id: "admin_003",
       name: "Dr. Emily Rodriguez",
-      role: "admin",
       email: "emily.rodriguez@edu.university.com",
       avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
     },

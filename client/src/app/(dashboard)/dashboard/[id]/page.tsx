@@ -8,8 +8,6 @@ import { ScheduleSection } from "./_components/ScheduleSection";
 import { MaterialsSection } from "./_components/MaterialsSection";
 import { ActionFooter } from "./_components/ActionFooter";
 import { IEvent, IMaterial } from "@/redux/slices/classroom/types";
-import { updateEventThunk } from "@/redux/slices/classroom/thunks/event/updateEventThunk";
-import { useAppDispatch } from "@/redux/hooks";
 
 export default function Page() {
   const params = useParams();
@@ -25,7 +23,7 @@ export default function Page() {
     materials: [] as IMaterial[],
     endAt: "",
     isCompleted: false,
-    createdBy: { _id: "", name: "", email: "", role: "member" },
+    createdBy: { _id: "", name: "", email: "" },
     createdAt: "",
     updatedAt: "",
   });

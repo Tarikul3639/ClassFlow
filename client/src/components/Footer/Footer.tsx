@@ -3,7 +3,7 @@ import { Sparkles, Code2, Zap } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="py-10 sm:py-12 border-t border-[#edf1f4] mt-20">
+    <footer className="py-10 sm:py-12 border-t border-[#edf1f4]">
       <div className="max-w-2xl mx-auto px-6">
         {/* Main Content */}
         <div className="flex flex-col items-center gap-6">

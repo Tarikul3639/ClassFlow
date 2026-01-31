@@ -1,26 +1,35 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CloudSun, Bell, LayoutDashboard } from "lucide-react";
+import { CloudSun, Bell, LayoutDashboard, User } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Dialog } from "@/components/ui/Dialog";
 import NavbarSkeleton from "./NavbarSkeleton";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "@/redux/hooks";
+import { selectProfileUser } from "@/redux/selectors/profile";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAppSelector((state) => state.auth);
+
+  const user = useAppSelector(selectProfileUser);
   const loading = useAppSelector(
     (state) => state.auth.requestStatus.refresh.loading
   );
-  const pathname = usePathname();
-  const [weather, setWeather] = useState<{ temp: number; desc: string } | null>(
-    null
-  );
 
-  const dashboard = user?.role === "admin" ? "/admin" : "/dashboard";
+  const pathname = usePathname();
+
+  const [weather, setWeather] = useState<{
+    temp: number;
+    desc: string;
+  } | null>(null);
+
+  const dashboard =
+    user?.currentClassroom?.role === "admin"
+      ? "/dashboard"
+      : "/dashboard";
 
   useEffect(() => {
     // Demo data for weather since real API needs a key
@@ -38,13 +47,11 @@ const Navbar: React.FC = () => {
     <>
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl font-display">
         <div className="bg-white/70 backdrop-blur-md border border-blue-100 px-4 md:px-6 py-2.5 md:py-3 rounded-full shadow-lg shadow-[#399aef]/5 flex justify-between items-center text-[#111518]">
-          
           {/* Logo Section */}
           <Logo />
 
           {/* Right Actions */}
           <div className="flex items-center gap-2 md:gap-4">
-            
             {/* Dashboard Link */}
             <Link
               href={dashboard}
@@ -59,9 +66,9 @@ const Navbar: React.FC = () => {
             >
               <LayoutDashboard
                 size={17}
-                strokeWidth={isActive(`/dashboard`) ? 2.5 : 2}
+                strokeWidth={isActive(dashboard) ? 2.5 : 2}
                 className={
-                  isActive(`/dashboard`)
+                  isActive(dashboard)
                     ? "animate-pulse-subtle"
                     : "opacity-70 group-hover:opacity-100"
                 }
@@ -70,7 +77,11 @@ const Navbar: React.FC = () => {
               <span
                 className={`
                   hidden sm:flex text-xxs font-black uppercase tracking-[0.12em] transition-opacity
-                  ${isActive(dashboard) ? "opacity-100" : "opacity-70 group-hover:opacity-100"}
+                  ${
+                    isActive(dashboard)
+                      ? "opacity-100"
+                      : "opacity-70 group-hover:opacity-100"
+                  }
                 `}
               >
                 Dashboard
@@ -86,14 +97,16 @@ const Navbar: React.FC = () => {
             <div className="hidden xs:flex items-center gap-2 text-xxs md:text-[11px] font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
               <CloudSun size={14} className="text-[#399aef] shrink-0" />
               <span className="truncate">
-                <span className="inline md:hidden">{weather?.temp || "18"}°C</span>
+                <span className="inline md:hidden">
+                  {weather?.temp || "18"}°C
+                </span>
                 <span className="hidden md:inline">
                   {weather?.desc || "Clear"}, {weather?.temp || "18"}°C
                 </span>
               </span>
             </div>
 
-            <div className="h-6 w-px bg-[#dbe1e6] hidden md:block"></div>
+            <div className="h-6 w-px bg-[#dbe1e6] hidden md:block" />
 
             {/* Notification Bell */}
             <button
@@ -104,29 +117,72 @@ const Navbar: React.FC = () => {
                 size={18}
                 className="md:w-5 md:h-5 group-hover:rotate-12 transition-transform"
               />
-              <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+              <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
             </button>
 
             {/* Profile Avatar Link */}
             <Link
               href="/profile"
-              className={`relative w-8 h-8 md:w-9 md:h-9 rounded-full transition-all shrink-0 border-2 ${
-                isActive("/profile")
-                  ? "ring-2 ring-[#399aef] ring-offset-2 border-[#399aef] scale-105"
-                  : "border-[#dbe1e6] hover:border-[#399aef] hover:scale-105"
-              }`}
+              className={`group relative w-10 h-10 md:w-11 md:h-11 rounded-full shrink-0
+                transition-all duration-300 ease-in-out flex items-center justify-center
+                ${
+                  isActive("/profile")
+                    ? "ring-2 ring-[#399aef] ring-offset-2 scale-110 shadow-lg shadow-blue-100"
+                    : "ring-1 ring-slate-200 hover:ring-[#399aef]/50 hover:ring-offset-2 hover:scale-105"
+                }
+              `}
             >
-              <img
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                alt="avatar"
-                className="w-full h-full object-cover rounded-full"
+              {/* Modern Glow Effect */}
+              <span
+                className={`absolute inset-0 rounded-full blur-lg transition-opacity duration-500
+                  ${
+                    isActive("/profile")
+                      ? "opacity-40 bg-[#399aef]"
+                      : "opacity-0 group-hover:opacity-20 bg-blue-400"
+                  }
+                `}
               />
+
+              <Avatar className="relative w-full h-full rounded-full border border-white/50 bg-slate-50 overflow-hidden shadow-inner">
+                <AvatarImage
+                  src={user?.avatarUrl}
+                  alt={user?.name || "User"}
+                  className="object-cover w-full h-full"
+                />
+
+                {/* High-Contrast Fallback */}
+                <AvatarFallback
+                  className="
+                    w-full h-full
+                    bg-linear-to-br from-[#399aef] to-[#2d84d1]
+                    text-white font-black
+                    text-xsm! md:text-[14px]
+                    flex items-center justify-center
+                    tracking-tighter select-none
+                  "
+                >
+                  {user?.name
+                    ? user.name
+                        .trim()
+                        .split(/\s+/)
+                        .map((n) => n[0])
+                        .slice(0, 2)
+                        .join("")
+                        .toUpperCase()
+                    : "UN"}
+                </AvatarFallback>
+              </Avatar>
+
+              {/* Active Indicator Dot */}
+              {isActive("/profile") && (
+                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#399aef] border-2 border-white rounded-full z-10" />
+              )}
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* Dialog should be outside nav */}
+      {/* Dialog */}
       <Dialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

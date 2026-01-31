@@ -12,27 +12,31 @@ import { createEventThunk } from "./thunks/event/createEventThunk";
 import { updateEventThunk } from "./thunks/event/updateEventThunk";
 import { deleteEventThunk } from "./thunks/event/deleteEventThunk";
 
-const initialState: ClassroomState = {
-  classroom: null,
-  loading: false,
-  error: null,
-  requestStatus: {
-    // Classroom related statuses
-    fetchClassroom: { loading: false, error: null },
-    joinClassroom: { loading: false, error: null },
-    leaveClassroom: { loading: false, error: null },
-    createClassroom: { loading: false, error: null },
-    // Event related statuses
-    fetchEvents: { loading: false, error: null },
-    updateEvent: { loading: false, error: null },
-    deleteEvent: { loading: false, error: null },
-    createEvent: { loading: false, error: null },
-  },
-};
+// Initial State for demo and testing
+import { demoClassroomState } from "./demoData";
+
+// Initial State
+// const initialState: ClassroomState = {
+//   classroom: null,
+//   loading: false,
+//   error: null,
+//   requestStatus: {
+//     // Classroom related statuses
+//     fetchClassroom: { loading: false, error: null },
+//     joinClassroom: { loading: false, error: null },
+//     leaveClassroom: { loading: false, error: null },
+//     createClassroom: { loading: false, error: null },
+//     // Event related statuses
+//     fetchEvents: { loading: false, error: null },
+//     updateEvent: { loading: false, error: null },
+//     deleteEvent: { loading: false, error: null },
+//     createEvent: { loading: false, error: null },
+//   },
+// };
 
 const classroomSlice = createSlice({
   name: "classroom",
-  initialState,
+  initialState: demoClassroomState,
   reducers: {
     // Set error for createClassroom
     setCreateClassroomError(state, action) {

@@ -1,3 +1,5 @@
+import { IUser } from "@/redux/slices/auth/types";
+
 export type ClassroomRole = "admin" | "co_admin" | "member";
 export type EventType =
   | "quiz"
@@ -7,14 +9,7 @@ export type EventType =
   | "lab"
   | "seminar"
   | "lecture"
-  | "Class";
-
-export interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-  avatarUrl?: string;
-}
+  | "class";
 
 export interface IMaterial {
   _id: string;

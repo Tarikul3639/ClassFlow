@@ -2,20 +2,19 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUser } from "@/redux/slices/auth/types";
 import { apiClient, setAuthToken } from "@/lib/api/axios";
 
-interface RegisterPayload {
-  name: string;
+interface SignInPayload {
   email: string;
   password: string;
 }
 
-export const registerThunk = createAsyncThunk<
+export const signInThunk = createAsyncThunk<
   { user: IUser; token: string },
-  RegisterPayload,
+  SignInPayload,
   { rejectValue: string }
->("auth/sign-up", async (data, { rejectWithValue }) => {
+>("auth/sign-in", async (data, { rejectWithValue }) => {
   try {
     const response = await apiClient.post<{ user: IUser; token: string }>(
-      "/auth/sign-up",
+      "/auth/sign-in",
       data,
     );
     const { user, token } = response.data;
@@ -26,7 +25,7 @@ export const registerThunk = createAsyncThunk<
     return { user, token };
   } catch (err) {
     return rejectWithValue(
-      err instanceof Error ? err.message : "Failed to sign up",
+      err instanceof Error ? err.message : "Failed to sign in",
     );
   }
 });

@@ -6,7 +6,7 @@ import {
   ArrowLeft,
   Shield,
 } from "lucide-react";
-import { IUser } from "@/redux/slices/classroom/types";
+import { IUser } from "@/redux/slices/auth/types";
 import { AnimatePresence } from "motion/react";
 import ProfileEditModal from "./ProfileEditModal";
 import { useState } from "react";
@@ -15,10 +15,10 @@ import { useRouter } from "next/navigation";
 interface ProfileHeaderProps {
   user: IUser;
   isAdmin: boolean;
-  className?: string; 
+  classroomName?: string; 
 }
 
-const ProfileHeader = ({ user, isAdmin, className }: ProfileHeaderProps) => {
+const ProfileHeader = ({ user, isAdmin, classroomName }: ProfileHeaderProps) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const openProfileModal = () => {
     setIsProfileModalOpen(true);
@@ -81,10 +81,10 @@ const ProfileHeader = ({ user, isAdmin, className }: ProfileHeaderProps) => {
                 ? user._id
                 : user._id}
             </span>
-            {isAdmin && className && (
+            {isAdmin && classroomName && (
               <span className="flex items-center gap-1.5 bg-white/15 px-2.5 py-1 rounded-lg backdrop-blur-sm">
                 <Cpu size={14} />
-                {className}
+                {classroomName}
               </span>
             )}
             {isAdmin && (

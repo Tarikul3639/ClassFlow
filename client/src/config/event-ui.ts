@@ -60,7 +60,7 @@ export const EVENT_UI: Record<EventType, EventUIConfig> = {
     icon: Users, // seminar / group icon
     label: "Seminar"
   },
-  Class: {
+  class: {
     color: "#f97316", // orange
     icon: BookOpenCheck, // class / study icon
     label: "Class"
