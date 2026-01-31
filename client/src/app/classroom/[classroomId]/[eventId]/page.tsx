@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AdminHeader } from "./_components/AdminHeader";
 import { GeneralInfoSection } from "./_components/GeneralInfoSection";
@@ -23,7 +23,7 @@ export default function Page() {
     materials: [] as IMaterial[],
     endAt: "",
     isCompleted: false,
-    createdBy: { _id: "", name: "", email: "" },
+    createdBy: { _id: "", name: "", email: "", classrooms: [] },
     createdAt: "",
     updatedAt: "",
   });
@@ -31,8 +31,6 @@ export default function Page() {
   if (!id) {
     return <div>Invalid Event ID</div>;
   }
-
-
 
   return (
     <div className="min-h-screen max-w-2xl mx-auto overflow-hidden">

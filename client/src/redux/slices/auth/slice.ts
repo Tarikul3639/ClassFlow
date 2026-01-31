@@ -5,15 +5,7 @@ import { signUpThunk } from "./thunks/signUpThunk";
 import { logoutThunk } from "./thunks/logoutThunk";
 import { verifyAuthThunk } from "./thunks/verifyAuthThunk";
 
-// const demo = {
-//       _id: "u1",
-//     name: "Aminul Islam",
-//     email: "aminul@mail.com",
-//     avatarUrl: "https://i.pravatar.cc/150?img=3",
-//     createdAt: "2023-01-01T00:00:00Z",
-//     updatedAt: "2023-01-01T00:00:00Z",
-// };
-
+// Initial State
 const initialState: IAuthState = {
   user: null,
   access_token: null,
@@ -31,7 +23,14 @@ const initialState: IAuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    // Logout handled in extraReducers
+    logout(state) {
+      state.user = null;
+      state.access_token = null;
+      state.isAuthenticated = false;
+    }
+  },
   extraReducers: (builder) => {
     // Login
     builder
@@ -87,6 +86,7 @@ const authSlice = createSlice({
     // Logout
     builder.addCase(logoutThunk.fulfilled, (state) => {
       state.user = null;
+      state.access_token = null;
       state.isAuthenticated = false;
       state.requestStatus.logout.loading = false;
       state.requestStatus.logout.error = null;
@@ -94,5 +94,5 @@ const authSlice = createSlice({
   },
 });
 
-export const {} = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

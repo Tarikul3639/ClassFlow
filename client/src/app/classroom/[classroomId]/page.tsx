@@ -8,7 +8,7 @@ import { useSortedEvents } from "@/hooks/useSortedEvents";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { useAppSelector } from "@/redux/hooks";
-import { isAdmin as selectIsAdmin } from "@/redux/selectors/selectors";
+import { classroomId, isAdmin as selectIsAdmin } from "@/redux/selectors/selectors";
 import { EmptyState } from "./_components/EmptyState";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -105,7 +105,7 @@ const Page = () => {
           {/* Refined Add Event Button */}
           {isAdmin && (
             <Link
-              href="/dashboard/new"
+              href={`/classroom/${classroomId}/new`}
               className="group relative flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#399aef] text-white overflow-hidden transition-all duration-300 hover:ring-2 hover:ring-[#399aef]/20 active:scale-95 shrink-0"
             >
               {/* Subtle Shine Effect on Hover */}

@@ -44,7 +44,11 @@ const SignInPage: React.FC = () => {
       .unwrap()
       .then((data) => {
         if (data.user) {
-          router.push("/dashboard");
+          if(data.user.classrooms.length === 0){
+            router.push("/dashboard/get-started");
+            return;
+          }
+          router.push("/");
         } else if (data.user) {
           router.push("/dashboard");
         }
@@ -120,7 +124,7 @@ const SignInPage: React.FC = () => {
                     Password
                   </label>
                   <Link
-                    href="/forgot-password"
+                    href="/auth/forgot-password"
                     className="text-[#399aef] text-xxsm font-bold hover:underline transition-colors"
                   >
                     Forgot Password?
@@ -168,7 +172,7 @@ const SignInPage: React.FC = () => {
             <p className="text-[#64748b] text-xs sm:text-xxsm font-medium">
               Don't have an account?
               <Link
-                href="/sign-up"
+                href="/auth/sign-up"
                 className="text-[#399aef] font-bold hover:underline ml-1.5"
               >
                 Create Account

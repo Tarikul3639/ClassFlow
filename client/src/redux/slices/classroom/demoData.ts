@@ -9,7 +9,7 @@ import {
 } from "./types";
 
 // ==================== Demo Users ====================
-export const demoUsers: IUser[] = [
+export const demoUsers = [
   {
     _id: "user-001-admin",
     name: "Dr. Sarah Mitchell",
@@ -109,7 +109,7 @@ export const demoMaterials: IMaterial[] = [
 ];
 
 // ==================== Demo Events ====================
-export const demoEvents: IEvent[] = [
+export const demoEvents = [
   // Upcoming Events
   {
     _id: "event-001",
@@ -265,7 +265,7 @@ export const demoEvents: IEvent[] = [
 ];
 
 // ==================== Demo Classroom Members ====================
-export const demoClassroomMembers: IClassroomMember[] = [
+export const demoClassroomMembers = [
   {
     user: demoUsers[0], // Admin
     role: "admin",
@@ -311,7 +311,7 @@ export const demoClassroomMembers: IClassroomMember[] = [
 ];
 
 // ==================== Demo Classroom ====================
-export const demoClassroom: IClassroom = {
+export const demoClassroom = {
   _id: "classroom-001",
   name: "Software Architecture & Design - Spring 2026",
   description:
@@ -334,7 +334,7 @@ export const demoClassroom: IClassroom = {
 };
 
 // ==================== Demo Redux State ====================
-export const demoClassroomState: ClassroomState = {
+export const demoClassroomState = {
   classroom: demoClassroom,
   loading: false,
   error: null,

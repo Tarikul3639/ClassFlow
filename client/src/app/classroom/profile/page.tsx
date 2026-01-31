@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { AnimatePresence } from "motion/react";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { AuthRequired } from "@/components/ui/AuthRequired";
 import {
   selectProfileUser,
@@ -21,6 +21,8 @@ import EditModal from "./_components/EditModal";
 import AssignCoAdminModal from "./_components/AssignCoAdminModal";
 import ProfileSkeleton from "./_components/ProfileSkeleton";
 import MetadataSection from "./_components/MetadataSection";
+import { logoutThunk } from "@/redux/slices/auth/thunks/logoutThunk";
+import { logout } from "@/redux/slices/auth/slice";
 
 export interface EditField {
   label: string;
@@ -29,6 +31,7 @@ export interface EditField {
 }
 
 const ProfilePage = () => {
+  const dispatch = useAppDispatch();
   // const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAuthenticated = true; // Temporary for testing
   const profileUser = useAppSelector(selectProfileUser);
@@ -53,8 +56,10 @@ const ProfilePage = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logging out...");
-    // TODO: Dispatch logout thunk
+    // TODO: Check if this is needed
+    dispatch(logout());
+    localStorage.removeItem("access_token");
+    // dispatch(logoutThunk());
   };
 
   const handleLeaveClassroom = () => {

@@ -20,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 interface ActionButtonsProps {
   _id: string;
@@ -119,13 +120,13 @@ export function ActionButtons({
         </button>
 
         {/* Edit Button */}
-        <button
-          onClick={() => router.push(`/dashboard/${_id}`)}
+        <Link
+          href={`/classroom/${classId}/${_id}`}
           className="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center text-[#617789] hover:text-[#399aef] hover:bg-white hover:shadow-sm rounded-md sm:rounded-lg transition-all active:scale-90"
           title="Edit Event"
         >
           <Edit3 className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
 
       {/* Mobile View - Compact & Modern Dropdown */}
@@ -163,7 +164,7 @@ export function ActionButtons({
 
             {/* Edit Option */}
             <DropdownMenuItem
-              onClick={() => router.push(`/dashboard/${_id}`)}
+              onClick={() => router.push(`/classroom/${classId}/${_id}`)}
               className="flex items-center gap-2.5 px-2 py-1.5 text-xxsm! font-medium text-[#475569] hover:bg-[#f8fafc] hover:text-[#399aef] rounded-md cursor-pointer outline-none transition-colors group"
             >
               <Edit3

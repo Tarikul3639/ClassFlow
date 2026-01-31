@@ -20,7 +20,7 @@ export const Navbar: React.FC = () => {
               About
             </Link>
             <Link
-              href="/sign-in"
+              href="auth/sign-in"
               className="group flex items-center justify-center h-10 px-6 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-full shadow-soft-blue transition-all duration-200 transform active:scale-95 cursor-pointer"
             >
               <span className="mr-1">Login</span>

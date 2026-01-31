@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
 
   const user = useAppSelector(selectProfileUser);
   const loading = useAppSelector(
-    (state) => state.auth.requestStatus.refresh.loading
+    (state) => state.auth.requestStatus.refresh.loading,
   );
 
   const pathname = usePathname();
@@ -26,10 +26,13 @@ const Navbar: React.FC = () => {
     desc: string;
   } | null>(null);
 
-  const dashboard =
-    user?.currentClassroom?.role === "admin"
-      ? "/dashboard"
-      : "/dashboard";
+  let dashboard = "";
+  if (user && user.classrooms.length === 0) {
+    dashboard = "/classroom";
+  }
+  if (user && user.classrooms.length === 1) {
+    dashboard = `/classroom/${user.classrooms[0]}`;
+  }
 
   useEffect(() => {
     // Demo data for weather since real API needs a key
@@ -97,10 +100,10 @@ const Navbar: React.FC = () => {
             <div className="hidden xs:flex items-center gap-2 text-xxs md:text-[11px] font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
               <CloudSun size={14} className="text-[#399aef] shrink-0" />
               <span className="truncate">
-                <span className="inline md:hidden">
+                <span className="inline lg:hidden">
                   {weather?.temp || "18"}°C
                 </span>
-                <span className="hidden md:inline">
+                <span className="hidden lg:inline">
                   {weather?.desc || "Clear"}, {weather?.temp || "18"}°C
                 </span>
               </span>
@@ -122,11 +125,11 @@ const Navbar: React.FC = () => {
 
             {/* Profile Avatar Link */}
             <Link
-              href="/profile"
+              href="/classroom/profile"
               className={`group relative w-8 h-8 rounded-full shrink-0
                 transition-all duration-300 ease-in-out flex items-center justify-center
                 ${
-                  isActive("/profile")
+                  isActive("/classroom/profile")
                     ? "ring-2 ring-[#399aef] ring-offset-2 scale-110 shadow-lg shadow-blue-100"
                     : "ring-1 ring-slate-200 hover:ring-[#399aef]/50 hover:ring-offset-2 hover:scale-105"
                 }
@@ -136,7 +139,7 @@ const Navbar: React.FC = () => {
               <span
                 className={`absolute inset-0 rounded-full blur-lg transition-opacity duration-500
                   ${
-                    isActive("/profile")
+                    isActive("/classroom/profile")
                       ? "opacity-40 bg-[#399aef]"
                       : "opacity-0 group-hover:opacity-20 bg-blue-400"
                   }
@@ -161,14 +164,12 @@ const Navbar: React.FC = () => {
                     tracking-tighter select-none
                   "
                 >
-                  {user?.name
-                    ? user.name.substring(0, 2).toUpperCase()
-                    : ""}
+                  {user?.name ? user.name.substring(0, 2).toUpperCase() : ""}
                 </AvatarFallback>
               </Avatar>
 
               {/* Active Indicator Dot */}
-              {isActive("/profile") && (
+              {isActive("/classroom/profile") && (
                 <span className="absolute -top-1 -right-1 w-2.5 md:w-3 h-2.5 md:h-3 bg-[#399aef] border-2 border-white rounded-full z-10" />
               )}
             </Link>

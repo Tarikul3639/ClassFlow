@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { AuthResponse, AuthUser } from './interface/auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<AuthResponse> {
     const existingUser = await this.userModel.findOne({
       email: registerDto.email,
     });
@@ -37,7 +38,7 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<AuthResponse> {
     const user = await this.userModel
       .findOne({ email: loginDto.email })
       .select('+password');
@@ -58,7 +59,7 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
-  async validateUser(userId: string) {
+  async validateUser(userId: string){
     const user = await this.userModel.findById(userId).select('-password');
 
     if (!user) {
@@ -68,7 +69,7 @@ export class AuthService {
     return user;
   }
 
-  private generateAuthResponse(user: UserDocument) {
+  private generateAuthResponse(user: UserDocument): AuthResponse {
     const payload = {
       sub: user._id.toString(),
       email: user.email,
@@ -82,6 +83,7 @@ export class AuthService {
         _id: user._id.toString(),
         name: user.name,
         email: user.email,
+        classrooms: user.classrooms.map((id) => id.toString()),
         avatarUrl: user.avatarUrl,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,

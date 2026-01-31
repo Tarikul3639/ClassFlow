@@ -1,26 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   BookOpen,
   Sparkles,
   PlusCircle,
   Users,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { classroomId } from "@/redux/selectors/selectors";
+import { useAppSelector } from "@/redux/hooks";
 
 const GetStartedPage: React.FC = () => {
   const router = useRouter();
+  const classId = useAppSelector(classroomId);
 
   const handleJoinClassroom = () => {
-    router.push("/join-classroom");
+    router.push("/classroom/join-classroom");
   };
 
   const handleCreateClassroom = () => {
-    router.push("/create-classroom");
+    router.push("/classroom/create-classroom");
   };
+
+  useEffect(() => {
+    if (classId) {
+      router.push(`/classroom/${classId}`);
+    }
+  }, [classId, router]);
 
   return (
     <div className="bg-white min-h-screen flex flex-col font-sans antialiased">

@@ -12,7 +12,7 @@ export const CTASection: React.FC = () => {
     <section className="py-24 bg-white overflow-hidden relative">
       <div className="absolute right-0 top-0 w-1/3 h-full bg-linear-to-l from-primary/5 to-transparent skew-x-12 transform origin-top-right"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+        <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
           <div className="flex-1 space-y-8">
             <h2 className="text-3xl md:text-4xl font-bold text-text-main">
               Ready to streamline your <br /> academic workflow?

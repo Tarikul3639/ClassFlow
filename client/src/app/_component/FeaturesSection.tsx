@@ -49,7 +49,7 @@ export const FeaturesSection: React.FC = () => {
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6">
           {FEATURES.map((feature) => {
             const Icon = feature.icon;
             return (

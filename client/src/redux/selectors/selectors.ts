@@ -2,7 +2,7 @@
 import { RootState } from "@/redux/store";
 
 export const classroomId = (state: RootState): string | null => {
-  return state.classroom.classroom?._id ?? null;
+  return state.auth.user?.classrooms?.[0] || null;
 };
 
 export const classroomName = (state: RootState): string | null => {

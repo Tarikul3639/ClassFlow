@@ -1,6 +1,6 @@
 import { IEvent } from "@/redux/slices/classroom/types";
 
-export const events: IEvent[] = [
+export const events = [
   {
     _id: "1",
     type: "ct",

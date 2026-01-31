@@ -66,7 +66,7 @@ const ForgotPasswordPage: React.FC = () => {
 
           <div className="mt-8 pt-6 border-t border-neutral-border">
             <Link
-              href="/sign-in"
+              href="/auth/sign-in"
               className="inline-flex items-center gap-2 text-[#399aef] text-sm font-bold hover:underline group"
             >
               <ArrowLeft
@@ -113,7 +113,7 @@ const ForgotPasswordSuccess: React.FC<{ email: string }> = ({ email }) => {
           </div>
 
           <div className="space-y-3">
-            <Link href="/sign-in" className="block w-full">
+            <Link href="/auth/sign-in" className="block w-full">
               <button className="w-full h-12 bg-[#399aef] text-white text-sm font-bold rounded-xl hover:bg-[#3289d6] transition-all active:scale-[0.98]">
                 Back to Login
               </button>
