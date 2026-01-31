@@ -1,11 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
 import { IBaseUser, IAdminProfile } from "@/types/profile";
-import {
-  demoClassroom,
-  demoClassroomMembers,
-  demoUsers,
-} from "../slices/classroom/demoData";
 
 // Base selectors
 export const selectAuthUser = (state: RootState) => state.auth.user;
@@ -30,39 +25,19 @@ export const selectCurrentUserMember = createSelector(
 export const selectProfileUser = createSelector(
   [selectAuthUser, selectClassroom, selectCurrentUserMember],
   (user, classroom, memberInfo): IBaseUser | null => {
-    // if (!user || !classroom || !memberInfo) return null;
-
-    // return {
-    //   ...user,
-    //   currentClassroom: {
-    //     _id: classroom._id,
-    //     name: classroom.name,
-    //     role: memberInfo.role,
-    //     joinedAt: memberInfo.joinedAt,
-    //   },
-    //   institute: classroom.institute,
-    //   department: classroom.department,
-    //   intake: classroom.intake,
-    //   section: classroom.section,
-    // };
-
+    if (!user) return null;
     return {
-      _id: demoUsers[0]._id,
-      name: demoUsers[0].name,
-      email: demoUsers[0].email,
-      avatarUrl: demoUsers[0].avatarUrl,
-      createdAt: "2026-01-01T08:00:00.000Z",
-      updatedAt: "2026-01-31T10:00:00.000Z",
+      ...user,
       currentClassroom: {
-        _id: demoClassroom._id,
-        name: demoClassroom.name,
-        role: "admin",
-        joinedAt: demoClassroomMembers[0].joinedAt,
+        _id: classroom?._id || "",
+        name: classroom?.name || "",
+        role: memberInfo?.role || "member",
+        joinedAt: memberInfo?.joinedAt || "",
       },
-      institute: demoClassroom.institute,
-      department: demoClassroom.department,
-      intake: demoClassroom.intake,
-      section: demoClassroom.section,
+      institute: classroom?.institute || "",
+      department: classroom?.department || "",
+      intake: classroom?.intake || "",
+      section: classroom?.section || "",
     };
   },
 );

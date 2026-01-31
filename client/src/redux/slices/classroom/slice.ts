@@ -13,30 +13,30 @@ import { updateEventThunk } from "./thunks/event/updateEventThunk";
 import { deleteEventThunk } from "./thunks/event/deleteEventThunk";
 
 // Initial State for demo and testing
-import { demoClassroomState } from "./demoData";
+// import { demoClassroomState } from "./demoData";
 
 // Initial State
-// const initialState: ClassroomState = {
-//   classroom: null,
-//   loading: false,
-//   error: null,
-//   requestStatus: {
-//     // Classroom related statuses
-//     fetchClassroom: { loading: false, error: null },
-//     joinClassroom: { loading: false, error: null },
-//     leaveClassroom: { loading: false, error: null },
-//     createClassroom: { loading: false, error: null },
-//     // Event related statuses
-//     fetchEvents: { loading: false, error: null },
-//     updateEvent: { loading: false, error: null },
-//     deleteEvent: { loading: false, error: null },
-//     createEvent: { loading: false, error: null },
-//   },
-// };
+const initialState: ClassroomState = {
+  classroom: null,
+  loading: false,
+  error: null,
+  requestStatus: {
+    // Classroom related statuses
+    fetchClassroom: { loading: false, error: null },
+    joinClassroom: { loading: false, error: null },
+    leaveClassroom: { loading: false, error: null },
+    createClassroom: { loading: false, error: null },
+    // Event related statuses
+    fetchEvents: { loading: false, error: null },
+    updateEvent: { loading: false, error: null },
+    deleteEvent: { loading: false, error: null },
+    createEvent: { loading: false, error: null },
+  },
+};
 
 const classroomSlice = createSlice({
   name: "classroom",
-  initialState: demoClassroomState,
+  initialState: initialState,
   reducers: {
     // Set error for createClassroom
     setCreateClassroomError(state, action) {
@@ -50,7 +50,7 @@ const classroomSlice = createSlice({
     setLeaveClassroomError(state, action) {
       state.requestStatus.leaveClassroom.error = action.payload;
     },
-    // Ser error for Delete Event
+    // Set error for Delete Event
     setDeleteEventError(state, action) {
       state.requestStatus.deleteEvent.error = action.payload;
     },
@@ -58,7 +58,7 @@ const classroomSlice = createSlice({
     setUpdateEventError(state, action) {
       state.requestStatus.updateEvent.error = action.payload;
     },
-    // Set Mark as a Prepared
+    // Set Mark as Prepared
     setMarkEventAsPrepared(state, action) {
       state.classroom?.events.includes(action.payload.eventId) &&
         (state.classroom.events.find(

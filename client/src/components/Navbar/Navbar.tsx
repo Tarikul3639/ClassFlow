@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
             {/* Profile Avatar Link */}
             <Link
               href="/profile"
-              className={`group relative w-10 h-10 md:w-11 md:h-11 rounded-full shrink-0
+              className={`group relative w-8 h-8 rounded-full shrink-0
                 transition-all duration-300 ease-in-out flex items-center justify-center
                 ${
                   isActive("/profile")
@@ -169,7 +169,7 @@ const Navbar: React.FC = () => {
 
               {/* Active Indicator Dot */}
               {isActive("/profile") && (
-                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#399aef] border-2 border-white rounded-full z-10" />
+                <span className="absolute -top-1 -right-1 w-2.5 md:w-3 h-2.5 md:h-3 bg-[#399aef] border-2 border-white rounded-full z-10" />
               )}
             </Link>
           </div>

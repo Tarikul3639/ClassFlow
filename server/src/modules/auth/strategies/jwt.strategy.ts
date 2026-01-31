@@ -30,8 +30,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    // Validate that user still exists in database
     const user = await this.authService.validateUser(payload.sub);
 
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Return user data - this will be attached to req.user
     return {
       userId: payload.sub,
       email: payload.email,

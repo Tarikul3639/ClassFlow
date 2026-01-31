@@ -10,7 +10,7 @@ export const logoutThunk = createAsyncThunk<
     await apiClient.post("/auth/logout");
 
     setAuthToken(null);
-    if (typeof window !== "undefined") localStorage.removeItem("token");
+    if (typeof window !== "undefined") localStorage.removeItem("access_token");
   } catch (err) {
     return rejectWithValue(
       err instanceof Error ? err.message : "Failed to logout",

@@ -12,9 +12,9 @@ export const apiClient = axios.create({
 });
 
 // Set auth token helper
-export const setAuthToken = (token: string | null) => {
-  if (token) {
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+export const setAuthToken = (access_token: string | null) => {
+  if (access_token) {
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
   } else {
     delete apiClient.defaults.headers.common['Authorization'];
   }
@@ -24,9 +24,9 @@ export const setAuthToken = (token: string | null) => {
 apiClient.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        setAuthToken(token);
+      const access_token = localStorage.getItem('access_token');
+      if (access_token) {
+        setAuthToken(access_token);
       }
     }
     return config;
@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
+        localStorage.removeItem('access_token');
         setAuthToken(null);
         window.location.href = '/auth/sign-in';
       }

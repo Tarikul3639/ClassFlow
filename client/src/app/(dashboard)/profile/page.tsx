@@ -21,7 +21,6 @@ import EditModal from "./_components/EditModal";
 import AssignCoAdminModal from "./_components/AssignCoAdminModal";
 import ProfileSkeleton from "./_components/ProfileSkeleton";
 import MetadataSection from "./_components/MetadataSection";
-import { userInfo } from "os";
 
 export interface EditField {
   label: string;
@@ -89,15 +88,15 @@ const ProfilePage = () => {
   };
 
   // Loading state
-  if (isAuthenticated && !profileUser) {
-    return (
-      <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased">
-        <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10">
-          <ProfileSkeleton type="admin" />
-        </main>
-      </div>
-    );
-  }
+  // if (isAuthenticated && !profileUser) {
+  //   return (
+  //     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased">
+  //       <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10">
+  //         <ProfileSkeleton type="admin" />
+  //       </main>
+  //     </div>
+  //   );
+  // }
 
   // Not authenticated
   if (!isAuthenticated || !profileUser) {

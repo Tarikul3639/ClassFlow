@@ -5,21 +5,21 @@ import { signUpThunk } from "./thunks/signUpThunk";
 import { logoutThunk } from "./thunks/logoutThunk";
 import { verifyAuthThunk } from "./thunks/verifyAuthThunk";
 
-const demo = {
-      _id: "u1",
-    name: "Aminul Islam",
-    email: "aminul@mail.com",
-    avatarUrl: "https://i.pravatar.cc/150?img=3",
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
-};
+// const demo = {
+//       _id: "u1",
+//     name: "Aminul Islam",
+//     email: "aminul@mail.com",
+//     avatarUrl: "https://i.pravatar.cc/150?img=3",
+//     createdAt: "2023-01-01T00:00:00Z",
+//     updatedAt: "2023-01-01T00:00:00Z",
+// };
 
 const initialState: IAuthState = {
-  user: demo,
-  token: "demo-token",
+  user: null,
+  access_token: null,
   loading: false,
   error: null,
-  isAuthenticated: true,
+  isAuthenticated: false,
   requestStatus: {
     signIn: { loading: false, error: null },
     signUp: { loading: false, error: null },
@@ -42,7 +42,7 @@ const authSlice = createSlice({
       .addCase(signInThunk.fulfilled, (state, action) => {
         state.requestStatus.signIn.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.access_token = action.payload.access_token;
         state.isAuthenticated = true;
       })
       .addCase(signInThunk.rejected, (state, action) => {
@@ -59,7 +59,7 @@ const authSlice = createSlice({
       .addCase(signUpThunk.fulfilled, (state, action) => {
         state.requestStatus.signUp.loading = false;
         state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.access_token = action.payload.access_token;
         state.isAuthenticated = true;
       })
       .addCase(signUpThunk.rejected, (state, action) => {

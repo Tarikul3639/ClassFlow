@@ -9,21 +9,21 @@ interface RegisterPayload {
 }
 
 export const signUpThunk = createAsyncThunk<
-  { user: IUser; token: string },
+  { user: IUser; access_token: string },
   RegisterPayload,
   { rejectValue: string }
 >("auth/sign-up", async (data, { rejectWithValue }) => {
   try {
-    const response = await apiClient.post<{ user: IUser; token: string }>(
+    const response = await apiClient.post<{ user: IUser; access_token: string }>(
       "/auth/sign-up",
       data,
     );
-    const { user, token } = response.data;
+    const { user, access_token } = response.data;
 
-    setAuthToken(token);
-    if (typeof window !== "undefined") localStorage.setItem("token", token);
+    setAuthToken(access_token);
+    if (typeof window !== "undefined") localStorage.setItem("access_token", access_token);
 
-    return { user, token };
+    return { user, access_token };
   } catch (err) {
     return rejectWithValue(
       err instanceof Error ? err.message : "Failed to sign up",
