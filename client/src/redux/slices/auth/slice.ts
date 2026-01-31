@@ -5,12 +5,19 @@ import { registerThunk } from "./thunks/registerThunk";
 import { logoutThunk } from "./thunks/logoutThunk";
 import { verifyAuthThunk } from "./thunks/verifyAuthThunk";
 
+const demo = {
+      _id: "u1",
+    name: "Aminul Islam",
+    email: "aminul@mail.com",
+    avatarUrl: "https://i.pravatar.cc/150?img=3",
+};
+
 const initialState: IAuthState = {
-  user: null,
-  token: null,
+  user: demo,
+  token: "demo-token",
   loading: false,
   error: null,
-  isAuthenticated: false,
+  isAuthenticated: true,
   requestStatus: {
     signIn: { loading: false, error: null },
     signUp: { loading: false, error: null },

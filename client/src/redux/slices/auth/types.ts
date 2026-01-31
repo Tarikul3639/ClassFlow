@@ -8,7 +8,6 @@ export interface IUser {
   _id: string;
   name: string;
   email: string;
-  role?: UserRole; // TODO: Will be removed later
   avatarUrl?: string;
 }
 

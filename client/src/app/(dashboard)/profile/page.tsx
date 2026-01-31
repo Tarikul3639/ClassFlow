@@ -14,12 +14,18 @@ import ProfileActions from "./_components/ProfileActions";
 import EditModal from "./_components/EditModal";
 import AssignCoAdminModal from "./_components/AssignCoAdminModal";
 import ProfileSkeleton from "./_components/ProfileSkeleton";
-import { IStudentProfile, IAdminProfile } from "@/types/profile";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { AuthRequired } from "@/components/ui/AuthRequired";
+import { isAdmin as selectIsAdmin, classroomId, classroomName } from "@/redux/selectors/selectors";
+import { UserRole } from "@/redux/slices/auth/types";
+import { IClassroom } from "@/redux/slices/classroom/types";
 
 // --- Main Profile View ---
 const ProfilePage = () => {
+  const isAdmin = useAppSelector(selectIsAdmin);
+  const classId = useAppSelector(classroomId);
+  const className = useAppSelector(classroomName);
+
   const { user, isAuthenticated, requestStatus } = useAppSelector(
     (state) => state.auth,
   );
@@ -40,7 +46,7 @@ const ProfilePage = () => {
     return (
       <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased text-[#111518]">
         <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10 flex flex-col gap-6">
-          <ProfileSkeleton type={user?.role ? user.role : "student"} />
+          <ProfileSkeleton type={isAdmin ? UserRole.ADMIN : UserRole.STUDENT} />
         </main>
       </div>
     );
@@ -53,46 +59,36 @@ const ProfilePage = () => {
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased text-[#111518]">
       <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10 flex flex-col gap-6">
-        {/* <ProfileHeader data={user} /> */}
-        {user.role === "student" && (
+        <ProfileHeader user={user} isAdmin={isAdmin} className={className ?? undefined} />
+        {!isAdmin && (
           <>
-            <StudentAccountSection
-              data={user as IStudentProfile}
-              onEdit={handleEdit}
-            />
+            <StudentAccountSection data={user} onEdit={handleEdit} />
             <StudentSecuritySection onEdit={handleEdit} />
           </>
         )}
-        {(user.role === "admin" || user.role === "co_admin") && (
+        {isAdmin && (
           <>
-            <AdminAccountSection
-              data={user as IAdminProfile}
-              onEdit={handleEdit}
-            />
+            <AdminAccountSection data={user} onEdit={handleEdit} />
 
             <UserManagementSection
-              data={user as IAdminProfile}
+              data={user}
               onAssignCoAdmin={() => setIsAssignCoAdminModalOpen(true)}
             />
 
-            {(user as IAdminProfile).classSectionIds &&
-              (user as IAdminProfile).classSectionIds!.length > 0 && (
-                <ClassSectionsSection
-                  classSectionIds={
-                    (user as IAdminProfile).classSectionIds!
-                  }
-                />
-              )}
+            {classId && (
+              <ClassSectionsSection classId={classId} />
+            )}
 
             <AdminSecuritySection onEdit={handleEdit} />
           </>
         )}
 
         <ProfileActions />
-        {/* <MetadataSection
+        <MetadataSection
           createdAt={user.createdAt}
           updatedAt={user.updatedAt}
-        /> */}
+        />
+
         {/* Modal Logic with Animation Support */}
         <AnimatePresence>
           {editingField && (

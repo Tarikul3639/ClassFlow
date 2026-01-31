@@ -11,7 +11,6 @@ import { leaveClassroomThunk } from "./thunks/classroom/leaveClassroomThunk";
 import { createEventThunk } from "./thunks/event/createEventThunk";
 import { updateEventThunk } from "./thunks/event/updateEventThunk";
 import { deleteEventThunk } from "./thunks/event/deleteEventThunk";
-import { set } from "date-fns";
 
 const initialState: ClassroomState = {
   classroom: null,

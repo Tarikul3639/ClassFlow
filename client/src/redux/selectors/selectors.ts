@@ -5,6 +5,10 @@ export const classroomId = (state: RootState): string | null => {
   return state.classroom.classroom?._id ?? null;
 };
 
+export const classroomName = (state: RootState): string | null => {
+  return state.classroom.classroom?.name ?? null;
+}
+
 export const isAdmin = (state: RootState): boolean => {
   const role = state.classroom.classroom?.myRole;
   return role === "admin" || role === "co_admin";

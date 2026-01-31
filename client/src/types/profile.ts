@@ -1,97 +1,142 @@
-import { UserRole } from "./auth";
-import { IClassSectionSummary } from "./academic";
+// ==================== Enums ====================
+export enum ClassroomRole {
+  ADMIN = 'admin',
+  CO_ADMIN = 'co_admin',
+  MEMBER = 'member',
+}
 
-/* =======================
-   BASE USER
-======================= */
+export enum UserRole {
+  ADMIN = 'admin',
+  STUDENT = 'student',
+}
 
-export interface IBaseProfile {
+// ==================== Base User ====================
+export interface IUser {
   _id: string;
   name: string;
   email: string;
-  role: UserRole;
   avatarUrl?: string;
-}
-
-/* =======================
-   STUDENT USER
-======================= */
-
-export interface IStudentProfile extends IBaseProfile {
-  role: "student";
-
-  studentId: string; // backend reference
-  classSectionId: string; // reference to ClassSection
-
-  // optional frontend display
-  classInfo?: IClassSectionSummary;
-
-  department?: string;
-  intake?: string;
-  section?: string;
-  
-  // Additional profile fields
-  phoneNumber?: string;
-  password?: string;
-  dateOfBirth?: string;
-  gender?: string;
-  address?: string;
-  guardianName?: string;
-  guardianPhone?: string;
-  bloodGroup?: string;
-  enrollmentDate?: string;
-
   createdAt: string;
   updatedAt: string;
 }
 
-/* =======================
-   ADMIN USER
-======================= */
+// ==================== Classroom Member ====================
+export interface IClassroomMember {
+  user: IUser;
+  role: ClassroomRole;
+  isBlocked: boolean;
+  blockedBy?: string;
+  blockedAt?: string;
+  joinedAt: string;
+}
 
-export interface IAdminProfile extends IBaseProfile {
-  role: "admin" | "co_admin";
-  adminId: string;
+// ==================== Classroom ====================
+export interface IClassroom {
+  _id: string;
+  name: string;
+  description?: string;
+  institute: string;
+  department: string;
+  intake: string;
+  section?: string;
+  joinCode?: string; // Only visible to admins
+  isJoinCodeActive: boolean;
+  createdBy: string;
+  members: IClassroomMember[];
+  isActive: boolean;
+  isArchived: boolean;
+  coverImage?: string;
+  totalMembers: number;
+  totalEvents: number;
+  myRole?: ClassroomRole; // Current user's role
+  createdAt: string;
+  updatedAt: string;
+}
 
-  // optional: scope restriction for co_admin
-  instituteId?: string;
-  departmentId?: string;
-  classSectionIds?: string[];
+// ==================== Profile Data ====================
 
-  // permissions control
-  permissions: {
-    canCreateClassroom: boolean;        // create classrooms
-    canAssignAdmin: boolean;            // assign co_admin
-    canRemoveAdmin: boolean;            // remove co_admin
-    canManageStudents: boolean;         // block/unblock, edit student profile
-    canManageTeachers: boolean;         // manage teacher profiles
-    canEditClassContent: boolean;       // edit class content
+// User Profile (Admin or Student)
+export interface IUserProfile extends IUser {
+  // Classroom context
+  currentClassroom: {
+    id: string;
+    name: string;
+    role: ClassroomRole;
+    isAdmin: boolean; // Computed from role
+    joinedAt: string;
   };
+  
+  // Academic info from classroom
+  institute: string;
+  department: string;
+  intake: string;
+  section?: string;
+}
 
-  // optional: user management logs (for frontend convenience)
-  managedStudents?: {
+// Admin-specific data
+export interface IAdminProfile extends IUserProfile {
+  // Managed users in current classroom
+  managedMembers: {
     _id: string;
-    studentId?: string;
-    adminId?: string;
     name: string;
     email: string;
     avatarUrl?: string;
-    blocked: boolean;
-    role: "student" | "co_admin";
+    role: ClassroomRole;
+    isBlocked: boolean;
+    blockedBy?: string;
+    blockedAt?: string;
+    joinedAt: string;
   }[];
   
-  // Additional admin fields
-  phoneNumber?: string;
-  dateOfBirth?: string;
-  gender?: string;
-  address?: string;
-
-  createdAt: string;
-  updatedAt: string;
+  // Classroom info
+  classroomInfo: {
+    joinCode: string;
+    isJoinCodeActive: boolean;
+    totalMembers: number;
+    totalAdmins: number;
+    totalBlockedMembers: number;
+  };
 }
 
-/* =======================
-   UNION TYPE
-======================= */
+// Student-specific data
+export interface IStudentProfile extends IUserProfile {
+  // No additional fields for now
+}
 
-export type IUserProfile = IStudentProfile | IAdminProfile;
+// ==================== UI Component Props ====================
+
+// User Section Props
+export interface UserSectionProps {
+  user: IUserProfile;
+  isAdmin: boolean;
+  onEdit: (field: string, value: string) => void;
+}
+
+// Security Section Props
+export interface SecuritySectionProps {
+  onLogout: () => void;
+  onLeaveClassroom: () => void;
+  onDeactivateAccount: () => void;
+  isAdmin: boolean;
+}
+
+// User Management Section Props (Admin only)
+export interface UserManagementSectionProps {
+  members: IAdminProfile['managedMembers'];
+  classroomInfo: IAdminProfile['classroomInfo'];
+  canAssignCoAdmin: boolean;
+  canBlockUser: boolean;
+  canRemoveCoAdmin: boolean;
+  onAssignCoAdmin: () => void;
+  onBlockUser: (userId: string) => void;
+  onUnblockUser: (userId: string) => void;
+  onRemoveCoAdmin: (userId: string) => void;
+  onRemoveMember: (userId: string) => void;
+}
+
+// Edit Field
+export interface EditField {
+  label: string;
+  value: string;
+  type?: 'text' | 'email' | 'password';
+}

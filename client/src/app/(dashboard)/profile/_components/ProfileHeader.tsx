@@ -6,34 +6,33 @@ import {
   ArrowLeft,
   Shield,
 } from "lucide-react";
-import { IStudentProfile, IAdminProfile, IBaseProfile } from "@/types/profile";
+import { IUser } from "@/redux/slices/classroom/types";
 import { AnimatePresence } from "motion/react";
 import ProfileEditModal from "./ProfileEditModal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface ProfileHeaderProps {
-  data: IStudentProfile | IAdminProfile;
+  user: IUser;
+  isAdmin: boolean;
+  className?: string; 
 }
 
-const ProfileHeader = ({ data }: ProfileHeaderProps) => {
+const ProfileHeader = ({ user, isAdmin, className }: ProfileHeaderProps) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const openProfileModal = () => {
     setIsProfileModalOpen(true);
   };
   const router = useRouter();
 
-  const isStudent = data.role === "student";
-  const isAdmin = data.role === "admin" || data.role === "co_admin";
-
   return (
     <header
       className={`relative ${
-        isStudent
-          ? "bg-linear-to-r from-[#399aef] to-[#4D9DE0]"
-          : "bg-linear-to-r from-purple-600 to-purple-500"
+        isAdmin
+          ? "bg-linear-to-r from-purple-600 to-purple-500"
+          : "bg-linear-to-r from-[#399aef] to-[#4D9DE0]"
       } rounded-2xl p-6 md:p-8 overflow-hidden shadow-md ${
-        isStudent ? "shadow-blue-100/40" : "shadow-purple-100/40"
+        isAdmin ? "shadow-purple-100/40" : "shadow-blue-100/40"
       }`}
     >
       {/* Back Button - Positioned Top Left */}
@@ -52,10 +51,10 @@ const ProfileHeader = ({ data }: ProfileHeaderProps) => {
 
       {/* Background Icon */}
       <div className="absolute -right-10 -top-10 opacity-10 rotate-12 pointer-events-none">
-        {isStudent ? (
-          <GraduationCap size={160} strokeWidth={1} />
-        ) : (
+        {isAdmin ? (
           <Shield size={160} strokeWidth={1} />
+        ) : (
+          <GraduationCap size={160} strokeWidth={1} />
         )}
       </div>
 
@@ -65,33 +64,33 @@ const ProfileHeader = ({ data }: ProfileHeaderProps) => {
             <img
               alt="Profile"
               className="w-full h-full object-cover rounded-full"
-              src={data.avatarUrl}
+              src={user.avatarUrl}
             />
           </div>
         </div>
 
         <div className="flex-1 text-center md:text-left">
           <h1 className="text-xl md:text-2xl font-black tracking-tight mb-2">
-            {data.name}
+            {user.name}
           </h1>
           <div className="flex flex-wrap justify-center md:justify-start gap-3 text-white/90 font-bold text-xxs">
             <span className="flex items-center gap-1.5 bg-white/15 px-2.5 py-1 rounded-lg backdrop-blur-sm">
               <BadgeCheck size={14} />
               ID: #
-              {isStudent
-                ? (data as IStudentProfile).studentId
-                : (data as IAdminProfile).adminId}
+              {isAdmin
+                ? user._id
+                : user._id}
             </span>
-            {isStudent && (data as IStudentProfile).department && (
+            {isAdmin && className && (
               <span className="flex items-center gap-1.5 bg-white/15 px-2.5 py-1 rounded-lg backdrop-blur-sm">
                 <Cpu size={14} />
-                {(data as IStudentProfile).department}
+                {className}
               </span>
             )}
             {isAdmin && (
               <span className="flex items-center gap-1.5 bg-white/15 px-2.5 py-1 rounded-lg backdrop-blur-sm">
                 <Shield size={14} />
-                {data.role === "admin" ? "Administrator" : "Co-Administrator"}
+                {isAdmin ? "Administrator" : "Co-Administrator"}
               </span>
             )}
           </div>
@@ -101,7 +100,7 @@ const ProfileHeader = ({ data }: ProfileHeaderProps) => {
           <button
             onClick={openProfileModal}
             className={`px-4 py-2 bg-white backdrop-blur-2xl ${
-              isStudent ? "text-[#399aef]" : "text-purple-600"
+              isAdmin ? "text-purple-600" : "text-[#399aef]"
             } text-xxsm font-black rounded-xl shadow-lg hover:bg-blue-50 transition-all flex items-center gap-2 group`}
           >
             <Edit3
@@ -120,8 +119,8 @@ const ProfileHeader = ({ data }: ProfileHeaderProps) => {
             isOpen={isProfileModalOpen}
             onClose={() => setIsProfileModalOpen(false)}
             currentData={{
-              name: data.name,
-              avatarUrl: data.avatarUrl,
+              name: user.name,
+              avatarUrl: user.avatarUrl,
             }}
           />
         )}
