@@ -38,7 +38,7 @@ export const CTASection: React.FC = () => {
               </li>
             </ul>
             <Link
-              href="/sign-up"
+              href="/auth/sign-up"
               className="inline-flex items-center justify-center h-12 px-8 bg-text-main text-white hover:bg-black text-base font-bold rounded-full transition-colors"
             >
               Get Started Now

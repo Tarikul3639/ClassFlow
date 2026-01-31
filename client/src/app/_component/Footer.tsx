@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+
 import { GraduationCap, Github, Twitter, ShieldCheck } from "lucide-react";
 
 export const Footer: React.FC = () => {
@@ -41,14 +41,14 @@ export const Footer: React.FC = () => {
               </a>
             </div>
             
-            <Link href="/admin" className="group flex items-center gap-2 pl-2 border border-[#edf1f4] hover:border-blue-200  rounded-lg p-2">
-              <span className="text-xxs font-black text-[#617789] uppercase tracking-widest px-2 group-hover:text-[#399aef] transition-colors">
-                Admin
+            <button className="group flex items-center gap-2 pl-2 border border-blue-200  rounded-lg p-2">
+              <span className="text-xxs font-black uppercase tracking-widest px-2 text-[#399aef] transition-colors">
+                Secure Access
               </span>
-              <div className="w-7 h-7 rounded-lg bg-[#617789] group-hover:bg-[#399aef] group-hover:text-white flex items-center justify-center border border-[#edf1f4] transition-all">
+              <div className="w-7 h-7 rounded-lg bg-[#399aef] text-white flex items-center justify-center border border-[#edf1f4] transition-all">
                 <ShieldCheck size={14} />
               </div>
-            </Link>
+            </button>
           </div>
 
         </div>
