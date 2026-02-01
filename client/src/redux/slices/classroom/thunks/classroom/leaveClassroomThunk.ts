@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiClient } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 export const leaveClassroomThunk = createAsyncThunk<
   void,
@@ -13,8 +14,6 @@ export const leaveClassroomThunk = createAsyncThunk<
       { withCredentials: true },
     );
   } catch (error) {
-    return rejectWithValue(
-      error instanceof Error ? error.message : "Unknown error",
-    );
+    return rejectWithValue(extractErrorMessage(error));
   }
 });

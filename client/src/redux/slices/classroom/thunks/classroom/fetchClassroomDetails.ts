@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IClassroom } from "@/redux/slices/classroom/types";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 import { apiClient } from "@/lib/api/axios";
 
 export const fetchClassroomDetails = createAsyncThunk<
@@ -42,8 +43,6 @@ export const fetchClassroomDetails = createAsyncThunk<
       myRole: classroom.myRole,
     };
   } catch (error) {
-    return rejectWithValue(
-      error instanceof Error ? error.message : "Unknown error",
-    );
+    return rejectWithValue(extractErrorMessage(error));
   }
 });

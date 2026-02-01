@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUser } from "@/redux/slices/auth/types";
 import { apiClient, setAuthToken } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 interface SignInPayload {
   email: string;
@@ -26,8 +27,6 @@ export const signInThunk = createAsyncThunk<
 
     return { user, access_token };
   } catch (err) {
-    return rejectWithValue(
-      err instanceof Error ? err.message : "Failed to sign in",
-    );
+    return rejectWithValue(extractErrorMessage(err));
   }
 });

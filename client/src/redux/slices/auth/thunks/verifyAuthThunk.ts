@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUser } from "@/redux/slices/auth/types";
 import { apiClient, setAuthToken } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 export const verifyAuthThunk = createAsyncThunk<
   IUser,
@@ -20,8 +21,6 @@ export const verifyAuthThunk = createAsyncThunk<
   } catch (err) {
     setAuthToken(null);
     if (typeof window !== "undefined") localStorage.removeItem("access_token");
-    return rejectWithValue(
-      err instanceof Error ? err.message : "Auth verification failed",
-    );
+    return rejectWithValue(extractErrorMessage(err));
   }
 });

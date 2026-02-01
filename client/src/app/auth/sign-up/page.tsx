@@ -53,7 +53,7 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     dispatch(signUpThunk(formData))
       .unwrap()
-      .then(() => router.push("/dashboard"))
+      .then(() => router.push("/classroom"))
       .catch(() => {});
   };
 

@@ -44,11 +44,11 @@ const JoinClassroomPage: React.FC = () => {
     dispatch(setJoinClassroomError(""));
 
     try {
-      await dispatch(joinClassroomThunk(code));
+      const joinedClassroom = await dispatch(joinClassroomThunk(code)).unwrap();
       // Success - redirect to classroom
-      router.push(`/classroom/${code}`);
+      router.push(`/classrooms/${joinedClassroom._id}`);
     } catch (err) {
-      dispatch(setJoinClassroomError("Invalid code. Please try again."));
+      // dispatch(setJoinClassroomError(err instanceof Error ? err.message : "Unknown error"));
     }
   };
 

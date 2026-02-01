@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IClassroom } from "@/redux/slices/classroom/types";
 import { apiClient } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 export const joinClassroomThunk = createAsyncThunk<
   IClassroom,
@@ -18,8 +19,6 @@ export const joinClassroomThunk = createAsyncThunk<
     if (!response) throw new Error("Failed to join classroom");
     return response.data.classroom;
   } catch (error) {
-    return rejectWithValue(
-      error instanceof Error ? error.message : "Unknown error",
-    );
+    return rejectWithValue(extractErrorMessage(error));
   }
 });

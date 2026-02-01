@@ -23,6 +23,7 @@ export class ClassroomService {
   ) {}
 
   async create(createClassroomDto: CreateClassroomDto, userId: string) {
+    console.log("Classroom payload: ",createClassroomDto);
     const joinCode = await this.helperService.generateJoinCode(this.classroomModel);
 
     const classroom = await this.classroomModel.create({

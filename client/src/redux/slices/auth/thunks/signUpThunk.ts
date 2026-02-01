@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUser } from "@/redux/slices/auth/types";
 import { apiClient, setAuthToken } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 interface RegisterPayload {
   name: string;
@@ -25,8 +26,6 @@ export const signUpThunk = createAsyncThunk<
 
     return { user, access_token };
   } catch (err) {
-    return rejectWithValue(
-      err instanceof Error ? err.message : "Failed to sign up",
-    );
+    return rejectWithValue(extractErrorMessage(err));
   }
 });

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiClient, setAuthToken } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 export const logoutThunk = createAsyncThunk<
   void,
@@ -12,8 +13,6 @@ export const logoutThunk = createAsyncThunk<
     setAuthToken(null);
     if (typeof window !== "undefined") localStorage.removeItem("access_token");
   } catch (err) {
-    return rejectWithValue(
-      err instanceof Error ? err.message : "Failed to logout",
-    );
+    return rejectWithValue(extractErrorMessage(err));
   }
 });

@@ -68,10 +68,12 @@ const CreateClassroomPage: React.FC = () => {
     }
 
     try {
-      await dispatch(createClassroomThunk(formData)).unwrap();
+      const createdClassroom = await dispatch(
+        createClassroomThunk(formData),
+      ).unwrap();
 
       // Success - redirect to classroom
-      router.push("/dashboard");
+      router.push(`/classrooms/${createdClassroom._id}`);
     } catch (err) {
       dispatch(
         setCreateClassroomError(

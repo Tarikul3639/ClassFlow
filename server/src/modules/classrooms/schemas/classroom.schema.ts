@@ -150,7 +150,6 @@ ClassroomSchema.pre('save', function (next: Function) {
   ).length;
   this.totalBlockedMembers = this.members.filter((m) => m.isBlocked).length;
   this.totalEvents = this.events.length; 
-  next();
 });
 
 // Enable virtuals
