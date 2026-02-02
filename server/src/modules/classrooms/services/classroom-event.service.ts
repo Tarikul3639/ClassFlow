@@ -22,6 +22,7 @@ export class ClassroomEventService {
     userId: string,
   ) {
     const classroom = await this.classroomModel.findById(classroomId);
+    console.log("create: ",classroom);
 
     if (!classroom) {
       throw new NotFoundException('Classroom not found');

@@ -6,7 +6,6 @@ import {
   IsBoolean,
   IsArray,
   ValidateNested,
-//   IsDateString,
   MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -25,8 +24,9 @@ class MaterialDto {
 }
 
 export class CreateEventDto {
-  @IsEnum(['quiz', 'assignment', 'presentation', 'ct', 'lab', 'seminar', 'lecture', 'Class'])
-  type: 'quiz' | 'assignment' | 'presentation' | 'ct' | 'lab' | 'seminar' | 'lecture' | 'Class';
+  @IsEnum(['quiz', 'assignment', 'presentation', 'ct', 'lab', 'seminar', 'lecture', 'class'])
+  @IsNotEmpty()
+  type: 'quiz' | 'assignment' | 'presentation' | 'ct' | 'lab' | 'seminar' | 'lecture' | 'class';
 
   @IsString()
   @IsNotEmpty()

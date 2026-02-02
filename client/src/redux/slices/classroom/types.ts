@@ -27,7 +27,7 @@ export interface IEvent {
   endAt?: string;
   location?: string;
   topics?: string;
-  materials: IMaterial[];
+  materials?: IMaterial[];
   isCompleted: boolean;
   createdBy: IUser; // User ID
   createdAt: string;

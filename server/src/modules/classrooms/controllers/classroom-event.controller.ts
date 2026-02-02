@@ -32,7 +32,25 @@ export class ClassroomEventController {
     @Body() createEventDto: CreateEventDto,
     @CurrentUser() user: any,
   ) {
-    return this.eventService.createEvent(classroomId, createEventDto, user.userId);
+    console.log('Create event controller reached:', { classroomId, user });
+    return this.eventService.createEvent(
+      classroomId,
+      createEventDto,
+      user.userId,
+    );
+  }
+
+  /**
+   * ✅ Get upcoming events - MUST be BEFORE :eventId route
+   * @route GET /classrooms/:classroomId/events/upcoming
+   */
+  @Get('upcoming')
+  getUpcomingEvents(
+    @Param('classroomId') classroomId: string,
+    @CurrentUser() user: any,
+  ) {
+    console.log('Get upcoming events controller reached:', { classroomId, user });
+    return this.eventService.getUpcomingEvents(classroomId, user.userId);
   }
 
   /**
@@ -49,23 +67,12 @@ export class ClassroomEventController {
     @Query() query: any,
     @CurrentUser() user: any,
   ) {
+    console.log('Get events controller reached:', { classroomId, user, query });
     return this.eventService.getEvents(classroomId, user.userId, query);
   }
 
   /**
-   * Get upcoming events
-   * @route GET /classrooms/:classroomId/events/upcoming
-   */
-  @Get('upcoming')
-  getUpcomingEvents(
-    @Param('classroomId') classroomId: string,
-    @CurrentUser() user: any,
-  ) {
-    return this.eventService.getUpcomingEvents(classroomId, user.userId);
-  }
-
-  /**
-   * Get single event details
+   * ✅ Get single event details - MUST be AFTER specific routes like /upcoming
    * @route GET /classrooms/:classroomId/events/:eventId
    */
   @Get(':eventId')
@@ -75,6 +82,23 @@ export class ClassroomEventController {
     @CurrentUser() user: any,
   ) {
     return this.eventService.getEvent(classroomId, eventId, user.userId);
+  }
+
+  /**
+   * ✅ Mark event as completed - MUST be BEFORE :eventId route
+   * @route PATCH /classrooms/:classroomId/events/:eventId/complete
+   */
+  @Patch(':eventId/complete')
+  markEventCompleted(
+    @Param('classroomId') classroomId: string,
+    @Param('eventId') eventId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.eventService.markEventCompleted(
+      classroomId,
+      eventId,
+      user.userId,
+    );
   }
 
   /**
@@ -88,7 +112,12 @@ export class ClassroomEventController {
     @Body() updateEventDto: UpdateEventDto,
     @CurrentUser() user: any,
   ) {
-    return this.eventService.updateEvent(classroomId, eventId, updateEventDto, user.userId);
+    return this.eventService.updateEvent(
+      classroomId,
+      eventId,
+      updateEventDto,
+      user.userId,
+    );
   }
 
   /**
@@ -102,18 +131,5 @@ export class ClassroomEventController {
     @CurrentUser() user: any,
   ) {
     return this.eventService.deleteEvent(classroomId, eventId, user.userId);
-  }
-
-  /**
-   * Mark event as completed (Admin/Co-admin only)
-   * @route PATCH /classrooms/:classroomId/events/:eventId/complete
-   */
-  @Patch(':eventId/complete')
-  markEventCompleted(
-    @Param('classroomId') classroomId: string,
-    @Param('eventId') eventId: string,
-    @CurrentUser() user: any,
-  ) {
-    return this.eventService.markEventCompleted(classroomId, eventId, user.userId);
   }
 }

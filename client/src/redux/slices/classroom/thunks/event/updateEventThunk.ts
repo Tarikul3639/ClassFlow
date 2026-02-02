@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { apiClient } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 interface UpdateEventPayload {
   classroomId: string;
@@ -17,7 +18,7 @@ export const updateEventThunk = createAsyncThunk<
   async ({ classroomId, eventId, eventData }, { rejectWithValue }) => {
     try {
       const response = await apiClient.patch<{ event: IEvent }>(
-        `/classroom/${classroomId}/event/${eventId}`,
+        `/classrooms/${classroomId}/events/${eventId}`,
         eventData,
         { withCredentials: true }
       );
@@ -27,9 +28,7 @@ export const updateEventThunk = createAsyncThunk<
 
       return response.data.event;
     } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : "Unknown error"
-      );
+      return rejectWithValue(extractErrorMessage(error));
     }
   }
 );

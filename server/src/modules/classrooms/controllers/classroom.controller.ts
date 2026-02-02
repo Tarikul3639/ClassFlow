@@ -9,7 +9,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
-import { ClassroomMember } from '../../../common/decorators/classroom-member.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { ClassroomService } from '../services/classroom.service';
 import { CreateClassroomDto } from '../dto/create-classroom.dto';
@@ -46,6 +45,24 @@ export class ClassroomController {
   }
 
   /**
+   * Get current user's classroom (first/active one)
+   * @route GET /classrooms
+   */
+  @Get()
+  async getCurrentClassroom(@CurrentUser() user: any) {
+    // Get user's classrooms
+    const { classrooms } = await this.classroomService.findUserClassrooms(user.userId);
+    
+    if (classrooms.length === 0) {
+      return { classroom: null };
+    }
+
+    // Get full details of first classroom
+    const firstClassroomId = classrooms[0]._id;
+    return this.classroomService.findOne(firstClassroomId, user.userId);
+  }
+
+  /**
    * Get all classrooms for current user
    * @route GET /classrooms/my
    */
@@ -59,7 +76,6 @@ export class ClassroomController {
    * @route GET /classrooms/:id
    */
   @Get(':id')
-  @ClassroomMember()
   findOne(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomService.findOne(id, user.userId);
   }
@@ -69,7 +85,6 @@ export class ClassroomController {
    * @route PATCH /classrooms/:id
    */
   @Patch(':id')
-  @ClassroomMember()
   update(
     @Param('id') id: string,
     @Body() updateClassroomDto: UpdateClassroomDto,
@@ -83,7 +98,6 @@ export class ClassroomController {
    * @route POST /classrooms/:id/leave
    */
   @Post(':id/leave')
-  @ClassroomMember()
   leaveClassroom(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomService.leaveClassroom(id, user.userId);
   }
@@ -93,7 +107,6 @@ export class ClassroomController {
    * @route POST /classrooms/:id/regenerate-code
    */
   @Post(':id/regenerate-code')
-  @ClassroomMember()
   regenerateJoinCode(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomService.regenerateJoinCode(id, user.userId);
   }
@@ -103,7 +116,6 @@ export class ClassroomController {
    * @route DELETE /classrooms/:id
    */
   @Delete(':id')
-  @ClassroomMember()
   delete(@Param('id') id: string, @CurrentUser() user: any) {
     return this.classroomService.delete(id, user.userId);
   }

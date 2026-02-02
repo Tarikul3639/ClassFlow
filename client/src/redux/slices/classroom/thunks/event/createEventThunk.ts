@@ -1,10 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { apiClient } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 interface CreateEventPayload {
   classroomId: string;
-  eventData: Omit<IEvent, "_id" | "createdAt">; // frontend sends data except _id
+  eventData: Omit<
+    IEvent,
+    "_id" | "createdAt" | "updatedAt" | "createdBy" | "classroomId"
+  >; // frontend sends data except these fields
 }
 
 export const createEventThunk = createAsyncThunk<
@@ -15,17 +19,16 @@ export const createEventThunk = createAsyncThunk<
   "classroom/createEvent",
   async ({ classroomId, eventData }, { rejectWithValue }) => {
     try {
+      console.log("Creating event with data:", eventData);
       const response = await apiClient.post<{ event: IEvent }>(
-        `/classroom/${classroomId}/event`,
+        `/classrooms/${classroomId}/events`,
         eventData,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       return response.data.event;
     } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : "Unknown error"
-      );
+      return rejectWithValue(extractErrorMessage(error));
     }
-  }
+  },
 );

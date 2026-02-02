@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import Navbar from "@/components/Navbar/Navbar";
 import { Footer } from "@/components/Footer/Footer";
 import { Loader } from "@/components/ui/Loader";
@@ -7,6 +7,7 @@ import { Loader } from "@/components/ui/Loader";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
+import { fetchClassroomDetails } from "@/redux/slices/classroom/thunks/classroom/fetchClassroomDetails";
 
 export default function LayoutDashboard({
   children,
@@ -19,7 +20,14 @@ export default function LayoutDashboard({
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(verifyAuthThunk());
+    (async () => {
+      try {
+        const user = await dispatch(verifyAuthThunk()).unwrap();
+        if (user) {
+          dispatch(fetchClassroomDetails(user.classrooms[0]));
+        }
+      } catch (error) {}
+    })();
   }, [dispatch]);
 
   if (isLoading && !children) {

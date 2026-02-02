@@ -8,7 +8,7 @@ import { useSortedEvents } from "@/hooks/useSortedEvents";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { useAppSelector } from "@/redux/hooks";
-import { classroomId, isAdmin as selectIsAdmin } from "@/redux/selectors/selectors";
+import { classroomId as classId, isAdmin as selectIsAdmin } from "@/redux/selectors/selectors";
 import { EmptyState } from "./_components/EmptyState";
 import { Plus } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +24,7 @@ const Page = () => {
   );
   const status = useAppSelector((state) => state.classroom.requestStatus);
   const isLoading = status.fetchClassroom.loading;
+  const classroomId = useAppSelector(classId);
   const isAdmin = useAppSelector(selectIsAdmin);
 
   // 1. Logic for Filtering by Category and Search

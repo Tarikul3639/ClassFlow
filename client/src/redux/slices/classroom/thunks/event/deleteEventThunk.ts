@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiClient } from "@/lib/api/axios";
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 interface DeleteEventPayload {
   classroomId: string;
@@ -24,9 +25,7 @@ export const deleteEventThunk = createAsyncThunk<
 
       return response.data.eventId;
     } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : "Unknown error"
-      );
+      return rejectWithValue(extractErrorMessage(error));
     }
   }
 );

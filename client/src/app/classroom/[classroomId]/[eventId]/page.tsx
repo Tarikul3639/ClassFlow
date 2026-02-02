@@ -11,7 +11,7 @@ import { IEvent, IMaterial } from "@/redux/slices/classroom/types";
 
 export default function Page() {
   const params = useParams();
-  const id = params.id as string;
+  const id = params.eventId as string;
   const [form, setForm] = useState<IEvent>({
     _id: id,
     title: "",
@@ -28,7 +28,7 @@ export default function Page() {
     updatedAt: "",
   });
 
-  if (!id) {
+  if (id == null || id === "") {
     return <div>Invalid Event ID</div>;
   }
 

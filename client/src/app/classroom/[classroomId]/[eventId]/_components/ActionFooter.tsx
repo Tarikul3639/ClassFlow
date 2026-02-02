@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Save, X, Loader2 } from "lucide-react";
+import { Save, X, Loader2, AlertCircle } from "lucide-react";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { useState } from "react";
 import { createEventThunk } from "@/redux/slices/classroom/thunks/event/createEventThunk";
@@ -9,6 +9,7 @@ import { updateEventThunk } from "@/redux/slices/classroom/thunks/event/updateEv
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useRouter } from "next/navigation";
 import { classroomId } from "@/redux/selectors/selectors";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ActionFooterProps {
   form: IEvent;
@@ -17,49 +18,103 @@ interface ActionFooterProps {
 export const ActionFooter = ({ form }: ActionFooterProps) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
-  const status = useAppSelector(
-    (state) => state.classroom.requestStatus,
-  );
   const classId = useAppSelector(classroomId);
+  const isBusy = useAppSelector(
+    (state) =>
+      state.classroom.requestStatus.updateEvent.loading ||
+      state.classroom.requestStatus.createEvent.loading,
+  );
+  const error = useAppSelector(
+    (state) =>
+      state.classroom.requestStatus.updateEvent.error ||
+      state.classroom.requestStatus.createEvent.error,
+  );
 
   if (!classId) {
     return null;
   }
 
   const handleSubmit = async () => {
+    console.log(form);
     try {
-      setLoading(true);
       if (form._id === "new") {
-        await dispatch(createEventThunk({
-          classroomId: classId,
-          eventData: form,
-        })).unwrap();
-        router.push("/dashboard");
+        console.log("New......");
+        await dispatch(
+          createEventThunk({
+            classroomId: classId,
+            eventData: Object.fromEntries(
+              Object.entries(form).filter(
+                ([key]) =>
+                  key !== "_id" &&
+                  key !== "createdAt" &&
+                  key !== "createdBy" &&
+                  key !== "updatedAt" &&
+                  key !== "classroomId",
+              ),
+            ) as Omit<
+              IEvent,
+              "_id" | "createdAt" | "createdBy" | "updatedAt" | "classroomId"
+            >,
+          }),
+        ).unwrap();
+        router.push(`/classroom/${classId}`);
       } else {
-        await dispatch(updateEventThunk({
-          classroomId: classId,
-          eventId: form._id,
-          eventData: form,
-        })).unwrap();
-        router.push("/dashboard");
+        await dispatch(
+          updateEventThunk({
+            classroomId: classId,
+            eventId: form._id,
+            eventData: form,
+          }),
+        ).unwrap();
+        router.push(`/classroom/${classId}`);
         console.log("Event updated:", form);
       }
     } catch (err) {
       console.error("Failed to save event:", err);
-    } finally {
-      setLoading(false);
     }
   };
 
-  // const isBusy = loading || status?.updating || status?.adding;
-  const isBusy = loading || status.fetchEvents.loading || status.updateEvent.loading;
-
   return (
     <div className="px-5 sm:px-10 pb-8 sm:pb-10 pt-4 backdrop-blur-md sticky bottom-0 z-50">
+      {error && (
+        <AnimatePresence mode="wait">
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="mb-6 w-full px-1"
+          >
+            <div className="flex items-center gap-3 px-3.5 py-1 sm:py-1.5 sm:px-4 bg-red-50/60 border border-red-100 rounded-full backdrop-blur-md relative overflow-hidden shadow-sm shadow-red-100/20">
+              {/* Icon Area: Fixed size */}
+              <div className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 bg-red-100 rounded-2xl flex items-center justify-center text-red-600">
+                <motion.div
+                  animate={{ rotate: [0, 10, -10, 10, 0] }}
+                  transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
+                >
+                  <AlertCircle
+                    size={20}
+                    className="size-4 sm:size-5"
+                    strokeWidth={2.5}
+                  />
+                </motion.div>
+              </div>
+
+              {/* Text Area: Flexible width */}
+              <div className="flex-1 min-w-0">
+                <p className="text-xxsm sm:text-[13.5px] font-medium text-red-800 leading-tight sm:leading-snug wrap-break-word">
+                  {error}
+                </p>
+              </div>
+
+              {/* Decorative Blur Element */}
+              <div className="hidden sm:block absolute top-0 right-0 -mr-4 -mt-4 w-12 h-12 bg-red-200/30 blur-2xl rounded-full" />
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      )}
       <div className="max-w-4xl mx-auto p-2 sm:p-3 rounded-3xl sm:rounded-4xl flex items-center justify-between gap-2 shadow-[#111518]/20">
         {/* Cancel Button */}
-        <Link href="/dashboard" className="flex-1">
+        <Link href={`/classroom/${classId}`} className="flex-1">
           <button
             disabled={isBusy}
             className="w-full flex items-center justify-center gap-2 px-5 py-3.5 sm:py-4 rounded-3xl sm:rounded-4xl  bg-gray-200 text-black hover:text-red-500 hover:bg-red-100 transition-all duration-300 disabled:opacity-50"
