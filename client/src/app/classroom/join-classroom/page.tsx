@@ -46,8 +46,9 @@ const JoinClassroomPage: React.FC = () => {
     try {
       const joinedClassroom = await dispatch(joinClassroomThunk(code)).unwrap();
       // Success - redirect to classroom
-      router.push(`/classrooms/${joinedClassroom._id}`);
+      router.push(`/classroom/${joinedClassroom._id}`);
     } catch (err) {
+      console.error("Failed to join classroom:", err);
       // dispatch(setJoinClassroomError(err instanceof Error ? err.message : "Unknown error"));
     }
   };
@@ -157,7 +158,7 @@ const JoinClassroomPage: React.FC = () => {
           {/* Help Text */}
           <div className="mt-5 sm:mt-5 pt-4 border-t border-[#e5e7eb]">
             <p className="text-xs sm:text-xxs text-[#6b7280] text-center leading-relaxed">
-              Don't have a code? Ask your instructor or CR to share the
+              Don&apos;t have a code? Ask your instructor or CR to share the
               classroom code with you.
             </p>
           </div>

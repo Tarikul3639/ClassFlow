@@ -34,7 +34,7 @@ export class ClassroomService {
     let exists = true;
 
     while (exists) {
-      code = Math.random().toString(36).substring(2, 10).toUpperCase();
+      code = Math.random().toString(36).substring(2, 8).toUpperCase();
       exists = !!(await this.classroomModel.findOne({ joinCode: code }));
     }
 

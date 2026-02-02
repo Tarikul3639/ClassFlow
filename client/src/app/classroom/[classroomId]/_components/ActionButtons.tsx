@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { deleteEventThunk } from "@/redux/slices/classroom/thunks/event/deleteEventThunk";
-import { setDeleteEventError } from "@/redux/slices/classroom/slice";
+// import { setDeleteEventError } from "@/redux/slices/classroom/slice";
 import { classroomId } from "@/redux/selectors/selectors";
 import { Dialog } from "@/components/ui/Dialog";
 import { toast } from "sonner";
@@ -58,9 +58,9 @@ export function ActionButtons({
           error: (err) => `Failed to delete: ${err}`,
         },
       );
-    } catch (err: any) {
+      setIsModalOpen(false);
+    } catch (err) {
       console.error(err);
-      dispatch(setDeleteEventError(err.toString()));
     }
   };
 
@@ -210,4 +210,4 @@ export function ActionButtons({
       />
     </>
   );
-};
+}

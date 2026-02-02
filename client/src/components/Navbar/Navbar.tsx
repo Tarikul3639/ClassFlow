@@ -16,17 +16,19 @@ const Navbar: React.FC = () => {
 
   const user = useAppSelector(selectProfileUser);
   const loading = useAppSelector(
-    (state) => state.auth.requestStatus.refresh.loading,
+    (state) =>
+      state.auth.requestStatus.refresh.loading ||
+      state.auth.requestStatus.signIn.loading,
   );
 
   const pathname = usePathname();
 
-  const [weather, setWeather] = useState<{
+  const [weather, _] = useState<{
     temp: number;
     desc: string;
   } | null>(null);
 
-  let dashboard = "";
+  let dashboard = "/classroom";
   if (user && user.classrooms.length === 0) {
     dashboard = "/classroom";
   }
@@ -49,130 +51,166 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] sm:w-[85%] md:w-[75%] lg:w-[60%] max-w-5xl font-display">
-        <div className="bg-white/70 backdrop-blur-md border border-blue-100 px-4 md:px-6 py-2.5 md:py-3 rounded-full shadow-lg shadow-[#399aef]/5 flex justify-between items-center text-[#111518]">
-          {/* Logo Section */}
-          <Logo />
+        {/* Modern Glass Container with Gradient Border */}
+        <div className="relative group">
+          {/* Gradient Border Effect */}
+          <div className="absolute -inset-px bg-linear-to-r from-blue-500/20 via-cyan-500/20 to-blue-500/20 rounded-full blur-sm group-hover:blur-md transition-all duration-500" />
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-2 md:gap-4">
-            {/* Dashboard Link */}
-            <Link
-              href={dashboard}
-              className={`
-                flex items-center gap-2.5 px-4 py-2 rounded-full transition-all duration-500 group relative
-                ${
-                  isActive(dashboard)
-                    ? "bg-linear-to-r from-[#399aef]/10 to-[#399aef]/5 text-[#399aef] shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
-                    : "text-[#617789] hover:bg-linear-to-r hover:from-[#399aef]/10 hover:to-[#399aef]/5 hover:text-[#399aef] hover:shadow-[inset_0_0_0_1px_rgba(57,154,239,0.1)]"
-                }
-              `}
-            >
-              <LayoutDashboard
-                size={17}
-                strokeWidth={isActive(dashboard) ? 2.5 : 2}
-                className={
-                  isActive(dashboard)
-                    ? "animate-pulse-subtle"
-                    : "opacity-70 group-hover:opacity-100"
-                }
-              />
+          {/* Main Navbar */}
+          <div className="relative bg-white/80 backdrop-blur-xl border border-white/40 px-4 md:px-6 py-2.5 md:py-3 rounded-full shadow-[0_8px_32px_rgba(57,154,239,0.12)] hover:shadow-[0_12px_48px_rgba(57,154,239,0.18)] transition-all duration-500 flex justify-between items-center text-[#111518]">
+            {/* Subtle Background Pattern */}
+            <div className="absolute inset-0 rounded-full opacity-[0.02] bg-[radial-gradient(circle_at_50%_50%,rgba(57,154,239,0.4),transparent_50%)]" />
 
-              <span
+            {/* Logo Section */}
+            <div className="relative z-10">
+              <Logo />
+            </div>
+
+            {/* Right Actions */}
+            <div className="relative z-10 flex items-center gap-2 md:gap-4">
+              {/* Dashboard Link - Modern Pill Design */}
+              <Link
+                href={dashboard}
                 className={`
-                  hidden sm:flex text-xxs font-black uppercase tracking-[0.12em] transition-opacity
+                  group/dash relative flex items-center gap-3 px-4 py-2 rounded-xl
+                  transition-all duration-500 ease-out overflow-hidden
                   ${
                     isActive(dashboard)
-                      ? "opacity-100"
-                      : "opacity-70 group-hover:opacity-100"
+                      ? "bg-linear-to-r from-[#399aef] to-[#2b8ad8] text-white font-semibold shadow-lg shadow-blue-500/30"
+                      : "text-[#617789] hover:bg-linear-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-[#399aef]"
                   }
                 `}
               >
-                Dashboard
-              </span>
+                {/* Animated Background Shine */}
+                {!isActive(dashboard) && (
+                  <span className="absolute inset-0 -translate-x-full group-hover/dash:translate-x-full transition-transform duration-1000 ease-out bg-linear-to-r from-transparent via-white/20 to-transparent" />
+                )}
 
-              {/* Active state indicator line */}
-              {isActive(dashboard) && (
-                <span className="absolute inset-x-4 -bottom-px h-px bg-linear-to-r from-transparent via-[#399aef]/40 to-transparent" />
-              )}
-            </Link>
-
-            {/* Weather Section */}
-            <div className="hidden xs:flex items-center gap-2 text-xxs md:text-[11px] font-black text-[#617789] bg-blue-50/50 px-2.5 py-1.5 md:px-3 rounded-full border border-blue-100/50 min-w-0 shrink">
-              <CloudSun size={14} className="text-[#399aef] shrink-0" />
-              <span className="truncate">
-                <span className="inline lg:hidden">
-                  {weather?.temp || "18"}°C
-                </span>
-                <span className="hidden lg:inline">
-                  {weather?.desc || "Clear"}, {weather?.temp || "18"}°C
-                </span>
-              </span>
-            </div>
-
-            <div className="h-6 w-px bg-[#dbe1e6] hidden md:block" />
-
-            {/* Notification Bell */}
-            <button
-              onClick={() => setIsOpen(true)}
-              className="p-2 rounded-xl hover:bg-gray-100 relative transition-colors text-[#617789] group"
-            >
-              <Bell
-                size={18}
-                className="md:w-5 md:h-5 group-hover:rotate-12 transition-transform"
-              />
-              <span className="absolute top-2 right-2.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
-            </button>
-
-            {/* Profile Avatar Link */}
-            <Link
-              href="/classroom/profile"
-              className={`group relative w-8 h-8 rounded-full shrink-0
-                transition-all duration-300 ease-in-out flex items-center justify-center
-                ${
-                  isActive("/classroom/profile")
-                    ? "ring-2 ring-[#399aef] ring-offset-2 scale-110 shadow-lg shadow-blue-100"
-                    : "ring-1 ring-slate-200 hover:ring-[#399aef]/50 hover:ring-offset-2 hover:scale-105"
-                }
-              `}
-            >
-              {/* Modern Glow Effect */}
-              <span
-                className={`absolute inset-0 rounded-full blur-lg transition-opacity duration-500
-                  ${
-                    isActive("/classroom/profile")
-                      ? "opacity-40 bg-[#399aef]"
-                      : "opacity-0 group-hover:opacity-20 bg-blue-400"
-                  }
-                `}
-              />
-
-              <Avatar className="relative w-full h-full rounded-full border border-white/50 bg-slate-50 overflow-hidden shadow-inner">
-                <AvatarImage
-                  src={user?.avatarUrl}
-                  alt={user?.name || "User"}
-                  className="object-cover w-full h-full"
+                {/* Icon with Micro Animation */}
+                <LayoutDashboard
+                  strokeWidth={isActive(dashboard) ? 2.5 : 2}
+                  className={`
+                    transition-all duration-300 size-4
+                    ${
+                      isActive(dashboard)
+                        ? "text-white scale-105"
+                        : "text-[#617789] group-hover/dash:text-[#399aef] group-hover/dash:scale-110 group-hover/dash:rotate-3"
+                    }
+                  `}
                 />
 
-                {/* High-Contrast Fallback */}
-                <AvatarFallback
-                  className="
-                    w-full h-full
-                    bg-linear-to-br from-[#399aef] to-[#2d84d1]
-                    text-white font-black
-                    text-xsm! md:text-[14px]
-                    flex items-center justify-center
-                    tracking-tighter select-none
-                  "
+                {/* Text with Smooth Transition */}
+                <span
+                  className={`
+                    hidden sm:inline text-xs font-medium tracking-wide
+                    transition-all duration-300
+                    ${isActive(dashboard) ? "opacity-100" : "opacity-70 group-hover/dash:opacity-100"}
+                  `}
                 >
-                  {user?.name ? user.name.substring(0, 2).toUpperCase() : ""}
-                </AvatarFallback>
-              </Avatar>
+                  Dashboard
+                </span>
 
-              {/* Active Indicator Dot */}
-              {isActive("/classroom/profile") && (
-                <span className="absolute -top-1 -right-1 w-2.5 md:w-3 h-2.5 md:h-3 bg-[#399aef] border-2 border-white rounded-full z-10" />
+                {/* Modern Active Indicator - Dot */}
+                {isActive(dashboard) && (
+                  <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-white  rounded-full shadow-lg animate-pulse" />
+                )}
+              </Link>
+
+              {/* Weather Section - Frosted Glass Card */}
+              <div className="hidden xs:flex items-center gap-2 text-xxs md:text-[11px] font-black text-[#617789] bg-linear-to-br from-blue-50/80 to-cyan-50/80 backdrop-blur-sm px-2.5 py-1.5 md:px-3 rounded-full border border-blue-200/30 shadow-inner min-w-0 shrink hover:shadow-md hover:scale-[1.02] transition-all duration-300">
+                <CloudSun
+                  size={14}
+                  className="text-[#399aef] shrink-0 animate-[spin_20s_linear_infinite]"
+                />
+                <span className="truncate">
+                  <span className="inline lg:hidden">
+                    {weather?.temp || "18"}°C
+                  </span>
+                  <span className="hidden lg:inline">
+                    {weather?.desc || "Clear"}, {weather?.temp || "18"}°C
+                  </span>
+                </span>
+              </div>
+
+              {/* Modern Divider with Gradient */}
+              <div className="h-6 w-px bg-linear-to-b from-transparent via-[#dbe1e6] to-transparent hidden md:block" />
+
+              {/* Notification Bell - Neumorphic Style */}
+              <button
+                onClick={() => setIsOpen(true)}
+                className="group/bell relative p-2 rounded-xl hover:bg-linear-to-br hover:from-blue-50 hover:to-cyan-50 transition-all duration-300 text-[#617789] hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105"
+              >
+                {/* Pulse Effect on Hover */}
+                <span className="absolute inset-0 rounded-xl bg-blue-400/0 group-hover/bell:bg-blue-400/5 group-hover/bell:animate-ping transition-all" />
+
+                <Bell
+                  size={18}
+                  className="md:w-5 md:h-5 relative z-10 group-hover/bell:rotate-12 group-hover/bell:text-[#399aef] transition-all duration-300"
+                />
+
+                {/* Notification Badge with Pulse */}
+                <span className="absolute top-1 right-1.5 w-2.5 h-2.5 bg-linear-to-br from-red-500 to-rose-600 rounded-full border-2 border-white shadow-lg animate-pulse" />
+              </button>
+
+              {/* Profile Avatar - Modern Glow Design */}
+              {user && (
+                <Link
+                  href="/classroom/profile"
+                  className={`
+                  group/avatar relative w-8 h-8 rounded-full shrink-0
+                  transition-all duration-500 ease-out flex items-center justify-center
+                  ${
+                    isActive("/classroom/profile")
+                      ? "ring-2 ring-[#399aef] ring-offset-2 ring-offset-white/50 scale-110 shadow-xl shadow-blue-400/40"
+                      : "ring-1 ring-slate-200/60 hover:ring-[#399aef]/60 hover:ring-offset-2 hover:ring-offset-white/50 hover:scale-105 hover:shadow-lg hover:shadow-blue-400/20"
+                  }
+                `}
+                >
+                  {/* Rotating Gradient Glow */}
+                  <span
+                    className={`
+                    absolute inset-0 rounded-full blur-xl transition-all duration-500
+                    ${
+                      isActive("/classroom/profile")
+                        ? "opacity-50 bg-linear-to-tr from-[#399aef] via-cyan-400 to-blue-500 animate-[spin_3s_linear_infinite]"
+                        : "opacity-0 group-hover/avatar:opacity-30 bg-linear-to-tr from-blue-400 via-cyan-300 to-blue-500"
+                    }
+                  `}
+                  />
+
+                  {/* Avatar Container */}
+                  <Avatar className="relative w-full h-full rounded-full border-2 border-white/80 bg-linear-to-br from-slate-50 to-blue-50 overflow-hidden shadow-inner hover:border-white transition-all duration-300">
+                    <AvatarImage
+                      src={user?.avatarUrl}
+                      alt={user?.name || "User"}
+                      className="object-cover w-full h-full group-hover/avatar:scale-110 transition-transform duration-500"
+                    />
+
+                    {/* Modern Gradient Fallback */}
+                    <AvatarFallback
+                      className="
+                      w-full h-full
+                      bg-linear-to-br from-[#399aef] via-[#2d84d1] to-[#2b8ad8]
+                      text-white font-black
+                      text-xsm! md:text-[14px]
+                      flex items-center justify-center
+                      tracking-tighter select-none
+                      group-hover/avatar:scale-110 transition-transform duration-300
+                    "
+                    >
+                      {user?.name
+                        ? user.name.substring(0, 2).toUpperCase()
+                        : ""}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  {/* Active Indicator with Pulse */}
+                  {isActive("/classroom/profile") && (
+                    <span className="absolute -top-1 -right-1 w-2.5 md:w-3 h-2.5 md:h-3 bg-linear-to-br from-[#399aef] to-cyan-500 border-2 border-white rounded-full z-10 shadow-lg animate-pulse" />
+                  )}
+                </Link>
               )}
-            </Link>
+            </div>
           </div>
         </div>
       </nav>

@@ -1,15 +1,28 @@
-import { User, Mail, Building2, GraduationCap, LayoutPanelTop, Album, Shield, Clock } from "lucide-react";
-import { IUser } from "@/redux/slices/auth/types";
+import {
+  User,
+  Mail,
+  Building2,
+  GraduationCap,
+  LayoutPanelTop,
+  Album,
+  Shield,
+  Clock,
+} from "lucide-react";
 import AccountField from "./AccountField";
 import { IBaseUser } from "@/types/profile";
 
 export interface UserSectionProps {
   user: IBaseUser;
   isAdmin: boolean;
-  onEdit: (label: string, value: string, type?: 'text' | 'email' | 'password') => void;
+  classId: string;
+  onEdit: (
+    label: string,
+    value: string,
+    type?: "text" | "email" | "password",
+  ) => void;
 }
 
-const UserSection = ({ user, isAdmin, onEdit }: UserSectionProps) => {
+const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
   return (
     <section className="bg-white rounded-2xl shadow-sm border border-[#dbe1e6] overflow-hidden">
       {/* Header */}
@@ -21,7 +34,7 @@ const UserSection = ({ user, isAdmin, onEdit }: UserSectionProps) => {
           User Information
         </h2>
         <span className="px-3 py-1 rounded-lg bg-[#399aef]/10 text-[#399aef] text-xxxs font-black uppercase tracking-wider">
-          {isAdmin ? 'Administrator' : 'Student'}
+          {isAdmin ? "Administrator" : "Student"}
         </span>
       </div>
 
@@ -33,7 +46,7 @@ const UserSection = ({ user, isAdmin, onEdit }: UserSectionProps) => {
           icon={User}
           onEdit={onEdit}
         />
-        
+
         <AccountField
           label="Email Address"
           value={user.email}
@@ -43,53 +56,67 @@ const UserSection = ({ user, isAdmin, onEdit }: UserSectionProps) => {
 
         <AccountField
           label="Role in Classroom"
-          value={user.currentClassroom.role === 'admin' ? 'Administrator' : user.currentClassroom.role === 'co_admin' ? 'Co-Administrator' : 'Student'}
+          value={
+            user.currentClassroom.role === "admin"
+              ? "Administrator"
+              : user.currentClassroom.role === "co_admin"
+                ? "Co-Administrator"
+                : "Student"
+          }
           icon={Shield}
           onEdit={() => {}} // Read-only
           readOnly
         />
 
-        <AccountField
-          label="Institute"
-          value={user.institute}
-          icon={Building2}
-          onEdit={onEdit}
-        />
+        {/* CLASSROOM */}
+        {classId && (
+          <>
+            <AccountField
+              label="Institute"
+              value={user.institute}
+              icon={Building2}
+              onEdit={onEdit}
+            />
 
-        <AccountField
-          label="Department"
-          value={user.department}
-          icon={GraduationCap}
-          onEdit={onEdit}
-        />
+            <AccountField
+              label="Department"
+              value={user.department}
+              icon={GraduationCap}
+              onEdit={onEdit}
+            />
 
-        <AccountField
-          label="Intake"
-          value={user.intake}
-          icon={LayoutPanelTop}
-          onEdit={onEdit}
-        />
+            <AccountField
+              label="Intake"
+              value={user.intake}
+              icon={LayoutPanelTop}
+              onEdit={onEdit}
+            />
 
-        {user.section && (
-          <AccountField
-            label="Section"
-            value={user.section}
-            icon={Album}
-            onEdit={onEdit}
-          />
+            {user.section && (
+              <AccountField
+                label="Section"
+                value={user.section}
+                icon={Album}
+                onEdit={onEdit}
+              />
+            )}
+            {user.currentClassroom.joinedAt && (
+              <AccountField
+                label="Joined Classroom"
+                value={new Date(
+                  user.currentClassroom.joinedAt,
+                ).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+                icon={Clock}
+                onEdit={() => {}} // Read-only
+                readOnly
+              />
+            )}
+          </>
         )}
-
-        <AccountField
-          label="Joined Classroom"
-          value={new Date(user.currentClassroom.joinedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
-          icon={Clock}
-          onEdit={() => {}} // Read-only
-          readOnly
-        />
       </div>
     </section>
   );

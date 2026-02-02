@@ -17,10 +17,9 @@ const ProfileEditModal = ({
   onClose,
   currentData,
 }: ProfileEditModalProps) => {
-  if (!isOpen) return null;
   const [preview, setPreview] = useState(currentData.avatarUrl);
   const [name, setName] = useState(currentData.name);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -34,6 +33,8 @@ const ProfileEditModal = ({
     // Implement save logic here (e.g., API call)
     onClose();
   };
+
+    if (!isOpen) return null;
 
   return (
     <motion.div

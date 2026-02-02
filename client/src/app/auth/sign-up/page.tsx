@@ -34,12 +34,14 @@ const RegisterPage: React.FC = () => {
   );
 
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState<SignUpFormData>({
+  const [formData, setFormData] = useState<SignUpFormData>(() => ({
     name: "",
     email: "",
     password: "",
-    avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random().toString(36).substring(7)}`,
-  });
+    avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()
+      .toString(36)
+      .substring(7)}`,
+  }));
 
   const regenerateAvatar = useCallback(() => {
     const newSeed = Math.random().toString(36).substring(7);

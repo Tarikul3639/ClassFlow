@@ -157,6 +157,8 @@ export class ClassroomEventService {
     await classroom.save();
 
     return {
+      eventId,
+      success: true,
       message: 'Event deleted successfully',
     };
   }

@@ -40,9 +40,9 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('access_token');
-        setAuthToken(null);
-        window.location.href = '/auth/sign-in';
+        // localStorage.removeItem('access_token');
+        // setAuthToken(null);
+        // window.location.href = '/auth/sign-in';
       }
     }
     return Promise.reject(error);

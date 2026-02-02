@@ -6,12 +6,15 @@ import { extractErrorMessage } from "@/lib/utils/error.utils";
 interface UpdateEventPayload {
   classroomId: string;
   eventId: string;
-  eventData: Partial<Omit<IEvent, "_id" | "createdAt" | "createdBy">>;
+  eventData: Omit<
+    IEvent,
+    "_id" | "createdAt" | "updatedAt" | "createdBy" | "classroomId"
+  >;
 }
 
 export const updateEventThunk = createAsyncThunk<
-  IEvent,                 // fulfilled returns the updated event
-  UpdateEventPayload,     // thunk argument
+  IEvent, // fulfilled returns the updated event
+  UpdateEventPayload, // thunk argument
   { rejectValue: string } // rejected returns string error
 >(
   "classroom/updateEvent",
@@ -20,7 +23,7 @@ export const updateEventThunk = createAsyncThunk<
       const response = await apiClient.patch<{ event: IEvent }>(
         `/classrooms/${classroomId}/events/${eventId}`,
         eventData,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (!response.data || !response.data.event)
@@ -30,5 +33,5 @@ export const updateEventThunk = createAsyncThunk<
     } catch (error) {
       return rejectWithValue(extractErrorMessage(error));
     }
-  }
+  },
 );

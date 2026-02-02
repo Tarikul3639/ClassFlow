@@ -28,7 +28,7 @@ const ForgotPasswordPage: React.FC = () => {
               Reset Password
             </h1>
             <p className="text-[#617789] text-xsm font-medium leading-relaxed">
-              Enter your email address below and we'll send you a link to reset
+              Enter your email address below and we&apos;ll send you a link to reset
               your password.
             </p>
           </div>
@@ -121,7 +121,7 @@ const ForgotPasswordSuccess: React.FC<{ email: string }> = ({ email }) => {
 
             <div className="mt-4 flex flex-col items-center gap-2">
               <p className="text-[#617789] text-xxsm font-medium">
-                Didn't receive the email?
+                Didn&apos;t receive the email?
               </p>
               <button
                 type="button"

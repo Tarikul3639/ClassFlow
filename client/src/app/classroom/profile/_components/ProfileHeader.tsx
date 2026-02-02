@@ -10,6 +10,7 @@ import { IUser } from "@/redux/slices/auth/types";
 import { AnimatePresence } from "motion/react";
 import ProfileEditModal from "./ProfileEditModal";
 import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 
 interface ProfileHeaderProps {
@@ -61,11 +62,16 @@ const ProfileHeader = ({ user, isAdmin, classroomName }: ProfileHeaderProps) => 
       <div className="relative flex flex-col md:flex-row md:mx-6 items-center gap-6 text-white">
         <div className="relative">
           <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-white/30 p-1 shadow-xl overflow-hidden">
-            <img
-              alt="Profile"
-              className="w-full h-full object-cover rounded-full"
-              src={user.avatarUrl}
-            />
+            <Avatar className="w-full h-full rounded-full bg-slate-50 overflow-hidden shadow-inner">
+              <AvatarImage
+                src={user?.avatarUrl}
+                alt={user?.name || "User"}
+                className="w-full h-full object-cover rounded-full"
+              />
+              <AvatarFallback className="w-full h-full bg-linear-to-br from-[#399aef] to-[#2d84d1] text-white font-black text-xsm! md:text-[24px] flex items-center justify-center tracking-tighter select-none">
+                {user?.name ? user.name.charAt(0) : "U"}
+              </AvatarFallback>
+            </Avatar>
           </div>
         </div>
 

@@ -6,10 +6,10 @@ export const leaveClassroomThunk = createAsyncThunk<
   void,
   { classroomId: string },
   { rejectValue: string }
->("classroom/leave", async ({ classroomId }, { rejectWithValue }) => {
+>("classrooms/leave", async ({ classroomId }, { rejectWithValue }) => {
   try {
     await apiClient.post(
-      "/classroom/leave",
+      `/classrooms/${classroomId}/leave`,
       { classroomId },
       { withCredentials: true },
     );

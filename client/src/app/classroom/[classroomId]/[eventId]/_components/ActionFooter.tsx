@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { Save, X, Loader2, AlertCircle } from "lucide-react";
 import { IEvent } from "@/redux/slices/classroom/types";
-import { useState } from "react";
 import { createEventThunk } from "@/redux/slices/classroom/thunks/event/createEventThunk";
 import { updateEventThunk } from "@/redux/slices/classroom/thunks/event/updateEventThunk";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -38,7 +37,6 @@ export const ActionFooter = ({ form }: ActionFooterProps) => {
     console.log(form);
     try {
       if (form._id === "new") {
-        console.log("New......");
         await dispatch(
           createEventThunk({
             classroomId: classId,
@@ -63,7 +61,19 @@ export const ActionFooter = ({ form }: ActionFooterProps) => {
           updateEventThunk({
             classroomId: classId,
             eventId: form._id,
-            eventData: form,
+            eventData: Object.fromEntries(
+              Object.entries(form).filter(
+                ([key]) =>
+                  key !== "_id" &&
+                  key !== "createdAt" &&
+                  key !== "createdBy" &&
+                  key !== "updatedAt" &&
+                  key !== "classroomId",
+              ),
+            ) as Omit<
+              IEvent,
+              "_id" | "createdAt" | "createdBy" | "updatedAt" | "classroomId"
+            >,
           }),
         ).unwrap();
         router.push(`/classroom/${classId}`);

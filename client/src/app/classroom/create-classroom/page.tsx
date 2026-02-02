@@ -73,13 +73,9 @@ const CreateClassroomPage: React.FC = () => {
       ).unwrap();
 
       // Success - redirect to classroom
-      router.push(`/classrooms/${createdClassroom._id}`);
+      router.push(`/classroom/${createdClassroom._id}`);
     } catch (err) {
-      dispatch(
-        setCreateClassroomError(
-          "Failed to create classroom. Please try again.",
-        ),
-      );
+      console.error("Error creating classroom:", err);
     }
   };
 
@@ -295,7 +291,7 @@ const CreateClassroomPage: React.FC = () => {
                 What happens next?
               </h4>
               <p className="text-xxs sm:text-xs text-[#6b7280] leading-relaxed">
-                After creating the classroom, you'll receive a unique
+                After creating the classroom, you&apos;ll receive a unique
                 6-character code. Share this code with students so they can join
                 your classroom.
               </p>

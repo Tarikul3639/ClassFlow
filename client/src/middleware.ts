@@ -1,11 +1,12 @@
 // middleware.ts
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PUBLIC_ROUTES = ["/", "/sign-in", "/sign-up", "/forgot-password"];
+// const PUBLIC_ROUTES = ["/", "/sign-in", "/sign-up", "/forgot-password"];
 
 export function middleware(req: NextRequest) {
-//   const { pathname } = req.nextUrl;
+  const { pathname } = req.nextUrl;
+  console.log(pathname);
 
 //   // Allow public routes
 //   if (PUBLIC_ROUTES.includes(pathname)) {

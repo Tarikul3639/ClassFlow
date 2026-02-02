@@ -6,14 +6,12 @@ import { fetchClassroomDetails } from "./thunks/classroom/fetchClassroomDetails"
 import { createClassroomThunk } from "./thunks/classroom/createClassroomThunk";
 import { joinClassroomThunk } from "./thunks/classroom/joinClassroomThunk";
 import { leaveClassroomThunk } from "./thunks/classroom/leaveClassroomThunk";
+import { deleteClassroomThunk } from "./thunks/classroom/deleteClassroomThunk";
 
 // Thunks of events
 import { createEventThunk } from "./thunks/event/createEventThunk";
 import { updateEventThunk } from "./thunks/event/updateEventThunk";
 import { deleteEventThunk } from "./thunks/event/deleteEventThunk";
-
-// Initial State for demo and testing
-// import { demoClassroomState } from "./demoData";
 
 // Initial State
 const initialState: ClassroomState = {
@@ -26,6 +24,7 @@ const initialState: ClassroomState = {
     joinClassroom: { loading: false, error: null },
     leaveClassroom: { loading: false, error: null },
     createClassroom: { loading: false, error: null },
+    deleteClassroom: { loading: false, error: null },
     // Event related statuses
     fetchEvents: { loading: false, error: null },
     updateEvent: { loading: false, error: null },
@@ -49,6 +48,10 @@ const classroomSlice = createSlice({
     // Set error for leaveClassroom
     setLeaveClassroomError(state, action) {
       state.requestStatus.leaveClassroom.error = action.payload;
+    },
+    // Set error for Delete Classroom
+    setDeleteClassroomError(state, action) {
+      state.requestStatus.deleteClassroom.error = action.payload;
     },
     // Set error for Delete Event
     setDeleteEventError(state, action) {
@@ -76,6 +79,7 @@ const classroomSlice = createSlice({
       .addCase(fetchClassroomDetails.pending, (state) => {
         state.requestStatus.fetchClassroom.loading = true;
         state.requestStatus.fetchClassroom.error = null;
+        state.error = null;
       })
       .addCase(fetchClassroomDetails.fulfilled, (state, action) => {
         state.requestStatus.fetchClassroom.loading = false;
@@ -84,6 +88,7 @@ const classroomSlice = createSlice({
       .addCase(fetchClassroomDetails.rejected, (state, action) => {
         state.requestStatus.fetchClassroom.loading = false;
         state.requestStatus.fetchClassroom.error = action.payload as string;
+        state.error = action.payload as string;
       });
 
     // Create Classroom
@@ -91,6 +96,7 @@ const classroomSlice = createSlice({
       .addCase(createClassroomThunk.pending, (state) => {
         state.requestStatus.createClassroom.loading = true;
         state.requestStatus.createClassroom.error = null;
+        state.error = null;
       })
       .addCase(createClassroomThunk.fulfilled, (state, action) => {
         state.requestStatus.createClassroom.loading = false;
@@ -99,13 +105,17 @@ const classroomSlice = createSlice({
       .addCase(createClassroomThunk.rejected, (state, action) => {
         state.requestStatus.createClassroom.loading = false;
         state.requestStatus.createClassroom.error = action.payload as string;
+        state.error = action.payload as string;
       });
+
+    //
 
     // Join Classroom
     builder
       .addCase(joinClassroomThunk.pending, (state) => {
         state.requestStatus.joinClassroom.loading = true;
         state.requestStatus.joinClassroom.error = null;
+        state.error = null;
       })
       .addCase(joinClassroomThunk.fulfilled, (state, action) => {
         state.requestStatus.joinClassroom.loading = false;
@@ -115,6 +125,7 @@ const classroomSlice = createSlice({
       .addCase(joinClassroomThunk.rejected, (state, action) => {
         state.requestStatus.joinClassroom.loading = false;
         state.requestStatus.joinClassroom.error = action.payload as string;
+        state.error = action.payload as string;
       });
 
     // Leave Classroom
@@ -122,14 +133,34 @@ const classroomSlice = createSlice({
       .addCase(leaveClassroomThunk.pending, (state) => {
         state.requestStatus.leaveClassroom.loading = true;
         state.requestStatus.leaveClassroom.error = null;
+        state.error = null;
       })
-      .addCase(leaveClassroomThunk.fulfilled, (state, action) => {
+      .addCase(leaveClassroomThunk.fulfilled, (state, _) => {
         state.requestStatus.leaveClassroom.loading = false;
         state.classroom = null;
+        state.error = null;
       })
       .addCase(leaveClassroomThunk.rejected, (state, action) => {
         state.requestStatus.leaveClassroom.loading = false;
         state.requestStatus.leaveClassroom.error = action.payload as string;
+        state.error = action.payload as string;
+      });
+    // Delete Classroom
+    builder
+      .addCase(deleteClassroomThunk.pending, (state) => {
+        state.requestStatus.deleteClassroom.loading = true;
+        state.requestStatus.deleteClassroom.error = null;
+        state.error = null;
+      })
+      .addCase(deleteClassroomThunk.fulfilled, (state, _) => {
+        state.requestStatus.deleteClassroom.loading = false;
+        state.classroom = null;
+        state.error = null;
+      })
+      .addCase(deleteClassroomThunk.rejected, (state, action) => {
+        state.requestStatus.deleteClassroom.loading = false;
+        state.requestStatus.deleteClassroom.error = action.payload as string;
+        state.error = action.payload as string;
       });
 
     //----------------------------------------------
@@ -141,6 +172,7 @@ const classroomSlice = createSlice({
       .addCase(createEventThunk.pending, (state) => {
         state.requestStatus.createEvent.loading = true;
         state.requestStatus.createEvent.error = null;
+        state.error = null;
       })
       .addCase(createEventThunk.fulfilled, (state, action) => {
         state.requestStatus.createEvent.loading = false;
@@ -152,6 +184,7 @@ const classroomSlice = createSlice({
       .addCase(createEventThunk.rejected, (state, action) => {
         state.requestStatus.createEvent.loading = false;
         state.requestStatus.createEvent.error = action.payload as string;
+        state.error = action.payload as string;
       });
 
     // Update Event
@@ -159,6 +192,7 @@ const classroomSlice = createSlice({
       .addCase(updateEventThunk.pending, (state) => {
         state.requestStatus.updateEvent.loading = true;
         state.requestStatus.updateEvent.error = null;
+        state.error = null;
       })
       .addCase(updateEventThunk.fulfilled, (state, action) => {
         state.requestStatus.updateEvent.loading = false;
@@ -174,13 +208,15 @@ const classroomSlice = createSlice({
       .addCase(updateEventThunk.rejected, (state, action) => {
         state.requestStatus.updateEvent.loading = false;
         state.requestStatus.updateEvent.error = action.payload as string;
+        state.error = action.payload as string;
       });
 
     // Delete Event
     builder
-      .addCase(deleteEventThunk.pending, (state, action) => {
+      .addCase(deleteEventThunk.pending, (state, _) => {
         state.requestStatus.deleteEvent.loading = true;
         state.requestStatus.deleteEvent.error = null;
+        state.error = null;
       })
       .addCase(deleteEventThunk.fulfilled, (state, action) => {
         state.requestStatus.deleteEvent.loading = false;
@@ -194,6 +230,7 @@ const classroomSlice = createSlice({
       .addCase(deleteEventThunk.rejected, (state, action) => {
         state.requestStatus.deleteEvent.loading = false;
         state.requestStatus.deleteEvent.error = action.payload as string;
+        state.error = action.payload as string;
       });
   },
 });

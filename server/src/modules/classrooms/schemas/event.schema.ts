@@ -9,7 +9,7 @@ export type EventType =
   | 'lab'
   | 'seminar'
   | 'lecture'
-  | 'Class';
+  | 'class';
 
 export type MaterialType = 'pdf' | 'docx' | 'image';
 
@@ -41,7 +41,7 @@ export class Event {
       'lab',
       'seminar',
       'lecture',
-      'Class',
+      'class',
     ],
   })
   type: EventType;

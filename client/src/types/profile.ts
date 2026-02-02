@@ -1,6 +1,5 @@
 import {
   ClassroomRole,
-  IClassroom,
   IClassroomMember,
 } from "@/redux/slices/classroom/types";
 import { IUser } from "@/redux/slices/auth/types";

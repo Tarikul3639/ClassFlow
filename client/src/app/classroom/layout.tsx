@@ -1,5 +1,5 @@
 "use client";
-import React, { use } from "react";
+
 import Navbar from "@/components/Navbar/Navbar";
 import { Footer } from "@/components/Footer/Footer";
 import { Loader } from "@/components/ui/Loader";
@@ -26,7 +26,9 @@ export default function LayoutDashboard({
         if (user) {
           dispatch(fetchClassroomDetails(user.classrooms[0]));
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error("Error verifying auth or fetching classroom details:", error);
+      }
     })();
   }, [dispatch]);
 

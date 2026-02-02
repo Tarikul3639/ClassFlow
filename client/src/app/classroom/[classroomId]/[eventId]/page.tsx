@@ -8,10 +8,17 @@ import { ScheduleSection } from "./_components/ScheduleSection";
 import { MaterialsSection } from "./_components/MaterialsSection";
 import { ActionFooter } from "./_components/ActionFooter";
 import { IEvent, IMaterial } from "@/redux/slices/classroom/types";
+import { useAppSelector } from "@/redux/hooks";
+import { getCurrentEvent } from "@/redux/selectors/event";
 
 export default function Page() {
   const params = useParams();
   const id = params.eventId as string;
+
+  const existingEvent = useAppSelector((state) =>
+    id && id !== "new" ? getCurrentEvent(state, id) : null,
+  );
+
   const [form, setForm] = useState<IEvent>({
     _id: id,
     title: "",
@@ -27,6 +34,12 @@ export default function Page() {
     createdAt: "",
     updatedAt: "",
   });
+
+  useEffect(() => {
+    if (existingEvent) {
+      setForm(existingEvent);
+    }
+  }, [existingEvent]);
 
   if (id == null || id === "") {
     return <div>Invalid Event ID</div>;

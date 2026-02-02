@@ -1,8 +1,7 @@
 "use client";
-import React, { use, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { AuthRequired } from "@/components/ui/AuthRequired";
 import {
   selectProfileUser,
   selectAdminProfile,
@@ -21,8 +20,11 @@ import EditModal from "./_components/EditModal";
 import AssignCoAdminModal from "./_components/AssignCoAdminModal";
 import ProfileSkeleton from "./_components/ProfileSkeleton";
 import MetadataSection from "./_components/MetadataSection";
-import { logoutThunk } from "@/redux/slices/auth/thunks/logoutThunk";
+// import { logoutThunk } from "@/redux/slices/auth/thunks/logoutThunk";
+import { leaveClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/leaveClassroomThunk";
 import { logout } from "@/redux/slices/auth/slice";
+import { classroomId } from "@/redux/selectors/selectors";
+import { toast } from "sonner";
 
 export interface EditField {
   label: string;
@@ -33,15 +35,17 @@ export interface EditField {
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
   // const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const isAuthenticated = true; // Temporary for testing
   const profileUser = useAppSelector(selectProfileUser);
   const adminProfile = useAppSelector(selectAdminProfile);
   const isAdmin = useAppSelector(selectIsAdmin);
-
+  const classId = useAppSelector(classroomId);
   // Permissions
   const canAssignCoAdmin = useAppSelector(selectCanAssignCoAdmin);
   const canBlockUser = useAppSelector(selectCanBlockUser);
   const canRemoveCoAdmin = useAppSelector(selectCanRemoveCoAdmin);
+  const isLeaving = useAppSelector(
+    (state) => state.classroom.requestStatus.leaveClassroom.loading,
+  );
 
   const [editingField, setEditingField] = useState<EditField | null>(null);
   const [isAssignCoAdminModalOpen, setIsAssignCoAdminModalOpen] =
@@ -61,23 +65,6 @@ const ProfilePage = () => {
     type: EditField["type"] = "text",
   ) => {
     setEditingField({ label, value, type });
-  };
-
-  const handleLogout = () => {
-    // TODO: Check if this is needed
-    dispatch(logout());
-    localStorage.removeItem("access_token");
-    // dispatch(logoutThunk());
-  };
-
-  const handleLeaveClassroom = () => {
-    console.log("Leaving classroom...");
-    // TODO: Dispatch leave classroom thunk
-  };
-
-  const handleDeactivateAccount = () => {
-    console.log("Deactivating account...");
-    // TODO: Dispatch deactivate account thunk
   };
 
   const handleBlockUser = (userId: string) => {
@@ -122,14 +109,12 @@ const ProfilePage = () => {
         />
 
         {/* Section 1: User Information */}
-        <UserSection user={profileUser} isAdmin={isAdmin} onEdit={handleEdit} />
+        <UserSection user={profileUser} isAdmin={isAdmin} onEdit={handleEdit} classId={classId ?? ""} />
 
         {/* Section 2: Security & Actions */}
         <SecuritySection
-          onLogout={handleLogout}
-          onLeaveClassroom={handleLeaveClassroom}
-          onDeactivateAccount={handleDeactivateAccount}
           isAdmin={isAdmin}
+          classroomId={classId ?? ""}
         />
 
         {/* Section 3: User Management (Admin Only) */}

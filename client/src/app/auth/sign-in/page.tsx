@@ -24,12 +24,12 @@ interface SignInPayload {
 const SignInPage: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  
+
   const isLoading = useAppSelector(
     (state) => state.auth?.requestStatus.signIn?.loading,
   );
   const error = useAppSelector(
-    (state) => state.auth?.requestStatus?.signIn?.error,
+    (state) => state.auth?.requestStatus?.signIn?.error || state.auth?.error,
   );
 
   const [showPassword, setShowPassword] = useState(false);
@@ -38,22 +38,21 @@ const SignInPage: React.FC = () => {
     password: "",
   });
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(signInThunk(formData))
-      .unwrap()
-      .then((data) => {
-        if (data.user) {
-          if(data.user.classrooms.length === 0){
-            router.push("/classroom");
-            return;
-          }
-          router.push("/");
-        } else if (data.user) {
+
+    try {
+      const data = await dispatch(signInThunk(formData)).unwrap();
+
+      if (data.user) {
+        if (data.access_token) {
           router.push("/classroom");
         }
-      })
-      .catch(() => {});
+      }
+    } catch (err) {
+      console.error("Sign in failed:", err);
+      // Optionally show error to user via your existing state
+    }
   };
 
   return (
@@ -89,7 +88,9 @@ const SignInPage: React.FC = () => {
                 <div className="flex items-center gap-2.5 py-3 px-4 rounded-xl bg-red-50 border border-red-100">
                   <AlertCircle className="text-red-500 shrink-0" size={16} />
                   <p className="text-red-700 text-xs font-bold leading-tight">
-                    {typeof error === "string" ? error : "Authentication failed."}
+                    {typeof error === "string"
+                      ? error
+                      : "Authentication failed."}
                   </p>
                 </div>
               </motion.div>
@@ -135,7 +136,7 @@ const SignInPage: React.FC = () => {
                   <input
                     required
                     type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
+                    placeholder="Enter your password"
                     className="w-full h-11 pl-11 pr-12 rounded-lg border border-slate-200 bg-white text-sm text-[#0f172a] font-medium focus:ring-4 focus:ring-[#399aef]/10 focus:border-[#399aef] outline-none transition-all placeholder:text-slate-400 placeholder:font-normal"
                     onChange={(e) =>
                       setFormData({ ...formData, password: e.target.value })
@@ -161,7 +162,11 @@ const SignInPage: React.FC = () => {
                 <Loader2 className="animate-spin size-5" />
               ) : (
                 <>
-                  Sign In <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  Sign In{" "}
+                  <ArrowRight
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
                 </>
               )}
             </button>
@@ -170,7 +175,7 @@ const SignInPage: React.FC = () => {
           {/* Footer Link */}
           <div className="py-3 pt-8 border-t border-slate-100 text-center">
             <p className="text-[#64748b] text-xs sm:text-xxsm font-medium">
-              Don't have an account?
+              Don&apos;t have an account?
               <Link
                 href="/auth/sign-up"
                 className="text-[#399aef] font-bold hover:underline ml-1.5"

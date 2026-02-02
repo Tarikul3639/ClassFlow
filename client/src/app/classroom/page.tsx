@@ -31,6 +31,7 @@ const GetStartedPage: React.FC = () => {
     }
   }, [classId, router]);
 
+
   return (
     <div className="bg-white min-h-screen flex flex-col font-sans antialiased">
       <div className="h-18"></div>

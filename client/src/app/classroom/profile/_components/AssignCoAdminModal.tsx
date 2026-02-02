@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { X, UserPlus, Search, Check, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -52,19 +52,21 @@ const sampleStudents: Student[] = [
 ];
 
 const AssignCoAdminModal = ({ isOpen, onClose }: AssignCoAdminModalProps) => {
-  if (!isOpen) return null;
-
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  if (!isOpen) return null;
+
   const filteredStudents = sampleStudents.filter((student) => {
     const searchLower = searchQuery.toLowerCase();
-    const studentIdMatch = student.studentId?.toLowerCase().includes(searchLower);
+    const studentIdMatch = student.studentId
+      ?.toLowerCase()
+      .includes(searchLower);
     const adminIdMatch = student.adminId?.toLowerCase().includes(searchLower);
     const nameMatch = student.name.toLowerCase().includes(searchLower);
     const emailMatch = student.email.toLowerCase().includes(searchLower);
-    
+
     return studentIdMatch || adminIdMatch || nameMatch || emailMatch;
   });
 
@@ -138,15 +140,18 @@ const AssignCoAdminModal = ({ isOpen, onClose }: AssignCoAdminModalProps) => {
                     selectedStudent === student._id
                       ? "border-[#399aef] bg-[#399aef]/5"
                       : student.blocked || student.role === "co_admin"
-                      ? "border-[#dbe1e6] bg-gray-100 opacity-60 cursor-not-allowed"
-                      : "border-[#dbe1e6] hover:border-[#399aef]/30 bg-gray-50"
+                        ? "border-[#dbe1e6] bg-gray-100 opacity-60 cursor-not-allowed"
+                        : "border-[#dbe1e6] hover:border-[#399aef]/30 bg-gray-50"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       {/* Avatar */}
                       <Avatar className="w-10 h-10 border-2 border-blue-200">
-                        <AvatarImage src={student.avatarUrl} alt={student.name} />
+                        <AvatarImage
+                          src={student.avatarUrl}
+                          alt={student.name}
+                        />
                         <AvatarFallback className="bg-blue-100 text-blue-600">
                           <User size={16} />
                         </AvatarFallback>

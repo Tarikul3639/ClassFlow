@@ -4,6 +4,7 @@ import { signInThunk } from "./thunks/signInThunk";
 import { signUpThunk } from "./thunks/signUpThunk";
 import { logoutThunk } from "./thunks/logoutThunk";
 import { verifyAuthThunk } from "./thunks/verifyAuthThunk";
+import { deactivateAccountThunk } from "./thunks/deactivateAccountThunk";
 
 // Initial State
 const initialState: IAuthState = {
@@ -17,6 +18,7 @@ const initialState: IAuthState = {
     signUp: { loading: false, error: null },
     logout: { loading: false, error: null },
     refresh: { loading: false, error: null },
+    deactivateAccount: { loading: false, error: null },
   },
 };
 
@@ -91,6 +93,25 @@ const authSlice = createSlice({
       state.requestStatus.logout.loading = false;
       state.requestStatus.logout.error = null;
     });
+    // Deactivate Account
+    builder
+      .addCase(deactivateAccountThunk.pending, (state) => {
+        state.requestStatus.deactivateAccount.loading = true;
+        state.requestStatus.deactivateAccount.error = null;
+        state.error = null;
+      })
+      .addCase(deactivateAccountThunk.fulfilled, (state) => {
+        state.requestStatus.deactivateAccount.loading = false;
+        state.user = null;
+        state.access_token = null;
+        state.isAuthenticated = false;
+        state.error = null;
+      })
+      .addCase(deactivateAccountThunk.rejected, (state, action) => {
+        state.requestStatus.deactivateAccount.loading = false;
+        state.requestStatus.deactivateAccount.error = action.payload as string;
+        state.error = action.payload as string;
+      });
   },
 });
 

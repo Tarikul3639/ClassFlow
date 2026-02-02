@@ -74,6 +74,7 @@ export interface ClassroomState {
     joinClassroom: { loading: boolean; error: string | null };
     leaveClassroom: { loading: boolean; error: string | null };
     createClassroom: { loading: boolean; error: string | null };
+    deleteClassroom: { loading: boolean; error: string | null };
     // Event related statuses
     fetchEvents: { loading: boolean; error: string | null };
     updateEvent: { loading: boolean; error: string | null };
