@@ -33,7 +33,16 @@ export const MaterialSchema = SchemaFactory.createForClass(Material);
 export class Event {
   @Prop({
     required: true,
-    enum: ['quiz', 'assignment', 'presentation', 'ct', 'lab', 'seminar', 'lecture', 'Class'],
+    enum: [
+      'quiz',
+      'assignment',
+      'presentation',
+      'ct',
+      'lab',
+      'seminar',
+      'lecture',
+      'Class',
+    ],
   })
   type: EventType;
 

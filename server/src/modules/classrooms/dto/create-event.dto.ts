@@ -24,9 +24,26 @@ class MaterialDto {
 }
 
 export class CreateEventDto {
-  @IsEnum(['quiz', 'assignment', 'presentation', 'ct', 'lab', 'seminar', 'lecture', 'class'])
+  @IsEnum([
+    'quiz',
+    'assignment',
+    'presentation',
+    'ct',
+    'lab',
+    'seminar',
+    'lecture',
+    'class',
+  ])
   @IsNotEmpty()
-  type: 'quiz' | 'assignment' | 'presentation' | 'ct' | 'lab' | 'seminar' | 'lecture' | 'class';
+  type:
+    | 'quiz'
+    | 'assignment'
+    | 'presentation'
+    | 'ct'
+    | 'lab'
+    | 'seminar'
+    | 'lecture'
+    | 'class';
 
   @IsString()
   @IsNotEmpty()

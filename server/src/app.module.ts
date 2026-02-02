@@ -23,15 +23,19 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     // Database Connection
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('DATABASE_URL'),
-        retryWrites: true,
+      useFactory: async (configService: ConfigService) => {
+        const uri = await Promise.resolve(
+          configService.get<string>('DATABASE_URL'),
+        );
 
-        // 🔐 TLS FIX
-        tls: true,
-        tlsAllowInvalidCertificates: false,
-        serverSelectionTimeoutMS: 5000,
-      }),
+        return {
+          uri,
+          retryWrites: true,
+          tls: true,
+          tlsAllowInvalidCertificates: false,
+          serverSelectionTimeoutMS: 5000,
+        };
+      },
       inject: [ConfigService],
     }),
 

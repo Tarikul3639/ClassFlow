@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Classroom, ClassroomDocument } from '../schemas/classroom.schema';
@@ -12,7 +9,8 @@ import { ClassroomHelperService } from './classroom-helper.service';
 @Injectable()
 export class ClassroomEventService {
   constructor(
-    @InjectModel(Classroom.name) private classroomModel: Model<ClassroomDocument>,
+    @InjectModel(Classroom.name)
+    private classroomModel: Model<ClassroomDocument>,
     private helperService: ClassroomHelperService,
   ) {}
 
@@ -22,7 +20,7 @@ export class ClassroomEventService {
     userId: string,
   ) {
     const classroom = await this.classroomModel.findById(classroomId);
-    console.log("create: ",classroom);
+    console.log('create: ', classroom);
 
     if (!classroom) {
       throw new NotFoundException('Classroom not found');
@@ -95,7 +93,9 @@ export class ClassroomEventService {
 
     this.helperService.checkMemberAccess(classroom, userId);
 
-    const event = classroom.events.find((e: any) => e._id.toString() === eventId);
+    const event = classroom.events.find(
+      (e: any) => e._id.toString() === eventId,
+    );
 
     if (!event) {
       throw new NotFoundException('Event not found');
@@ -118,7 +118,9 @@ export class ClassroomEventService {
 
     this.helperService.checkAdminPrivileges(classroom, userId);
 
-    const event = classroom.events.find((e: any) => e._id.toString() === eventId);
+    const event = classroom.events.find(
+      (e: any) => e._id.toString() === eventId,
+    );
 
     if (!event) {
       throw new NotFoundException('Event not found');
@@ -172,7 +174,9 @@ export class ClassroomEventService {
 
     this.helperService.checkAdminPrivileges(classroom, userId);
 
-    const event = classroom.events.find((e: any) => e._id.toString() === eventId);
+    const event = classroom.events.find(
+      (e: any) => e._id.toString() === eventId,
+    );
 
     if (!event) {
       throw new NotFoundException('Event not found');

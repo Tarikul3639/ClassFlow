@@ -122,20 +122,28 @@ ClassroomSchema.virtual('admins').get(function (this: ClassroomDocument) {
   );
 });
 
-ClassroomSchema.virtual('regularMembers').get(function (this: ClassroomDocument) {
+ClassroomSchema.virtual('regularMembers').get(function (
+  this: ClassroomDocument,
+) {
   return this.members.filter((m) => m.role === ClassroomRole.MEMBER);
 });
 
-ClassroomSchema.virtual('blockedMembers').get(function (this: ClassroomDocument) {
+ClassroomSchema.virtual('blockedMembers').get(function (
+  this: ClassroomDocument,
+) {
   return this.members.filter((m) => m.isBlocked);
 });
 
-ClassroomSchema.virtual('activeMembers').get(function (this: ClassroomDocument) {
+ClassroomSchema.virtual('activeMembers').get(function (
+  this: ClassroomDocument,
+) {
   return this.members.filter((m) => !m.isBlocked);
 });
 
 // 🆕 Upcoming events virtual
-ClassroomSchema.virtual('upcomingEvents').get(function (this: ClassroomDocument) {
+ClassroomSchema.virtual('upcomingEvents').get(function (
+  this: ClassroomDocument,
+) {
   const now = new Date().toISOString();
   return this.events
     .filter((e) => e.startAt >= now && !e.isCompleted)
@@ -143,13 +151,13 @@ ClassroomSchema.virtual('upcomingEvents').get(function (this: ClassroomDocument)
 });
 
 // Pre-save middleware
-ClassroomSchema.pre('save', function (next: Function) {
+ClassroomSchema.pre('save', function() {
   this.totalMembers = this.members.length;
   this.totalAdmins = this.members.filter(
     (m) => m.role === ClassroomRole.ADMIN || m.role === ClassroomRole.CO_ADMIN,
   ).length;
   this.totalBlockedMembers = this.members.filter((m) => m.isBlocked).length;
-  this.totalEvents = this.events.length; 
+  this.totalEvents = this.events.length;
 });
 
 // Enable virtuals

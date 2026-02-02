@@ -49,10 +49,11 @@ export class ClassroomService {
     userId: string,
   ): ClassroomRole | null {
     const member = classroom.members.find((m) => {
-      const memberUserId = m.userId instanceof Types.ObjectId 
-        ? m.userId.toString() 
-        : String(m.userId);
-      
+      const memberUserId =
+        m.userId instanceof Types.ObjectId
+          ? m.userId.toString()
+          : String(m.userId);
+
       return memberUserId === userId.toString();
     });
 
@@ -92,7 +93,8 @@ export class ClassroomService {
     const myRole = this.getUserRole(classroom, currentUserId);
 
     // Check if members are already populated
-    const isPopulated = classroom.members.length > 0 && 
+    const isPopulated =
+      classroom.members.length > 0 &&
       typeof classroom.members[0].userId === 'object' &&
       'name' in classroom.members[0].userId;
 
@@ -108,7 +110,7 @@ export class ClassroomService {
     const formattedMembers = originalMembers.map((originalMember, index) => {
       const populatedMember = classroom.members[index] as any;
       const user = populatedMember.userId;
-      
+
       // console.log('Formatting member:', {
       //   originalRole: originalMember.role,
       //   userId: user._id.toString(),
@@ -161,9 +163,10 @@ export class ClassroomService {
       department: classroom.department,
       intake: classroom.intake,
       section: classroom.section,
-      joinCode: (myRole === ClassroomRole.ADMIN || myRole === ClassroomRole.CO_ADMIN)
-        ? classroom.joinCode
-        : undefined,
+      joinCode:
+        myRole === ClassroomRole.ADMIN || myRole === ClassroomRole.CO_ADMIN
+          ? classroom.joinCode
+          : undefined,
       isJoinCodeActive: classroom.isJoinCodeActive,
       createdBy: classroom.createdBy.toString(),
       members: formattedMembers,
@@ -235,9 +238,10 @@ export class ClassroomService {
 
     // Check if user is already a member
     const existingMember = classroom.members.find((m) => {
-      const memberUserId = m.userId instanceof Types.ObjectId 
-        ? m.userId.toString() 
-        : String(m.userId);
+      const memberUserId =
+        m.userId instanceof Types.ObjectId
+          ? m.userId.toString()
+          : String(m.userId);
       return memberUserId === userId.toString();
     });
 
@@ -289,9 +293,10 @@ export class ClassroomService {
 
     const formattedClassrooms = classrooms.map((classroom) => {
       const member = classroom.members.find((m) => {
-        const memberUserId = m.userId instanceof Types.ObjectId 
-          ? m.userId.toString() 
-          : String(m.userId);
+        const memberUserId =
+          m.userId instanceof Types.ObjectId
+            ? m.userId.toString()
+            : String(m.userId);
         return memberUserId === userId.toString();
       });
 
@@ -326,9 +331,10 @@ export class ClassroomService {
 
     // Check if user is a member
     const isMember = classroom.members.some((m) => {
-      const memberUserId = m.userId instanceof Types.ObjectId 
-        ? m.userId.toString() 
-        : String(m.userId);
+      const memberUserId =
+        m.userId instanceof Types.ObjectId
+          ? m.userId.toString()
+          : String(m.userId);
       return memberUserId === userId.toString();
     });
 
@@ -396,9 +402,10 @@ export class ClassroomService {
     }
 
     classroom.members = classroom.members.filter((m) => {
-      const memberUserId = m.userId instanceof Types.ObjectId 
-        ? m.userId.toString() 
-        : String(m.userId);
+      const memberUserId =
+        m.userId instanceof Types.ObjectId
+          ? m.userId.toString()
+          : String(m.userId);
       return memberUserId !== userId.toString();
     });
 

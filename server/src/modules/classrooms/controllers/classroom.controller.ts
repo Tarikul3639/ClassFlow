@@ -51,8 +51,10 @@ export class ClassroomController {
   @Get()
   async getCurrentClassroom(@CurrentUser() user: any) {
     // Get user's classrooms
-    const { classrooms } = await this.classroomService.findUserClassrooms(user.userId);
-    
+    const { classrooms } = await this.classroomService.findUserClassrooms(
+      user.userId,
+    );
+
     if (classrooms.length === 0) {
       return { classroom: null };
     }

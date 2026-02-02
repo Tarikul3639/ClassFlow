@@ -26,7 +26,8 @@ async function bootstrap() {
   // logger.log('✅ DATABASE_URL loaded successfully');
 
   app.enableCors({
-    origin: configService.get<string>('FRONTEND_URL') || 'http://localhost:5173',
+    origin:
+      configService.get<string>('FRONTEND_URL') || 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

@@ -14,7 +14,9 @@ export class ClassroomHelperService {
     while (exists) {
       code = '';
       for (let i = 0; i < 6; i++) {
-        code += characters.charAt(Math.floor(Math.random() * characters.length));
+        code += characters.charAt(
+          Math.floor(Math.random() * characters.length),
+        );
       }
       exists = !!(await classroomModel.exists({ joinCode: code }));
     }
@@ -53,7 +55,8 @@ export class ClassroomHelperService {
    */
   checkMemberAccess(classroom: any, userId: string): void {
     const member = classroom.members.find(
-      (m: any) => m.userId.toString() === userId || m.userId._id?.toString() === userId,
+      (m: any) =>
+        m.userId.toString() === userId || m.userId._id?.toString() === userId,
     );
 
     if (!member) {
@@ -68,7 +71,10 @@ export class ClassroomHelperService {
   /**
    * Check if user is blocked in classroom
    */
-  isUserBlockedInClassroom(classroom: ClassroomDocument, userId: string): boolean {
+  isUserBlockedInClassroom(
+    classroom: ClassroomDocument,
+    userId: string,
+  ): boolean {
     const member = classroom.members.find(
       (m) => m.userId.toString() === userId,
     );

@@ -32,7 +32,7 @@ export class ClassroomEventController {
     @Body() createEventDto: CreateEventDto,
     @CurrentUser() user: any,
   ) {
-    console.log('Create event controller reached:', { classroomId, user });
+    // console.log('Create event controller reached:', { classroomId, user });
     return this.eventService.createEvent(
       classroomId,
       createEventDto,
@@ -49,7 +49,10 @@ export class ClassroomEventController {
     @Param('classroomId') classroomId: string,
     @CurrentUser() user: any,
   ) {
-    console.log('Get upcoming events controller reached:', { classroomId, user });
+    console.log('Get upcoming events controller reached:', {
+      classroomId,
+      user,
+    });
     return this.eventService.getUpcomingEvents(classroomId, user.userId);
   }
 

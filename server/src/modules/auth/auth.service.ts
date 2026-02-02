@@ -59,7 +59,7 @@ export class AuthService {
     return this.generateAuthResponse(user);
   }
 
-  async validateUser(userId: string){
+  async validateUser(userId: string) {
     const user = await this.userModel.findById(userId).select('-password');
 
     if (!user) {

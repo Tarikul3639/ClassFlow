@@ -7,7 +7,5 @@ import { ClassroomAccessGuard } from '../guards/classroom-access.guard';
  * Use on routes that access a specific classroom by :id param
  */
 export function ClassroomMember() {
-  return applyDecorators(
-    UseGuards(JwtAuthGuard, ClassroomAccessGuard)
-  );
+  return applyDecorators(UseGuards(JwtAuthGuard, ClassroomAccessGuard));
 }

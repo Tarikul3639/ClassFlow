@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     // Demo data for weather since real API needs a key
-    setWeather({ temp: 22, desc: "Mostly Sunny" });
+    // setWeather({ temp: 22, desc: "Mostly Sunny" });
   }, []);
 
   const isActive = (path: string) => pathname === path;

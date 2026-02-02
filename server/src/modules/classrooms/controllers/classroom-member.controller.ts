@@ -30,7 +30,11 @@ export class ClassroomMemberController {
     @Body() assignAdminDto: AssignAdminDto,
     @CurrentUser() user: any,
   ) {
-    return this.memberService.assignRole(classroomId, assignAdminDto, user.userId);
+    return this.memberService.assignRole(
+      classroomId,
+      assignAdminDto,
+      user.userId,
+    );
   }
 
   /**
@@ -43,7 +47,11 @@ export class ClassroomMemberController {
     @Body() blockMemberDto: BlockMemberDto,
     @CurrentUser() user: any,
   ) {
-    return this.memberService.blockMember(classroomId, blockMemberDto, user.userId);
+    return this.memberService.blockMember(
+      classroomId,
+      blockMemberDto,
+      user.userId,
+    );
   }
 
   /**
@@ -56,7 +64,11 @@ export class ClassroomMemberController {
     @Body() blockMemberDto: BlockMemberDto,
     @CurrentUser() user: any,
   ) {
-    return this.memberService.unblockMember(classroomId, blockMemberDto, user.userId);
+    return this.memberService.unblockMember(
+      classroomId,
+      blockMemberDto,
+      user.userId,
+    );
   }
 
   /**

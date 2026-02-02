@@ -7,7 +7,11 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Classroom, ClassroomDocument, ClassroomRole } from '../schemas/classroom.schema';
+import {
+  Classroom,
+  ClassroomDocument,
+  ClassroomRole,
+} from '../schemas/classroom.schema';
 import { User, UserDocument } from '../../users/schemas/user.schema';
 import { AssignAdminDto } from '../dto/assign-admin.dto';
 import { BlockMemberDto } from '../dto/block-member.dto';
@@ -16,7 +20,8 @@ import { ClassroomHelperService } from './classroom-helper.service';
 @Injectable()
 export class ClassroomMemberService {
   constructor(
-    @InjectModel(Classroom.name) private classroomModel: Model<ClassroomDocument>,
+    @InjectModel(Classroom.name)
+    private classroomModel: Model<ClassroomDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private helperService: ClassroomHelperService,
   ) {}
@@ -107,9 +112,12 @@ export class ClassroomMemberService {
 
     if (
       requesterMember?.role === ClassroomRole.CO_ADMIN &&
-      (member.role === ClassroomRole.ADMIN || member.role === ClassroomRole.CO_ADMIN)
+      (member.role === ClassroomRole.ADMIN ||
+        member.role === ClassroomRole.CO_ADMIN)
     ) {
-      throw new ForbiddenException('Co-admin cannot block another admin or co-admin');
+      throw new ForbiddenException(
+        'Co-admin cannot block another admin or co-admin',
+      );
     }
 
     member.isBlocked = true;
@@ -231,7 +239,9 @@ export class ClassroomMemberService {
     }
 
     if (requesterId === memberId) {
-      throw new BadRequestException('Cannot remove yourself. Use leave endpoint instead.');
+      throw new BadRequestException(
+        'Cannot remove yourself. Use leave endpoint instead.',
+      );
     }
 
     const requesterMember = classroom.members.find(
@@ -245,9 +255,12 @@ export class ClassroomMemberService {
     if (
       requesterMember?.role === ClassroomRole.CO_ADMIN &&
       targetMember &&
-      (targetMember.role === ClassroomRole.ADMIN || targetMember.role === ClassroomRole.CO_ADMIN)
+      (targetMember.role === ClassroomRole.ADMIN ||
+        targetMember.role === ClassroomRole.CO_ADMIN)
     ) {
-      throw new ForbiddenException('Co-admin cannot remove another admin or co-admin');
+      throw new ForbiddenException(
+        'Co-admin cannot remove another admin or co-admin',
+      );
     }
 
     classroom.members = classroom.members.filter(
