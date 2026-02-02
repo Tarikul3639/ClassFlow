@@ -23,11 +23,20 @@ async function bootstrap() {
     logger.error('❌ DATABASE_URL is not set in .env file!');
     process.exit(1);
   }
-  // logger.log('✅ DATABASE_URL loaded successfully');
+
+  // ✅ Handle multiple CORS origins
+  const frontendUrls = (configService.get<string>('FRONTEND_URL') || '')
+    .split(',')
+    .map((url) => url.trim().replace(/\/$/, '')); // remove trailing slash if any
+
+  // Add localhost and other URL manually
+  frontendUrls.push(
+    'http://localhost:3000',
+    'https://class-flow-ruby.vercel.app',
+  );
 
   app.enableCors({
-    origin:
-      configService.get<string>('FRONTEND_URL') || 'http://localhost:5173',
+    origin: frontendUrls,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
