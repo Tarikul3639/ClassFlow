@@ -2,16 +2,26 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ClassroomState } from "@/redux/slices/classroom/types";
 
 // Thunks of classroom
-import { fetchClassroomDetails } from "./thunks/classroom/fetchClassroomDetails";
-import { createClassroomThunk } from "./thunks/classroom/createClassroomThunk";
-import { joinClassroomThunk } from "./thunks/classroom/joinClassroomThunk";
-import { leaveClassroomThunk } from "./thunks/classroom/leaveClassroomThunk";
-import { deleteClassroomThunk } from "./thunks/classroom/deleteClassroomThunk";
+import {
+  createClassroomThunk,
+  fetchClassroomThunk,
+  deleteClassroomThunk,
+  leaveClassroomThunk,
+  joinClassroomThunk,
+} from "./thunks/classroom/index";
 
 // Thunks of events
 import { createEventThunk } from "./thunks/event/createEventThunk";
 import { updateEventThunk } from "./thunks/event/updateEventThunk";
 import { deleteEventThunk } from "./thunks/event/deleteEventThunk";
+
+// Thunks of user management
+import {
+  assignRoleThunk,
+  removeMemberThunk,
+  blockUserThunk,
+  unblockUserThunk,
+} from "./thunks/classroom/member/index";
 
 // Initial State
 const initialState: ClassroomState = {
@@ -30,6 +40,11 @@ const initialState: ClassroomState = {
     updateEvent: { loading: false, error: null },
     deleteEvent: { loading: false, error: null },
     createEvent: { loading: false, error: null },
+    // User management statuses
+    blockUser: { loading: false, error: null },
+    unblockUser: { loading: false, error: null },
+    assignRole: { loading: false, error: null },
+    removeMember: { loading: false, error: null },
   },
 };
 
@@ -63,10 +78,13 @@ const classroomSlice = createSlice({
     },
     // Set Mark as Prepared
     setMarkEventAsPrepared(state, action) {
-      state.classroom?.events.includes(action.payload.eventId) &&
-        (state.classroom.events.find(
-          (e) => e._id === action.payload.eventId,
-        )!.isCompleted = action.payload.isCompleted);
+      if (!state.classroom) return;
+      const event = state.classroom.events.find(
+        (e) => e._id === action.payload.eventId,
+      );
+      if (event) {
+        event.isCompleted = action.payload.isCompleted;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -76,16 +94,16 @@ const classroomSlice = createSlice({
 
     // Fetch User Classrooms
     builder
-      .addCase(fetchClassroomDetails.pending, (state) => {
+      .addCase(fetchClassroomThunk.pending, (state) => {
         state.requestStatus.fetchClassroom.loading = true;
         state.requestStatus.fetchClassroom.error = null;
         state.error = null;
       })
-      .addCase(fetchClassroomDetails.fulfilled, (state, action) => {
+      .addCase(fetchClassroomThunk.fulfilled, (state, action) => {
         state.requestStatus.fetchClassroom.loading = false;
         state.classroom = action.payload;
       })
-      .addCase(fetchClassroomDetails.rejected, (state, action) => {
+      .addCase(fetchClassroomThunk.rejected, (state, action) => {
         state.requestStatus.fetchClassroom.loading = false;
         state.requestStatus.fetchClassroom.error = action.payload as string;
         state.error = action.payload as string;
@@ -230,6 +248,115 @@ const classroomSlice = createSlice({
       .addCase(deleteEventThunk.rejected, (state, action) => {
         state.requestStatus.deleteEvent.loading = false;
         state.requestStatus.deleteEvent.error = action.payload as string;
+        state.error = action.payload as string;
+      });
+
+    // ----------------------------------------------
+    // --------------User Management Thunks----------
+    // ----------------------------------------------
+
+    // Block User
+    builder
+      .addCase(blockUserThunk.pending, (state) => {
+        state.requestStatus.blockUser.loading = true;
+        state.requestStatus.blockUser.error = null;
+        state.error = null;
+      })
+      .addCase(blockUserThunk.fulfilled, (state, action) => {
+        state.requestStatus.blockUser.loading = false;
+        if (state.classroom) {
+          const isBlocked = action.payload.data?.isBlocked;
+          const userId = action.payload.data?.userId;
+          if (isBlocked !== undefined && userId) {
+            const member = state.classroom.members.find(
+              (m) => m.user._id === userId,
+            );
+            if (member) {
+              member.isBlocked = isBlocked;
+            }
+          }
+        }
+      })
+      .addCase(blockUserThunk.rejected, (state, action) => {
+        state.requestStatus.blockUser.loading = false;
+        state.requestStatus.blockUser.error = action.payload as string;
+        state.error = action.payload as string;
+      });
+
+    // Unblock User
+    builder
+      .addCase(unblockUserThunk.pending, (state) => {
+        state.requestStatus.unblockUser.loading = true;
+        state.requestStatus.unblockUser.error = null;
+        state.error = null;
+      })
+      .addCase(unblockUserThunk.fulfilled, (state, action) => {
+        state.requestStatus.unblockUser.loading = false;
+        if (state.classroom) {
+          const isBlocked = action.payload.data?.isBlocked;
+          const userId = action.payload.data?.userId;
+          if (isBlocked !== undefined && userId) {
+            const member = state.classroom.members.find(
+              (m) => m.user._id === userId,
+            );
+            if (member) {
+              member.isBlocked = isBlocked;
+            }
+          }
+        }
+      })
+      .addCase(unblockUserThunk.rejected, (state, action) => {
+        state.requestStatus.unblockUser.loading = false;
+        state.requestStatus.unblockUser.error = action.payload as string;
+        state.error = action.payload as string;
+      });
+
+    // Assign Role
+    builder
+      .addCase(assignRoleThunk.pending, (state) => {
+        state.requestStatus.assignRole.loading = true;
+        state.requestStatus.assignRole.error = null;
+        state.error = null;
+      })
+      .addCase(assignRoleThunk.fulfilled, (state, action) => {
+        state.requestStatus.assignRole.loading = false;
+        if (state.classroom) {
+          const member = state.classroom.members.find(
+            (m) => m.user._id === action.payload.data?.userId,
+          );
+          if (member) {
+            member.role = "co_admin";
+          }
+        }
+      })
+      .addCase(assignRoleThunk.rejected, (state, action) => {
+        state.requestStatus.assignRole.loading = false;
+        state.requestStatus.assignRole.error = action.payload as string;
+        state.error = action.payload as string;
+      });
+
+    // Remove Member
+    builder
+      .addCase(removeMemberThunk.pending, (state) => {
+        state.requestStatus.removeMember.loading = true;
+        state.requestStatus.removeMember.error = null;
+        state.error = null;
+      })
+      .addCase(removeMemberThunk.fulfilled, (state, action) => {
+        state.requestStatus.removeMember.loading = false;
+        if (state.classroom) {
+          const userId = action.payload.data?.userId;
+          if (userId) {
+            state.classroom.members = state.classroom.members.filter(
+              (m) => m.user._id !== userId,
+            );
+            state.classroom.totalMembers -= 1;
+          }
+        }
+      })
+      .addCase(removeMemberThunk.rejected, (state, action) => {
+        state.requestStatus.removeMember.loading = false;
+        state.requestStatus.removeMember.error = action.payload as string;
         state.error = action.payload as string;
       });
   },

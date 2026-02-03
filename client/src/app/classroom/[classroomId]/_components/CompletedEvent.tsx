@@ -2,6 +2,7 @@ import { CheckCircle2, Calendar, Clock } from "lucide-react";
 import { ActionButtons } from "./ActionButtons";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { EVENT_UI } from "@/config/event-ui";
+import { motion } from "framer-motion";
 
 interface Props {
   event: IEvent;
@@ -21,7 +22,14 @@ export const CompletedEvent = ({
   const color = ui.color;
 
   return (
-    <article className="group relative flex items-center gap-3 sm:gap-5 px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-2xl sm:rounded-3xl bg-gray-50/50 border border-[#e5e7eb] opacity-60 hover:opacity-100 transition-all duration-300">
+    <motion.div
+      layout
+      layoutId={event._id}
+      initial={{ opacity: 0.8, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      className="group relative flex items-center gap-3 sm:gap-5 px-3 sm:px-4 md:px-6 py-3 sm:py-4 rounded-2xl sm:rounded-3xl bg-gray-50/50 border border-[#e5e7eb] opacity-60 hover:opacity-100 transition-all duration-300"
+    >
       {/* Subtle Side Accent */}
       <div
         className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 rounded-r-full opacity-30 transition-all group-hover:h-8 group-hover:opacity-50"
@@ -82,6 +90,6 @@ export const CompletedEvent = ({
           />
         </div>
       )}
-    </article>
+    </motion.div>
   );
 };

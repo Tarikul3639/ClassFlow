@@ -82,7 +82,7 @@ export const selectCanBlockUser = createSelector(
   (member) => member?.role === "admin" || member?.role === "co_admin",
 );
 
-export const selectCanRemoveCoAdmin = createSelector(
+export const selectCanAssignRole = createSelector(
   [selectCurrentUserMember],
   (member) => member?.role === "admin",
 );

@@ -8,8 +8,12 @@ import { useSortedEvents } from "@/hooks/useSortedEvents";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { IEvent } from "@/redux/slices/classroom/types";
 import { useAppSelector } from "@/redux/hooks";
-import { classroomId as classId, isAdmin as selectIsAdmin } from "@/redux/selectors/selectors";
+import {
+  classroomId as classId,
+  isAdmin as selectIsAdmin,
+} from "@/redux/selectors/selectors";
 import { EmptyState } from "./_components/EmptyState";
+import { LayoutGroup } from "framer-motion";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
@@ -127,41 +131,40 @@ const Page = () => {
           )}
         </header>
 
-        {/* List Rendering */}
-        <div className="flex flex-col gap-4">
-          {/* Active Events */}
-          {activeEvents.map((event) => (
-            <EventItem
-              key={event._id}
-              event={event}
-              highlight={nextEvent?._id === event._id}
-              expandedId={expandedId}
-              setExpandedId={setExpandedId}
-              formatDate={formatDate}
-              formatTime={formatTime}
-              isAdmin={isAdmin}
-            />
-          ))}
+        <LayoutGroup>
+          <div className="flex flex-col gap-4">
+            {/* Active Events */}
+            {activeEvents.map((event) => (
+              <EventItem
+                key={event._id}
+                event={event}
+                highlight={nextEvent?._id === event._id}
+                expandedId={expandedId}
+                setExpandedId={setExpandedId}
+                formatDate={formatDate}
+                formatTime={formatTime}
+                isAdmin={isAdmin}
+              />
+            ))}
 
-          {/* Empty State */}
-          {filteredEvents.length === 0 && <EmptyState isAdmin={isAdmin} />}
+            {filteredEvents.length === 0 && <EmptyState isAdmin={isAdmin} />}
 
-          {/* Completed Section Divider */}
-          {completedEvents.length > 0 && (
-            <SectionDivider label="Completed Activities" />
-          )}
+            {completedEvents.length > 0 && (
+              <SectionDivider label="Completed Activities" />
+            )}
 
-          {/* Completed Events */}
-          {completedEvents.map((event) => (
-            <CompletedEvent
-              key={event._id}
-              event={event}
-              formatDate={formatDate}
-              formatTime={formatTime}
-              isAdmin={isAdmin}
-            />
-          ))}
-        </div>
+            {/* Completed Events */}
+            {completedEvents.map((event) => (
+              <CompletedEvent
+                key={event._id}
+                event={event}
+                formatDate={formatDate}
+                formatTime={formatTime}
+                isAdmin={isAdmin}
+              />
+            ))}
+          </div>
+        </LayoutGroup>
       </main>
     </div>
   );

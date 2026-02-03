@@ -45,10 +45,11 @@ export interface UserManagementSectionProps {
   classroomInfo: IAdminProfile["classroomInfo"];
   canAssignCoAdmin: boolean;
   canBlockUser: boolean;
-  canRemoveCoAdmin: boolean;
+  canAssignRole: boolean;
   onAssignCoAdmin: () => void;
   onBlockUser: (userId: string) => void;
   onUnblockUser: (userId: string) => void;
   onRemoveCoAdmin: (userId: string) => void;
+  onAddCoAdmin: (userId: string) => void;
   onRemoveMember: (userId: string) => void;
 }

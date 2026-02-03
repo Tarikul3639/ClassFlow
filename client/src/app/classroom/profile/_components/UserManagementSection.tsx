@@ -28,7 +28,7 @@ const UserManagementSection = ({
   classroomInfo,
   canAssignCoAdmin,
   canBlockUser,
-  canRemoveCoAdmin,
+  canAssignRole,
   onAssignCoAdmin,
   onBlockUser,
   onUnblockUser,
@@ -228,7 +228,7 @@ const UserManagementSection = ({
                           </DropdownMenuItem>
                         )}
 
-                        {member.role === "co_admin" && canRemoveCoAdmin && (
+                        {member.role === "co_admin" && canAssignRole && (
                           <>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem

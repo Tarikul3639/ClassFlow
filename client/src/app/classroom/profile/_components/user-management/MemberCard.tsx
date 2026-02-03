@@ -5,10 +5,11 @@ import { IClassroomMember } from "@/redux/slices/classroom/types";
 
 interface MemberCardProps {
   member: IClassroomMember;
-  canBlockUser: boolean;    
-  canRemoveCoAdmin: boolean;
+  canBlockUser: boolean;
+  canAssignRole: boolean;
   onBlockUser: (userId: string) => void;
   onUnblockUser: (userId: string) => void;
+  onAddCoAdmin: (userId: string) => void;
   onRemoveCoAdmin: (userId: string) => void;
   onRemoveMember: (userId: string) => void;
 }
@@ -16,9 +17,10 @@ interface MemberCardProps {
 const MemberCard = ({
   member,
   canBlockUser,
-  canRemoveCoAdmin,
+  canAssignRole,
   onBlockUser,
   onUnblockUser,
+  onAddCoAdmin,
   onRemoveCoAdmin,
   onRemoveMember,
 }: MemberCardProps) => {
@@ -28,15 +30,10 @@ const MemberCard = ({
         {/* Avatar */}
         <Avatar
           className={`w-11 h-11 border-2 ${
-            member.role === "co_admin"
-              ? "border-purple-200"
-              : "border-blue-200"
+            member.role === "co_admin" ? "border-purple-200" : "border-blue-200"
           }`}
         >
-          <AvatarImage
-            src={member.user.avatarUrl}
-            alt={member.user.name}
-          />
+          <AvatarImage src={member.user.avatarUrl} alt={member.user.name} />
           <AvatarFallback
             className={`${
               member.role === "co_admin"
@@ -57,24 +54,22 @@ const MemberCard = ({
           <p className="text-xsm font-bold text-gray-800 truncate">
             {member.user.name}
           </p>
-          <p className="text-xxs text-gray-500 truncate">
-            {member.user.email}
-          </p>
+          <p className="text-xxs text-gray-500 truncate">{member.user.email}</p>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             <span
               className={`px-2 py-0.5 rounded-md text-xxxxs font-black uppercase ${
                 member.role === "co_admin"
                   ? "bg-purple-100 text-purple-700"
                   : member.role === "admin"
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-gray-100 text-gray-700"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-gray-100 text-gray-700"
               }`}
             >
               {member.role === "co_admin"
                 ? "Co-Admin"
                 : member.role === "admin"
-                ? "Admin"
-                : "Student"}
+                  ? "Admin"
+                  : "Student"}
             </span>
             {member.isBlocked && (
               <span className="px-2 py-0.5 rounded-md text-xxxxs font-black bg-red-100 text-red-700">
@@ -92,9 +87,10 @@ const MemberCard = ({
           memberRole={member.role}
           isBlocked={member.isBlocked}
           canBlockUser={canBlockUser}
-          canRemoveCoAdmin={canRemoveCoAdmin}
+          canAssignRole={canAssignRole}
           onBlockUser={onBlockUser}
           onUnblockUser={onUnblockUser}
+          onAddCoAdmin={onAddCoAdmin}
           onRemoveCoAdmin={onRemoveCoAdmin}
           onRemoveMember={onRemoveMember}
         />

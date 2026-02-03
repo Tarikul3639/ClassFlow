@@ -9,10 +9,11 @@ const UserManagementSection = ({
   classroomInfo,
   canAssignCoAdmin,
   canBlockUser,
-  canRemoveCoAdmin,
+  canAssignRole,
   onAssignCoAdmin,
   onBlockUser,
   onUnblockUser,
+  onAddCoAdmin,
   onRemoveCoAdmin,
   onRemoveMember,
 }: UserManagementSectionProps) => {
@@ -52,11 +53,12 @@ const UserManagementSection = ({
         <MembersList
           members={members}
           canBlockUser={canBlockUser}
-          canRemoveCoAdmin={canRemoveCoAdmin}
+          canAssignRole={canAssignRole}
           onBlockUser={onBlockUser}
           onUnblockUser={onUnblockUser}
           onRemoveCoAdmin={onRemoveCoAdmin}
           onRemoveMember={onRemoveMember}
+          onAddCoAdmin={onAddCoAdmin}
         />
       </div>
     </section>

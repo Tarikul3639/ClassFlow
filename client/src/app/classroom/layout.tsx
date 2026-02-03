@@ -7,7 +7,7 @@ import { Loader } from "@/components/ui/Loader";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
-import { fetchClassroomDetails } from "@/redux/slices/classroom/thunks/classroom/fetchClassroomDetails";
+import { fetchClassroomThunk } from "@/redux/slices/classroom/thunks/classroom";
 
 export default function LayoutDashboard({
   children,
@@ -24,7 +24,7 @@ export default function LayoutDashboard({
       try {
         const user = await dispatch(verifyAuthThunk()).unwrap();
         if (user) {
-          dispatch(fetchClassroomDetails(user.classrooms[0]));
+          dispatch(fetchClassroomThunk(user.classrooms[0]));
         }
       } catch (error) {
         console.error("Error verifying auth or fetching classroom details:", error);

@@ -50,10 +50,23 @@ export const EventItem = ({
     }
   };
 
+  const handleSafeClick = (e: React.MouseEvent) => {
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) return;
+
+    toggleExpand();
+  };
+
   const hasExpandableContent = event.topics || event.materials;
 
   return (
-    <article
+    <motion.div
+      layout
+      layoutId={event._id}
+      onClick={handleSafeClick}
+      initial={{ opacity: 0.8, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
       className="group relative flex flex-col px-4 sm:px-6 py-4 rounded-3xl bg-white border border-[#edf1f4] hover:border-[#399aef]/30 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300"
       style={{
         ...(isExpanded && {
@@ -169,14 +182,17 @@ export const EventItem = ({
       </div>
 
       {/* Expanded */}
-      <AnimatePresence>
+      <AnimatePresence initial={false}>
         {isExpanded && hasExpandableContent && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="pt-4"
+            transition={{
+              layout: { duration: 0.35, ease: "easeInOut" },
+              opacity: { duration: 0.2 },
+            }}
+            className="pt-4 overflow-hidden"
           >
             <div
               className="rounded-xl p-5 border border-[#dbe1e6] grid gap-6"
@@ -254,7 +270,7 @@ export const EventItem = ({
               )}
 
               {/* Prepared - Only for users */}
-              {!isAdmin && (
+              {/* {!isAdmin && (
                 <div className="pt-4 border-t border-[#dbe1e6]">
                   <label
                     className="flex items-center gap-3 p-4 rounded-2xl cursor-pointer group transition-colors"
@@ -310,11 +326,11 @@ export const EventItem = ({
                     </span>
                   </label>
                 </div>
-              )}
+              )} */}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </article>
+    </motion.div>
   );
 };

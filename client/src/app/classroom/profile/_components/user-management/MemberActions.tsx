@@ -4,7 +4,7 @@ import {
   CheckCircle,
   ShieldAlert,
   UserMinus,
-  Settings2
+  Settings2,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -20,9 +20,10 @@ interface MemberActionsProps {
   memberRole: string;
   isBlocked: boolean;
   canBlockUser: boolean;
-  canRemoveCoAdmin: boolean;
+  canAssignRole: boolean;
   onBlockUser: (userId: string) => void;
   onUnblockUser: (userId: string) => void;
+  onAddCoAdmin: (userId: string) => void;
   onRemoveCoAdmin: (userId: string) => void;
   onRemoveMember: (userId: string) => void;
 }
@@ -32,9 +33,10 @@ const MemberActions = ({
   memberRole,
   isBlocked,
   canBlockUser,
-  canRemoveCoAdmin,
+  canAssignRole,
   onBlockUser,
   onUnblockUser,
+  onAddCoAdmin,
   onRemoveCoAdmin,
   onRemoveMember,
 }: MemberActionsProps) => {
@@ -45,9 +47,9 @@ const MemberActions = ({
           <MoreHorizontal size={16} />
         </button>
       </DropdownMenuTrigger>
-      
-      <DropdownMenuContent 
-        align="end" 
+
+      <DropdownMenuContent
+        align="end"
         sideOffset={6}
         className="w-44 p-2.5 bg-white border border-slate-200 shadow-md rounded-xl animate-in fade-in slide-in-from-top-1"
       >
@@ -60,8 +62,10 @@ const MemberActions = ({
         <div className="space-y-0.5">
           {canBlockUser && (
             <DropdownMenuItem
-                onClick={() => isBlocked ? onUnblockUser(memberId) : onBlockUser(memberId)}
-                className={`cursor-pointer px-2.5 py-2 flex items-center gap-2 text-xsm! font-medium rounded-md transition-colors ${
+              onClick={() =>
+                isBlocked ? onUnblockUser(memberId) : onBlockUser(memberId)
+              }
+              className={`cursor-pointer px-2.5 py-2 flex items-center gap-2 text-xsm! font-medium rounded-md transition-colors ${
                 isBlocked
                   ? "text-emerald-600 hover:bg-emerald-100 focus:bg-emerald-50"
                   : "text-slate-600 hover:bg-slate-100! focus:bg-slate-50"
@@ -72,7 +76,7 @@ const MemberActions = ({
             </DropdownMenuItem>
           )}
 
-          {memberRole === "co_admin" && canRemoveCoAdmin && (
+          {memberRole === "co_admin" && canAssignRole && (
             <DropdownMenuItem
               onClick={() => onRemoveCoAdmin(memberId)}
               className="cursor-pointer px-2.5 py-2 flex items-center gap-2 text-xsm! font-medium text-slate-600 hover:bg-slate-100 focus:bg-slate-50 rounded-md transition-colors"
@@ -82,9 +86,18 @@ const MemberActions = ({
             </DropdownMenuItem>
           )}
         </div>
+        {memberRole !== "admin" && canAssignRole && (
+          <DropdownMenuItem
+            onClick={() => onAddCoAdmin(memberId)}
+            className="cursor-pointer px-2.5 py-2 flex items-center gap-2 text-xsm! font-medium text-slate-600 hover:bg-slate-100 focus:bg-slate-50 rounded-md transition-colors"
+          >
+            <ShieldAlert size={14} />
+            <span>Assign Co-Admin</span>
+          </DropdownMenuItem>
+        )}
 
         <DropdownMenuSeparator className="my-0.5 bg-slate-100" />
-        
+
         {/* Danger Zone Header (Optional but looks pro) */}
         <DropdownMenuItem
           onClick={() => onRemoveMember(memberId)}

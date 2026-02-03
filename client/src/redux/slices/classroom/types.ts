@@ -80,5 +80,10 @@ export interface ClassroomState {
     updateEvent: { loading: boolean; error: string | null };
     deleteEvent: { loading: boolean; error: string | null };
     createEvent: { loading: boolean; error: string | null };
+    // User management statuses
+    blockUser: { loading: boolean; error: string | null };
+    unblockUser: { loading: boolean; error: string | null };
+    assignRole: { loading: boolean; error: string | null };
+    removeMember: { loading: boolean; error: string | null };
   };
 }

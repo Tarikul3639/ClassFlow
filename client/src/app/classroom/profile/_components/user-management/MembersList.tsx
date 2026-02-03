@@ -5,9 +5,10 @@ import { IClassroomMember } from "@/redux/slices/classroom/types";
 interface MembersListProps {
   members: IClassroomMember[];
   canBlockUser: boolean;
-  canRemoveCoAdmin: boolean;
+  canAssignRole: boolean;
   onBlockUser: (userId: string) => void;
   onUnblockUser: (userId: string) => void;
+  onAddCoAdmin: (userId: string) => void;
   onRemoveCoAdmin: (userId: string) => void;
   onRemoveMember: (userId: string) => void;
 }
@@ -15,9 +16,10 @@ interface MembersListProps {
 const MembersList = ({
   members,
   canBlockUser,
-  canRemoveCoAdmin,
+  canAssignRole,
   onBlockUser,
   onUnblockUser,
+  onAddCoAdmin,
   onRemoveCoAdmin,
   onRemoveMember,
 }: MembersListProps) => {
@@ -34,11 +36,12 @@ const MembersList = ({
               key={member.user._id}
               member={member}
               canBlockUser={canBlockUser}
-              canRemoveCoAdmin={canRemoveCoAdmin}
+              canAssignRole={canAssignRole}
               onBlockUser={onBlockUser}
               onUnblockUser={onUnblockUser}
               onRemoveCoAdmin={onRemoveCoAdmin}
               onRemoveMember={onRemoveMember}
+              onAddCoAdmin={onAddCoAdmin}
             />
           ))}
         </div>

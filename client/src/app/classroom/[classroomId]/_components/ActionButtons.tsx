@@ -134,7 +134,7 @@ export function ActionButtons({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="w-9 h-9 flex items-center justify-center text-[#617789] bg-white border border-[#edf1f4] rounded-lg active:scale-90 transition-all"
+              className="w-9 h-9 flex items-center justify-center text-[#617789] bg-white border border-[#edf1f4] rounded-lg active:scale-90 transition-all focus-outline-none focus:ring-2 focus:ring-[#399aef]/20"
               aria-label="More options"
             >
               <MoreVertical size={16} />

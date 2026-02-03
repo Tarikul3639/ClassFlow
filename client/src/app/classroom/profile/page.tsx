@@ -8,7 +8,7 @@ import {
   selectIsAdmin,
   selectCanAssignCoAdmin,
   selectCanBlockUser,
-  selectCanRemoveCoAdmin,
+  selectCanAssignRole,
 } from "@/redux/selectors/profile";
 
 // Components
@@ -23,10 +23,23 @@ import MetadataSection from "./_components/MetadataSection";
 import { logout } from "@/redux/slices/auth/slice";
 import { classroomId } from "@/redux/selectors/selectors";
 import { toast } from "sonner";
-import { logoutThunk } from "@/redux/slices/auth/thunks/logoutThunk";
-import { leaveClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/leaveClassroomThunk";
-import { deactivateAccountThunk } from "@/redux/slices/auth/thunks/deactivateAccountThunk";
-import { deleteClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/deleteClassroomThunk";
+
+// Thunks
+import {
+  logoutThunk,
+  deactivateAccountThunk,
+} from "@/redux/slices/auth/thunks/index";
+import {
+  leaveClassroomThunk,
+  deleteClassroomThunk,
+} from "@/redux/slices/classroom/thunks/classroom";
+import {
+  assignRoleThunk,
+  blockUserThunk,
+  unblockUserThunk,
+} from "@/redux/slices/classroom/thunks/classroom/member";
+
+import { extractErrorMessage } from "@/lib/utils/error.utils";
 
 export interface EditField {
   label: string;
@@ -40,14 +53,16 @@ const ProfilePage = () => {
   const adminProfile = useAppSelector(selectAdminProfile);
   const isAdmin = useAppSelector(selectIsAdmin);
   const classId = useAppSelector(classroomId);
-  
+
   // Permissions
   const canAssignCoAdmin = useAppSelector(selectCanAssignCoAdmin);
+  console.log("Can i assign co-admin?", canAssignCoAdmin);
   const canBlockUser = useAppSelector(selectCanBlockUser);
-  const canRemoveCoAdmin = useAppSelector(selectCanRemoveCoAdmin);
+  const canAssignRole = useAppSelector(selectCanAssignRole);
 
   const [editingField, setEditingField] = useState<EditField | null>(null);
-  const [isAssignCoAdminModalOpen, setIsAssignCoAdminModalOpen] = useState(false);
+  const [isAssignCoAdminModalOpen, setIsAssignCoAdminModalOpen] =
+    useState(false);
 
   const refreshing = useAppSelector(
     (state) => state.auth.requestStatus.refresh.loading,
@@ -69,7 +84,9 @@ const ProfilePage = () => {
       toast.success("Logged out successfully!", { id: "logout" });
     } catch (error: any) {
       console.error("Logout failed:", error);
-      toast.error(error || "Failed to logout. Please try again.", { id: "logout" });
+      toast.error(extractErrorMessage(error), {
+        id: "logout",
+      });
     }
   };
 
@@ -80,11 +97,15 @@ const ProfilePage = () => {
     toast.loading("Leaving classroom...", { id: "leave-classroom" });
     try {
       await dispatch(leaveClassroomThunk({ classroomId: classId })).unwrap();
-      toast.success("Successfully left the classroom!", { id: "leave-classroom" });
+      toast.success("Successfully left the classroom!", {
+        id: "leave-classroom",
+      });
       // Optionally redirect to dashboard
     } catch (error: any) {
       console.error("Leave classroom failed:", error);
-      toast.error(error || "Failed to leave classroom. Please try again.", { id: "leave-classroom" });
+      toast.error(extractErrorMessage(error), {
+        id: "leave-classroom",
+      });
     }
   };
 
@@ -95,11 +116,15 @@ const ProfilePage = () => {
     toast.loading("Deleting classroom...", { id: "delete-classroom" });
     try {
       await dispatch(deleteClassroomThunk({ classroomId: classId })).unwrap();
-      toast.success("Classroom deleted successfully!", { id: "delete-classroom" });
+      toast.success("Classroom deleted successfully!", {
+        id: "delete-classroom",
+      });
       // Optionally redirect to dashboard
     } catch (error: any) {
       console.error("Delete classroom failed:", error);
-      toast.error(error || "Failed to delete classroom. Please try again.", { id: "delete-classroom" });
+      toast.error(extractErrorMessage(error), {
+        id: "delete-classroom",
+      });
     }
   };
 
@@ -110,10 +135,14 @@ const ProfilePage = () => {
       await dispatch(deactivateAccountThunk()).unwrap();
       dispatch(logout());
       localStorage.removeItem("access_token");
-      toast.success("Account deactivated successfully!", { id: "deactivate-account" });
+      toast.success("Account deactivated successfully!", {
+        id: "deactivate-account",
+      });
     } catch (error: any) {
       console.error("Deactivate account failed:", error);
-      toast.error(error || "Failed to deactivate account. Please try again.", { id: "deactivate-account" });
+      toast.error(extractErrorMessage(error), {
+        id: "deactivate-account",
+      });
     }
   };
 
@@ -133,24 +162,69 @@ const ProfilePage = () => {
     setEditingField({ label, value, type });
   };
 
-  const handleBlockUser = (userId: string) => {
+  const handleBlockUser = async (userId: string) => {
     console.log("Blocking user:", userId);
-    // TODO: Dispatch block user thunk
+    try {
+      await dispatch(
+        blockUserThunk({ classroomId: classId ?? "", userId }),
+      ).unwrap();
+      toast.success("User blocked successfully!");
+    } catch (error) {
+      console.error("Block user failed:", error);
+      toast.error(extractErrorMessage(error));
+    }
   };
 
-  const handleUnblockUser = (userId: string) => {
+  const handleUnblockUser = async (userId: string) => {
     console.log("Unblocking user:", userId);
-    // TODO: Dispatch unblock user thunk
+    try {
+      await dispatch(
+        unblockUserThunk({ classroomId: classId ?? "", userId }),
+      ).unwrap();
+      toast.success("User unblocked successfully!");
+    } catch (error) {
+      console.error("Unblock user failed:", error);
+      toast.error(extractErrorMessage(error));
+    }
   };
 
-  const handleRemoveCoAdmin = (userId: string) => {
+  const handleRemoveCoAdmin = async (userId: string) => {
     console.log("Removing co-admin:", userId);
-    // TODO: Dispatch remove co-admin thunk
+    try {
+      await dispatch(
+        assignRoleThunk({ classroomId: classId ?? "", userId, role: "member" }),
+      ).unwrap();
+      toast.success("Co-Admin removed successfully!");
+    } catch (error) {
+      console.error("Remove Co-Admin failed:", error);
+      toast.error(extractErrorMessage(error));
+    }
   };
 
-  const handleRemoveMember = (userId: string) => {
+  const handleAddCoAdmin = async (userId: string) => {
+    console.log("Adding co-admin:", userId);
+    try {
+      await dispatch(
+        assignRoleThunk({ classroomId: classId ?? "", userId, role: "co_admin" }),
+      ).unwrap();
+      toast.success("Co-Admin added successfully!");
+    } catch (error) {
+      console.error("Add Co-Admin failed:", error);
+      toast.error(extractErrorMessage(error));
+    }
+  };
+
+  const handleRemoveMember = async (userId: string) => {
     console.log("Removing member:", userId);
-    // TODO: Dispatch remove member thunk
+    try {
+      await dispatch(
+        assignRoleThunk({ classroomId: classId ?? "", userId, role: "member" }),
+      ).unwrap();
+      toast.success("Member removed successfully!");
+    } catch (error) {
+      console.error("Remove member failed:", error);
+      toast.error(extractErrorMessage(error));
+    }
   };
 
   // Loading state
@@ -175,11 +249,11 @@ const ProfilePage = () => {
         />
 
         {/* Section 1: User Information */}
-        <UserSection 
-          user={profileUser} 
-          isAdmin={isAdmin} 
-          onEdit={handleEdit} 
-          classId={classId ?? ""} 
+        <UserSection
+          user={profileUser}
+          isAdmin={isAdmin}
+          onEdit={handleEdit}
+          classId={classId ?? ""}
         />
 
         {/* Section 2: Security & Actions */}
@@ -200,10 +274,11 @@ const ProfilePage = () => {
             classroomInfo={adminProfile.classroomInfo}
             canAssignCoAdmin={canAssignCoAdmin}
             canBlockUser={canBlockUser}
-            canRemoveCoAdmin={canRemoveCoAdmin}
+            canAssignRole={canAssignRole}
             onAssignCoAdmin={() => setIsAssignCoAdminModalOpen(true)}
             onBlockUser={handleBlockUser}
             onUnblockUser={handleUnblockUser}
+            onAddCoAdmin={handleAddCoAdmin}
             onRemoveCoAdmin={handleRemoveCoAdmin}
             onRemoveMember={handleRemoveMember}
           />
