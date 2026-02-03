@@ -2,30 +2,35 @@ import { Lock, LogOut, UserX, AlertTriangle, Key, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Dialog } from "@/components/ui/Dialog";
 import AccountField from "./AccountField";
-import { logout } from "@/redux/slices/auth/slice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { leaveClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/leaveClassroomThunk";
-import { logoutThunk } from "@/redux/slices/auth/thunks/logoutThunk";
-import { deactivateAccountThunk } from "@/redux/slices/auth/thunks/deactivateAccountThunk";
-import { deleteClassroomThunk } from "@/redux/slices/classroom/thunks/classroom/deleteClassroomThunk";
-import { toast } from "sonner";
+import { useAppSelector } from "@/redux/hooks";
 
 // Security Section Props
 export interface SecuritySectionProps {
   classroomId?: string;
   isAdmin: boolean;
+  onLogout: () => Promise<void>;
+  onLeaveClassroom: () => Promise<void>;
+  onDeleteClassroom: () => Promise<void>;
+  onDeactivateAccount: () => Promise<void>;
+  onChangePassword: () => void;
 }
 
-const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
-  const dispatch = useAppDispatch();
-
+const SecuritySection = ({
+  classroomId,
+  isAdmin,
+  onLogout,
+  onLeaveClassroom,
+  onDeleteClassroom,
+  onDeactivateAccount,
+  onChangePassword,
+}: SecuritySectionProps) => {
   // Dialog state
   const [dialogState, setDialogState] = useState<{
     type: "logout" | "leave" | "deactivate" | "delete" | null;
     loading: boolean;
   }>({ type: null, loading: false });
 
-  // Loading states
+  // Loading states from Redux
   const isLeaveLoading = useAppSelector(
     (state) => state.classroom.requestStatus.leaveClassroom.loading,
   );
@@ -39,74 +44,29 @@ const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
     (state) => state.auth.requestStatus.logout?.loading || false,
   );
 
-  // Handle logout
-  const handleLogout = async () => {
+  // Wrapper functions to handle dialog state
+  const handleLogoutConfirm = async () => {
     setDialogState({ type: "logout", loading: true });
-    toast.loading("Logging out...", { id: "logout" });
-    try {
-      await dispatch(logoutThunk()).unwrap();
-      dispatch(logout());
-      localStorage.removeItem("access_token");
-      toast.success("Logged out successfully!", { id: "logout" });
-      setDialogState({ type: null, loading: false });
-    } catch (error: any) {
-      console.error("Logout failed:", error);
-      toast.error(error || "Failed to logout. Please try again.", { id: "logout" });
-      setDialogState({ type: null, loading: false });
-    }
+    await onLogout();
+    setDialogState({ type: null, loading: false });
   };
 
-  // Handle leave classroom
-  const handleLeaveClassroom = async () => {
-    if (!classroomId) return;
-
+  const handleLeaveConfirm = async () => {
     setDialogState({ type: "leave", loading: true });
-    toast.loading("Leaving classroom...", { id: "leave-classroom" });
-    try {
-      await dispatch(leaveClassroomThunk({ classroomId })).unwrap();
-      toast.success("Successfully left the classroom!", { id: "leave-classroom" });
-      setDialogState({ type: null, loading: false });
-      // Optionally redirect to dashboard
-    } catch (error: any) {
-      console.error("Leave classroom failed:", error);
-      toast.error(error || "Failed to leave classroom. Please try again.", { id: "leave-classroom" });
-      setDialogState({ type: null, loading: false });
-    }
+    await onLeaveClassroom();
+    setDialogState({ type: null, loading: false });
   };
 
-  // Handle delete classroom
-  const handleDeleteClassroom = async () => {
-    if (!classroomId) return;
-
+  const handleDeleteConfirm = async () => {
     setDialogState({ type: "delete", loading: true });
-    toast.loading("Deleting classroom...", { id: "delete-classroom" });
-    try {
-      await dispatch(deleteClassroomThunk({ classroomId })).unwrap();
-      toast.success("Classroom deleted successfully!", { id: "delete-classroom" });
-      setDialogState({ type: null, loading: false });
-      // Optionally redirect to dashboard
-    } catch (error: any) {
-      console.error("Delete classroom failed:", error);
-      toast.error(error || "Failed to delete classroom. Please try again.", { id: "delete-classroom" });
-      setDialogState({ type: null, loading: false });
-    }
+    await onDeleteClassroom();
+    setDialogState({ type: null, loading: false });
   };
 
-  // Handle deactivate account
-  const handleDeactivateAccount = async () => {
+  const handleDeactivateConfirm = async () => {
     setDialogState({ type: "deactivate", loading: true });
-    toast.loading("Deactivating account...", { id: "deactivate-account" });
-    try {
-      await dispatch(deactivateAccountThunk()).unwrap();
-      dispatch(logout());
-      localStorage.removeItem("access_token");
-      toast.success("Account deactivated successfully!", { id: "deactivate-account" });
-      setDialogState({ type: null, loading: false });
-    } catch (error: any) {
-      console.error("Deactivate account failed:", error);
-      toast.error(error || "Failed to deactivate account. Please try again.", { id: "deactivate-account" });
-      setDialogState({ type: null, loading: false });
-    }
+    await onDeactivateAccount();
+    setDialogState({ type: null, loading: false });
   };
 
   return (
@@ -129,7 +89,7 @@ const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
             value="********"
             icon={Key}
             isPassword
-            onEdit={(label, value) => console.log("Change password")}
+            onEdit={onChangePassword}
           />
 
           {/* Leave Classroom */}
@@ -231,7 +191,7 @@ const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
         title="Confirm Logout"
         description="Are you sure you want to log out from your account?"
         confirmText="Yes, Logout"
-        onConfirm={handleLogout}
+        onConfirm={handleLogoutConfirm}
       />
 
       <Dialog
@@ -242,7 +202,7 @@ const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
         title="Leave Classroom"
         description="Are you sure you want to leave this classroom? You'll need a join code to rejoin."
         confirmText="Yes, Leave"
-        onConfirm={handleLeaveClassroom}
+        onConfirm={handleLeaveConfirm}
       />
 
       <Dialog
@@ -252,8 +212,8 @@ const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
         variant="danger"
         title="Delete Classroom"
         description="This action is permanent and cannot be undone. All classroom data will be permanently deleted."
-        confirmText="Yes, Delete Forever"
-        onConfirm={handleDeleteClassroom}
+        confirmText="Delete Forever"
+        onConfirm={handleDeleteConfirm}
       />
 
       <Dialog
@@ -263,8 +223,8 @@ const SecuritySection = ({ classroomId, isAdmin }: SecuritySectionProps) => {
         variant="danger"
         title="Deactivate Account"
         description="This action is permanent and cannot be undone. All your data will be permanently deleted."
-        confirmText="Yes, Delete Forever"
-        onConfirm={handleDeactivateAccount}
+        confirmText="Delete Forever"
+        onConfirm={handleDeactivateConfirm}
       />
     </>
   );

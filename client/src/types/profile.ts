@@ -41,7 +41,7 @@ export interface IAdminProfile extends IBaseUser {
 
 // User Management Section Props (Admin only)
 export interface UserManagementSectionProps {
-  members: IAdminProfile["members"];
+  members: IClassroomMember[];
   classroomInfo: IAdminProfile["classroomInfo"];
   canAssignCoAdmin: boolean;
   canBlockUser: boolean;
