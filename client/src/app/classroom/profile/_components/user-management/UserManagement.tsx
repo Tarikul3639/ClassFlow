@@ -27,15 +27,6 @@ const UserManagementSection = ({
           </div>
           User Management
         </h2>
-        {canAssignCoAdmin && (
-          <button
-            onClick={onAssignCoAdmin}
-            className="px-3 py-2 bg-[#399aef] text-white text-xxs font-black rounded-xl hover:bg-[#2d84d1] transition-all flex items-center gap-2"
-          >
-            <UserPlus size={14} />
-            <span className="hidden sm:inline">Assign Co-Admin</span>
-          </button>
-        )}
       </div>
 
       <div className="p-6 space-y-6">

@@ -56,6 +56,7 @@ export interface IClassroom {
   events: IEvent[];
   isActive: boolean;
   isArchived: boolean;
+  isBlocked?: boolean;
   coverImage?: string;
   totalMembers: number;
   totalEvents: number;

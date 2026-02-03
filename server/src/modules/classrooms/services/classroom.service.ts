@@ -111,11 +111,6 @@ export class ClassroomService {
       const populatedMember = classroom.members[index] as any;
       const user = populatedMember.userId;
 
-      // console.log('Formatting member:', {
-      //   originalRole: originalMember.role,
-      //   userId: user._id.toString(),
-      // });
-
       return {
         user: {
           _id: user._id.toString(),
@@ -133,27 +128,41 @@ export class ClassroomService {
       };
     });
 
-    // Format events
-    const formattedEvents = classroom.events.map((event: any) => ({
-      _id: event._id.toString(),
-      type: event.type,
-      title: event.title,
-      date: event.date,
-      startAt: event.startAt,
-      endAt: event.endAt,
-      location: event.location,
-      topics: event.topics,
-      materials: event.materials.map((m: any) => ({
-        _id: m._id.toString(),
-        name: m.name,
-        type: m.type,
-        url: m.url,
-      })),
-      isCompleted: event.isCompleted,
-      createdBy: event.createdBy.toString(),
-      createdAt: event.createdAt,
-      updatedAt: event.updatedAt,
-    }));
+    // ✅ Check if current user is blocked
+    const currentMember = classroom.members.find((m: any) => {
+      const memberUserId =
+        m.userId instanceof Types.ObjectId
+          ? m.userId.toString()
+          : m.userId._id?.toString() || m.userId;
+      return memberUserId === currentUserId.toString();
+    });
+
+    const isBlocked = currentMember?.isBlocked || false;
+
+    // Format events: hide if blocked
+    let formattedEvents: any[] = [];
+    if (!isBlocked) {
+      formattedEvents = classroom.events.map((event: any) => ({
+        _id: event._id.toString(),
+        type: event.type,
+        title: event.title,
+        date: event.date,
+        startAt: event.startAt,
+        endAt: event.endAt,
+        location: event.location,
+        topics: event.topics,
+        materials: event.materials.map((m: any) => ({
+          _id: m._id.toString(),
+          name: m.name,
+          type: m.type,
+          url: m.url,
+        })),
+        isCompleted: event.isCompleted,
+        createdBy: event.createdBy.toString(),
+        createdAt: event.createdAt,
+        updatedAt: event.updatedAt,
+      }));
+    }
 
     return {
       _id: classroom._id.toString(),
@@ -169,14 +178,18 @@ export class ClassroomService {
           : undefined,
       isJoinCodeActive: classroom.isJoinCodeActive,
       createdBy: classroom.createdBy.toString(),
-      members: formattedMembers,
+      members:
+        myRole === ClassroomRole.ADMIN || myRole === ClassroomRole.CO_ADMIN
+          ? formattedMembers
+          : [],
       events: formattedEvents,
+      isBlocked, // ✅ Include blocked status for UI
       isActive: classroom.isActive,
       isArchived: classroom.isArchived,
       coverImage: classroom.coverImage,
       totalMembers: classroom.totalMembers,
       totalEvents: classroom.totalEvents,
-      myRole: myRole, // ✅ Use pre-population role
+      myRole, // ✅ Use pre-population role
       createdAt: classroom.createdAt,
       updatedAt: classroom.updatedAt,
     };

@@ -37,10 +37,10 @@ const AccountField = ({
     {!readOnly && (
       <button
         onClick={() => onEdit(label, value)}
-        className="ml-2 p-2 md:p-1.5 text-gray-400 hover:text-[#399aef] hover:bg-white rounded-lg border border-[#dbe1e6] md:border-transparent md:hover:border-[#dbe1e6] transition-all flex items-center gap-1.5 shrink-0 md:opacity-0 md:group-hover:opacity-100"
+        className="ml-2 p-2 md:p-1.5 text-gray-400 hover:text-[#399aef] hover:bg-white rounded-lg border border-[#dbe1e6] md:border-transparent md:hover:border-[#dbe1e6] transition-all flex items-center gap-1 shrink-0 md:opacity-0 md:group-hover:opacity-100"
       >
         <Edit3 size={12} />
-        <span className="text-xxxs md:text-xxs font-black hidden xs:block">
+        <span className="text-xxxs md:text-xxs font-black hidden xs:block pl-1.5 pr-1">
           Edit
         </span>
       </button>

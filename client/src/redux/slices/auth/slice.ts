@@ -5,6 +5,7 @@ import { signUpThunk } from "./thunks/signUpThunk";
 import { logoutThunk } from "./thunks/logoutThunk";
 import { verifyAuthThunk } from "./thunks/verifyAuthThunk";
 import { deactivateAccountThunk } from "./thunks/deactivateAccountThunk";
+import { changePasswordThunk } from "./thunks/changePasswordThunk";
 
 // Initial State
 const initialState: IAuthState = {
@@ -19,6 +20,7 @@ const initialState: IAuthState = {
     logout: { loading: false, error: null },
     refresh: { loading: false, error: null },
     deactivateAccount: { loading: false, error: null },
+    changePassword: { loading: false, error: null },
   },
 };
 
@@ -31,7 +33,7 @@ const authSlice = createSlice({
       state.user = null;
       state.access_token = null;
       state.isAuthenticated = false;
-    }
+    },
   },
   extraReducers: (builder) => {
     // Login
@@ -110,6 +112,23 @@ const authSlice = createSlice({
       .addCase(deactivateAccountThunk.rejected, (state, action) => {
         state.requestStatus.deactivateAccount.loading = false;
         state.requestStatus.deactivateAccount.error = action.payload as string;
+        state.error = action.payload as string;
+      });
+
+    // Change Password
+    builder
+      .addCase(changePasswordThunk.pending, (state) => {
+        state.requestStatus.changePassword.loading = true;
+        state.requestStatus.changePassword.error = null;
+        state.error = null;
+      })
+      .addCase(changePasswordThunk.fulfilled, (state) => {
+        state.requestStatus.changePassword.loading = false;
+        state.error = null;
+      })
+      .addCase(changePasswordThunk.rejected, (state, action) => {
+        state.requestStatus.changePassword.loading = false;
+        state.requestStatus.changePassword.error = action.payload as string;
         state.error = action.payload as string;
       });
   },

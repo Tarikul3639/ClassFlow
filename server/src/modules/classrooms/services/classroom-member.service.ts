@@ -273,6 +273,13 @@ export class ClassroomMemberService {
       $pull: { classrooms: classroom._id },
     });
 
-    return { message: 'Member removed successfully' };
+    return {
+      success: true,
+      message: 'Member removed successfully',
+      data: {
+        userId: memberId,
+        removedAt: new Date().toISOString(),
+      },
+    };
   }
 }

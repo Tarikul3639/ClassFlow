@@ -69,6 +69,33 @@ export class AuthService {
     return user;
   }
 
+  async logout() {
+    // Stateless JWT er jonno ekhane server-side logic mandatory noy.
+    // Kintu log tracking ba session audit er jonno eita dorkar hoy.
+    return { success: true };
+  }
+
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await this.userModel.findById(userId).select('+password');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.password,
+    );
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedNewPassword;
+    await user.save();
+  }
+
   private generateAuthResponse(user: UserDocument): AuthResponse {
     const payload = {
       sub: user._id.toString(),

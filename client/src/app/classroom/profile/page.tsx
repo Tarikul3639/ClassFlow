@@ -14,19 +14,21 @@ import {
 // Components
 import ProfileHeader from "./_components/ProfileHeader";
 import UserSection from "./_components/UserSection";
-import SecuritySection from "./_components/SecuritySection";
+import SecuritySection from "./_components/security/SecuritySection";
 import UserManagementSection from "./_components/user-management/UserManagement";
 import EditModal from "./_components/EditModal";
-import AssignCoAdminModal from "./_components/AssignCoAdminModal";
+import PasswordEditModal from "./_components/security/PasswordEditModal";
 import ProfileSkeleton from "./_components/ProfileSkeleton";
 import MetadataSection from "./_components/MetadataSection";
 import { logout } from "@/redux/slices/auth/slice";
 import { classroomId } from "@/redux/selectors/selectors";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 // Thunks
 import {
   logoutThunk,
+  changePasswordThunk,
   deactivateAccountThunk,
 } from "@/redux/slices/auth/thunks/index";
 import {
@@ -34,6 +36,7 @@ import {
   deleteClassroomThunk,
 } from "@/redux/slices/classroom/thunks/classroom";
 import {
+  removeMemberThunk,
   assignRoleThunk,
   blockUserThunk,
   unblockUserThunk,
@@ -53,15 +56,17 @@ const ProfilePage = () => {
   const adminProfile = useAppSelector(selectAdminProfile);
   const isAdmin = useAppSelector(selectIsAdmin);
   const classId = useAppSelector(classroomId);
+  const router = useRouter();
 
   // Permissions
   const canAssignCoAdmin = useAppSelector(selectCanAssignCoAdmin);
-  console.log("Can i assign co-admin?", canAssignCoAdmin);
   const canBlockUser = useAppSelector(selectCanBlockUser);
   const canAssignRole = useAppSelector(selectCanAssignRole);
 
   const [editingField, setEditingField] = useState<EditField | null>(null);
   const [isAssignCoAdminModalOpen, setIsAssignCoAdminModalOpen] =
+    useState(false);
+  const [isPasswordChangeModalOpen, setIsPasswordChangeModalOpen] =
     useState(false);
 
   const refreshing = useAppSelector(
@@ -71,85 +76,121 @@ const ProfilePage = () => {
   const isLoading = useAppSelector(
     (state) => state.classroom.requestStatus.fetchClassroom.loading,
   );
+  const error = useAppSelector(
+    (state) => state.auth.requestStatus.changePassword?.error,
+  );
 
   // ==================== Security Actions ====================
 
   // Handle logout
   const handleLogout = async () => {
-    toast.loading("Logging out...", { id: "logout" });
+    const logoutPromise = dispatch(logoutThunk()).unwrap();
     try {
-      await dispatch(logoutThunk()).unwrap();
+      await logoutPromise;
+      toast.promise(logoutPromise, {
+        loading: "Logging out...",
+        success: "Logged out successfully!",
+        error: (err) => extractErrorMessage(err) || "Failed to logout",
+      });
       dispatch(logout());
       localStorage.removeItem("access_token");
-      toast.success("Logged out successfully!", { id: "logout" });
-    } catch (error: any) {
+      router.push("/login");
+    } catch (error) {
       console.error("Logout failed:", error);
-      toast.error(extractErrorMessage(error), {
-        id: "logout",
-      });
+      toast.error(extractErrorMessage(error) || "Failed to logout", {});
     }
   };
 
   // Handle leave classroom
   const handleLeaveClassroom = async () => {
-    if (!classId) return;
-
-    toast.loading("Leaving classroom...", { id: "leave-classroom" });
+    if (!classId) throw new Error("Classroom ID is missing");
+    const leavePromise = dispatch(
+      leaveClassroomThunk({ classroomId: classId }),
+    ).unwrap();
     try {
-      await dispatch(leaveClassroomThunk({ classroomId: classId })).unwrap();
-      toast.success("Successfully left the classroom!", {
-        id: "leave-classroom",
+      await leavePromise;
+      toast.promise(leavePromise, {
+        loading: "Leaving classroom...",
+        success: "Successfully left the classroom!",
+        error: (err) => extractErrorMessage(err) || "Failed to leave classroom",
       });
-      // Optionally redirect to dashboard
-    } catch (error: any) {
+      router.push("/");
+    } catch (error) {
       console.error("Leave classroom failed:", error);
-      toast.error(extractErrorMessage(error), {
-        id: "leave-classroom",
-      });
+      toast.error(
+        extractErrorMessage(error) || "Failed to leave classroom",
+        {},
+      );
     }
   };
 
   // Handle delete classroom
   const handleDeleteClassroom = async () => {
-    if (!classId) return;
-
-    toast.loading("Deleting classroom...", { id: "delete-classroom" });
+    if (!classId) throw new Error("Classroom ID is missing");
+    const deletePromise = dispatch(
+      deleteClassroomThunk({ classroomId: classId }),
+    ).unwrap();
     try {
-      await dispatch(deleteClassroomThunk({ classroomId: classId })).unwrap();
-      toast.success("Classroom deleted successfully!", {
-        id: "delete-classroom",
+      await deletePromise;
+      toast.promise(deletePromise, {
+        loading: "Deleting classroom...",
+        success: "Classroom deleted successfully!",
+        error: (err) =>
+          extractErrorMessage(err) || "Failed to delete classroom",
       });
-      // Optionally redirect to dashboard
-    } catch (error: any) {
+      router.push("/");
+    } catch (error) {
       console.error("Delete classroom failed:", error);
-      toast.error(extractErrorMessage(error), {
-        id: "delete-classroom",
-      });
+      toast.error(
+        extractErrorMessage(error) || "Failed to delete classroom",
+        {},
+      );
     }
   };
 
   // Handle deactivate account
   const handleDeactivateAccount = async () => {
-    toast.loading("Deactivating account...", { id: "deactivate-account" });
+    const deactivatePromise = dispatch(deactivateAccountThunk()).unwrap();
     try {
-      await dispatch(deactivateAccountThunk()).unwrap();
-      dispatch(logout());
-      localStorage.removeItem("access_token");
-      toast.success("Account deactivated successfully!", {
-        id: "deactivate-account",
+      await deactivatePromise;
+      toast.promise(deactivatePromise, {
+        loading: "Deactivating account...",
+        success: "Account deactivated successfully!",
+        error: (err) =>
+          extractErrorMessage(err) || "Failed to deactivate account",
       });
-    } catch (error: any) {
+      router.push("/");
+    } catch (error) {
       console.error("Deactivate account failed:", error);
-      toast.error(extractErrorMessage(error), {
-        id: "deactivate-account",
-      });
+      toast.error(
+        extractErrorMessage(error) || "Failed to deactivate account",
+        {},
+      );
     }
   };
 
   // Handle change password
-  const handleChangePassword = () => {
-    console.log("Change password clicked");
-    // TODO: Implement password change logic
+  const handleSavePassword = async (
+    currentPassword: string,
+    newPassword: string,
+  ) => {
+    console.log("Changing password...");
+    // TODO: Dispatch change password thunk
+    toast.loading("Changing password...", { id: "change-password" });
+    try {
+      await dispatch(
+        changePasswordThunk({ currentPassword, newPassword }),
+      ).unwrap();
+      toast.success("Password changed successfully!", {
+        id: "change-password",
+      });
+      setIsPasswordChangeModalOpen(false);
+    } catch (error: any) {
+      console.error("Change password failed:", error);
+      toast.error(error || "Failed to change password.", {
+        id: "change-password",
+      });
+    }
   };
 
   // ==================== User Management Actions ====================
@@ -163,67 +204,99 @@ const ProfilePage = () => {
   };
 
   const handleBlockUser = async (userId: string) => {
-    console.log("Blocking user:", userId);
+    const blockPromise = dispatch(
+      blockUserThunk({ classroomId: classId ?? "", userId }),
+    ).unwrap();
     try {
-      await dispatch(
-        blockUserThunk({ classroomId: classId ?? "", userId }),
-      ).unwrap();
-      toast.success("User blocked successfully!");
+      await blockPromise;
+      toast.promise(blockPromise, {
+        loading: "Blocking user...",
+        success: "User blocked successfully!",
+        error: (err) => extractErrorMessage(err) || "Failed to block user",
+      });
     } catch (error) {
       console.error("Block user failed:", error);
-      toast.error(extractErrorMessage(error));
+      toast.error(extractErrorMessage(error) || "Failed to block user", {});
     }
   };
 
   const handleUnblockUser = async (userId: string) => {
     console.log("Unblocking user:", userId);
+    const unblockPromise = dispatch(
+      unblockUserThunk({ classroomId: classId ?? "", userId }),
+    ).unwrap();
     try {
-      await dispatch(
-        unblockUserThunk({ classroomId: classId ?? "", userId }),
-      ).unwrap();
-      toast.success("User unblocked successfully!");
+      await unblockPromise;
+      toast.promise(unblockPromise, {
+        loading: "Unblocking user...",
+        success: "User unblocked successfully!",
+        error: (err) => extractErrorMessage(err) || "Failed to unblock user",
+      });
     } catch (error) {
       console.error("Unblock user failed:", error);
-      toast.error(extractErrorMessage(error));
+      toast.error(extractErrorMessage(error) || "Failed to unblock user", {});
     }
   };
 
   const handleRemoveCoAdmin = async (userId: string) => {
-    console.log("Removing co-admin:", userId);
+    const removePromise = dispatch(
+      assignRoleThunk({ classroomId: classId ?? "", userId, role: "member" }),
+    ).unwrap();
     try {
-      await dispatch(
-        assignRoleThunk({ classroomId: classId ?? "", userId, role: "member" }),
-      ).unwrap();
-      toast.success("Co-Admin removed successfully!");
+      await removePromise;
+      toast.promise(removePromise, {
+        loading: "Removing Co-Admin...",
+        success: "Co-Admin removed successfully!",
+        error: (err) => extractErrorMessage(err) || "Failed to remove Co-Admin",
+      });
     } catch (error) {
       console.error("Remove Co-Admin failed:", error);
-      toast.error(extractErrorMessage(error));
+      toast.error(
+        extractErrorMessage(error) || "Failed to remove Co-Admin",
+        {},
+      );
     }
   };
 
   const handleAddCoAdmin = async (userId: string) => {
-    console.log("Adding co-admin:", userId);
+    const addPromise = dispatch(
+      assignRoleThunk({ classroomId: classId ?? "", userId, role: "co_admin" }),
+    ).unwrap();
     try {
-      await dispatch(
-        assignRoleThunk({ classroomId: classId ?? "", userId, role: "co_admin" }),
-      ).unwrap();
-      toast.success("Co-Admin added successfully!");
+      await addPromise;
+      toast.promise(addPromise, {
+        loading: "Adding Co-Admin...",
+        success: "Co-Admin added successfully!",
+        error: (err) => extractErrorMessage(err) || "Failed to add Co-Admin",
+      });
     } catch (error) {
       console.error("Add Co-Admin failed:", error);
-      toast.error(extractErrorMessage(error));
+      toast.error(extractErrorMessage(error) || "Failed to add Co-Admin", {});
     }
   };
 
   const handleRemoveMember = async (userId: string) => {
-    console.log("Removing member:", userId);
+    // 1. Ekta unique promise define kora hocche
+    const removePromise = dispatch(
+      removeMemberThunk({ classroomId: classId ?? "", memberId: userId }),
+    ).unwrap();
+
+    // 2. Toast.promise diye Loading, Success ebong Error eksathe handle kora
+    toast.promise(removePromise, {
+      loading: "Removing member from classroom...",
+      success: (data) => {
+        return data.message || "Member removed successfully!";
+      },
+      error: (err) => {
+        return extractErrorMessage(err) || "Failed to remove member";
+      },
+    });
+
     try {
-      await dispatch(
-        assignRoleThunk({ classroomId: classId ?? "", userId, role: "member" }),
-      ).unwrap();
-      toast.success("Member removed successfully!");
+      await removePromise;
     } catch (error) {
       console.error("Remove member failed:", error);
-      toast.error(extractErrorMessage(error));
+      toast.error(extractErrorMessage(error) || "Failed to remove member", {});
     }
   };
 
@@ -264,7 +337,7 @@ const ProfilePage = () => {
           onLeaveClassroom={handleLeaveClassroom}
           onDeleteClassroom={handleDeleteClassroom}
           onDeactivateAccount={handleDeactivateAccount}
-          onChangePassword={handleChangePassword}
+          onChangePassword={() => setIsPasswordChangeModalOpen(true)}
         />
 
         {/* Section 3: User Management (Admin Only) */}
@@ -298,10 +371,13 @@ const ProfilePage = () => {
               onClose={() => setEditingField(null)}
             />
           )}
-          {isAssignCoAdminModalOpen && (
-            <AssignCoAdminModal
-              isOpen={isAssignCoAdminModalOpen}
-              onClose={() => setIsAssignCoAdminModalOpen(false)}
+
+          {isPasswordChangeModalOpen && (
+            <PasswordEditModal
+              isOpen={isPasswordChangeModalOpen}
+              onClose={() => setIsPasswordChangeModalOpen(false)}
+              onSave={handleSavePassword}
+              error={error}
             />
           )}
         </AnimatePresence>

@@ -13,9 +13,11 @@ import {
   isAdmin as selectIsAdmin,
 } from "@/redux/selectors/selectors";
 import { EmptyState } from "./_components/EmptyState";
+import { BlockedState } from "./_components/BlockedState";
 import { LayoutGroup } from "framer-motion";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { isBlocked } from "@/redux/selectors/selectors";
 
 const Page = () => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -30,7 +32,7 @@ const Page = () => {
   const isLoading = status.fetchClassroom.loading;
   const classroomId = useAppSelector(classId);
   const isAdmin = useAppSelector(selectIsAdmin);
-
+  const blocked = useAppSelector(isBlocked);
   // 1. Logic for Filtering by Category and Search
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
@@ -88,6 +90,11 @@ const Page = () => {
   // Show loading skeleton
   if (isLoading) {
     return <EventPageSkeleton />;
+  }
+
+  // If blocked, show blocked state
+  if (blocked) {
+    return <BlockedState/>;
   }
 
   return (

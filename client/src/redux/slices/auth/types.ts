@@ -20,5 +20,6 @@ export interface IAuthState {
     logout: { loading: boolean; error: string | null };
     refresh: { loading: boolean; error: string | null };
     deactivateAccount: { loading: boolean; error: string | null };
+    changePassword: { loading: boolean; error: string | null };
   };
 }

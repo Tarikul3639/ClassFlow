@@ -8,7 +8,7 @@ export const logoutThunk = createAsyncThunk<
   { rejectValue: string }
 >("auth/logout", async (_, { rejectWithValue }) => {
   try {
-    await apiClient.post("/auth/logout");
+    await apiClient.post("/auth/sign-out");
 
     setAuthToken(null);
     if (typeof window !== "undefined") localStorage.removeItem("access_token");

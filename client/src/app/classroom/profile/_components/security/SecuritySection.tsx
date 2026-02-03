@@ -1,7 +1,7 @@
 import { Lock, LogOut, UserX, AlertTriangle, Key, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Dialog } from "@/components/ui/Dialog";
-import AccountField from "./AccountField";
+import AccountField from "../AccountField";
 import { useAppSelector } from "@/redux/hooks";
 
 // Security Section Props

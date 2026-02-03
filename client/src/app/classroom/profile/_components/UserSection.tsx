@@ -45,6 +45,7 @@ const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
           value={user.name}
           icon={User}
           onEdit={onEdit}
+          readOnly
         />
 
         <AccountField
@@ -52,6 +53,7 @@ const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
           value={user.email}
           icon={Mail}
           onEdit={onEdit}
+          readOnly
         />
 
         <AccountField

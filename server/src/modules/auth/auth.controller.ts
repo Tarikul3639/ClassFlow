@@ -54,4 +54,52 @@ export class AuthController {
       },
     };
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('sign-out')
+  @HttpCode(HttpStatus.OK)
+  async logout(): Promise<{ success: boolean; message: string }> {
+    await this.authService.logout();
+    return {
+      success: true,
+      message: 'Logged out successfully',
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  @HttpCode(HttpStatus.OK)
+  async getProfile(@Req() req: any): Promise<AuthUser> {
+    const userId = req.user.userId;
+    const user = await this.authService.validateUser(userId);
+    return {
+      _id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      classrooms: user.classrooms.map((id) => id.toString()),
+      avatarUrl: user.avatarUrl,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('change-password')
+  @HttpCode(HttpStatus.OK)
+  async changePassword(
+    @Req() req: any,
+    @Body() body: { currentPassword: string; newPassword: string },
+  ): Promise<{ success: boolean; message: string }> {
+    const userId = req.user.userId;
+    const { currentPassword, newPassword } = body;
+    await this.authService.changePassword(
+      userId,
+      currentPassword,
+      newPassword,
+    );
+    return {
+      success: true,
+      message: 'Password changed successfully',
+    };
+  }
 }

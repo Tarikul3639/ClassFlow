@@ -13,3 +13,11 @@ export const isAdmin = (state: RootState): boolean => {
   const role = state.classroom.classroom?.myRole;
   return role === "admin" || role === "co_admin";
 };
+
+export const isBlocked = (state: RootState): boolean => {
+  return state.classroom.classroom?.isBlocked || false;
+}
+
+export const members = (state: RootState) => {
+  return state.classroom.classroom?.members || [];
+}

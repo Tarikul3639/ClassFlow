@@ -25,11 +25,14 @@ export const removeMemberThunk = createAsyncThunk<
   async ({ classroomId, memberId }, { rejectWithValue }) => {
     try {
       const response = await apiClient.delete<RemoveMemberResponse>(
-        `/classrooms/${classroomId}/members/${memberId}` // memberId in URL
+        `/classrooms/${classroomId}/members/${memberId}`, // memberId in URL
       );
+      if (!response.data.success) {
+        return rejectWithValue("Failed to remove member");
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(extractErrorMessage(error));
     }
-  }
+  },
 );
