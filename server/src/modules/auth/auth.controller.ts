@@ -282,21 +282,24 @@ export class AuthController {
   private setAuthCookie(res: Response, token: string): void {
     const isProduction = process.env.NODE_ENV === 'production';
 
-    const cookieOptions = {
+    res.clearCookie('access_token', {
       httpOnly: true,
-      secure: true, // false in development, true in production
-      sameSite: 'none' as const, // 'none' for cross-origin in prod
+      secure: true,
+      sameSite: 'none' as const,
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      // domain: isProduction ? '.class-flow-psi.vercel.app' : undefined, // e.g., '.yourdomain.com'
-    };
-
-    res.cookie('access_token', token, cookieOptions);
+      domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
+    });
 
     // Debug log
     console.log('🍪 Cookie set:', {
       token: token.substring(0, 20) + '...',
-      options: cookieOptions,
+      options: {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none' as const,
+        path: '/',
+        domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
+      },
     });
   }
 
@@ -309,10 +312,10 @@ export class AuthController {
 
     res.clearCookie('access_token', {
       httpOnly: true,
-      secure: true, // false in development, true in production
+      secure: true,
       sameSite: 'none' as const,
       path: '/',
-      // domain: isProduction ? '.class-flow-psi.vercel.app' : undefined,
+      domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
     });
   }
 }
