@@ -284,11 +284,11 @@ export class AuthController {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction, // false in development, true in production
-      sameSite: isProduction ? ('none' as const) : ('lax' as const), // 'none' for cross-origin in prod
+      secure: true, // false in development, true in production
+      sameSite: 'none' as const, // 'none' for cross-origin in prod
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: isProduction ? process.env.COOKIE_DOMAIN : undefined, // e.g., '.yourdomain.com'
+      domain: isProduction ? '.class-flow-psi.vercel.app' : undefined, // e.g., '.yourdomain.com'
     };
 
     res.cookie('access_token', token, cookieOptions);
@@ -309,10 +309,10 @@ export class AuthController {
 
     res.clearCookie('access_token', {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? ('none' as const) : ('lax' as const),
+      secure: true, // false in development, true in production
+      sameSite: 'none' as const,
       path: '/',
-      domain: isProduction ? process.env.COOKIE_DOMAIN : undefined,
+      domain: isProduction ? '.class-flow-psi.vercel.app' : undefined,
     });
   }
 }
