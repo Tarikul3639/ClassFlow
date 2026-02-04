@@ -14,7 +14,7 @@ export type EventType =
 export interface IMaterial {
   _id: string;
   name: string;
-  type: "pdf" | "docx" | "image";
+  type: "pdf" | "docx" | "image" | "link";
   url?: string;
 }
 

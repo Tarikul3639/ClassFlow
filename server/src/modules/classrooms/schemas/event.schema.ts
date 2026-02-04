@@ -11,7 +11,7 @@ export type EventType =
   | 'lecture'
   | 'class';
 
-export type MaterialType = 'pdf' | 'docx' | 'image';
+export type MaterialType = 'pdf' | 'docx' | 'image' | 'link';
 
 // Material Schema
 @Schema({ _id: true })
@@ -19,7 +19,7 @@ export class Material {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, enum: ['pdf', 'docx', 'image'] })
+  @Prop({ required: true, enum: ['pdf', 'docx', 'image', 'link'] })
   type: MaterialType;
 
   @Prop()

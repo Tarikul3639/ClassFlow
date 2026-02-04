@@ -19,10 +19,14 @@ export const createEventThunk = createAsyncThunk<
   "classroom/createEvent",
   async ({ classroomId, eventData }, { rejectWithValue }) => {
     try {
-      console.log("Creating event with data:", eventData);
+      const sanitizedEventData = {
+        ...eventData,
+        materials: eventData.materials?.map(({ _id, ...rest }) => rest),
+      };
+      console.log("Creating event with data:", sanitizedEventData);
       const response = await apiClient.post<{ event: IEvent }>(
         `/classrooms/${classroomId}/events`,
-        eventData,
+        sanitizedEventData,
         { withCredentials: true },
       );
 

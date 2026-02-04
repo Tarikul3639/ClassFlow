@@ -20,9 +20,13 @@ export const updateEventThunk = createAsyncThunk<
   "classroom/updateEvent",
   async ({ classroomId, eventId, eventData }, { rejectWithValue }) => {
     try {
+       const sanitizedEventData = {
+        ...eventData,
+        materials: eventData.materials?.map(({ _id, ...rest }) => rest),
+      };
       const response = await apiClient.patch<{ event: IEvent }>(
         `/classrooms/${classroomId}/events/${eventId}`,
-        eventData,
+        sanitizedEventData,
         { withCredentials: true },
       );
 

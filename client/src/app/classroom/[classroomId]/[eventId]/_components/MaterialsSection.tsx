@@ -75,6 +75,23 @@ export const MaterialsSection = ({ form, setForm }: MaterialsSectionProps) => {
               />
             </div>
 
+            {/* Link Type */}
+            <div className="flex-1 space-y-1.5 lg:space-y-2">
+              <p className="text-xxxxs sm:text-xxxxs lg:text-xxxs font-black text-[#617789] uppercase tracking-[0.2em] pl-2">
+                Resource Type
+              </p>
+              <select
+                value={m.type}
+                onChange={(e) => updateMaterial(m._id, "type", e.target.value)}
+                className="w-full bg-transparent font-medium text-xxs md:text-xs lg:text-xsm text-[#111518] outline-none px-2"
+              >
+                <option value="pdf">PDF</option>
+                <option value="docx">DOCX</option>
+                <option value="image">Image</option>
+                <option value="link">Link</option>
+              </select>
+            </div>
+
             {/* URL Input */}
             <div className="flex-[1.5] space-y-1.5 lg:space-y-2">
               <p className="text-xxxxs sm:text-xxxxs lg:text-xxxs font-black text-[#617789] uppercase tracking-[0.2em]">

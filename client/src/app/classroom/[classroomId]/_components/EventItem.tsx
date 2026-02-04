@@ -6,6 +6,7 @@ import {
   Folder,
   MessageSquare,
   Download,
+  ExternalLink,
 } from "lucide-react";
 import { useEventTime } from "@/hooks/useEventTime";
 import { ActionButtons } from "./ActionButtons";
@@ -217,6 +218,7 @@ export const EventItem = ({
               )}
 
               {/* Materials - Updated Design */}
+              {/* Materials - Updated Design */}
               {event.materials && event.materials.length > 0 && (
                 <div className="space-y-4">
                   <h3 className="text-xxs font-black text-[#617789] uppercase tracking-[0.15em] flex items-center gap-2">
@@ -232,7 +234,14 @@ export const EventItem = ({
                             ? m.name
                             : undefined
                         }
-                        target={m.type === "image" ? "_blank" : "_self"}
+                        target={
+                          m.type === "image" || m.type === "link"
+                            ? "_blank"
+                            : "_self"
+                        }
+                        rel={
+                          m.type === "link" ? "noopener noreferrer" : undefined
+                        }
                         className="group/link flex items-center justify-between p-3 rounded-lg bg-white border border-[#dbe1e6] hover:border-[#399aef] transition-all"
                         style={{
                           borderColor: `${color}20`,
@@ -244,25 +253,49 @@ export const EventItem = ({
                           e.currentTarget.style.borderColor = `${color}20`;
                         }}
                       >
-                        <div className="flex items-center gap-3">
-                          <FileText size={18} style={{ color }} />
-                          <span className="text-xs sm:text-sm font-bold text-gray-700 group-hover/link:text-[#111518]">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="shrink-0">
+                            {m.type === "link" ? (
+                              <ExternalLink size={18} style={{ color }} />
+                            ) : (
+                              <FileText size={18} style={{ color }} />
+                            )}
+                          </div>
+                          <span className="text-xs sm:text-sm font-bold text-gray-700 group-hover/link:text-[#111518] truncate">
                             {m.name}
                           </span>
                         </div>
-                        <Download
-                          size={16}
-                          className="text-gray-300 group-hover/link:text-[#399aef] transition-colors"
-                          style={{
-                            color: "currentColor",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = color;
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = "";
-                          }}
-                        />
+                        <div className="shrink-0 ml-2">
+                          {m.type === "link" ? (
+                            <ExternalLink
+                              size={16}
+                              className="text-gray-300 group-hover/link:text-[#399aef] transition-colors"
+                              style={{
+                                color: "currentColor",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.color = color;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.color = "";
+                              }}
+                            />
+                          ) : (
+                            <Download
+                              size={16}
+                              className="text-gray-300 group-hover/link:text-[#399aef] transition-colors"
+                              style={{
+                                color: "currentColor",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.color = color;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.color = "";
+                              }}
+                            />
+                          )}
+                        </div>
                       </a>
                     ))}
                   </div>

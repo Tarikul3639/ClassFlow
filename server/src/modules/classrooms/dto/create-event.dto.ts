@@ -15,8 +15,8 @@ class MaterialDto {
   @IsNotEmpty()
   name: string;
 
-  @IsEnum(['pdf', 'docx', 'image'])
-  type: 'pdf' | 'docx' | 'image';
+  @IsEnum(['pdf', 'docx', 'image', 'link'])
+  type: 'pdf' | 'docx' | 'image' | 'link';
 
   @IsOptional()
   @IsString()
