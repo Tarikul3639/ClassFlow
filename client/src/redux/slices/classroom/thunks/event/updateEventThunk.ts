@@ -20,7 +20,7 @@ export const updateEventThunk = createAsyncThunk<
   "classroom/updateEvent",
   async ({ classroomId, eventId, eventData }, { rejectWithValue }) => {
     try {
-       const sanitizedEventData = {
+      const sanitizedEventData = {
         ...eventData,
         materials: eventData.materials?.map(({ _id, ...rest }) => rest),
       };
