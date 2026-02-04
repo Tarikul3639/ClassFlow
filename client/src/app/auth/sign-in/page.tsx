@@ -159,7 +159,10 @@ const SignInPage: React.FC = () => {
               className="group w-full h-11 bg-[#399aef] text-white text-[14px] font-medium rounded-xl hover:bg-[#3289d6] shadow-lg shadow-blue-100/50 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
             >
               {isLoading ? (
-                <Loader2 className="animate-spin size-5" />
+                <>
+                  <Loader2 className="animate-spin size-5" />
+                  Signing In...
+                </>
               ) : (
                 <>
                   Sign In{" "}

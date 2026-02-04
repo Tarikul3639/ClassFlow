@@ -86,15 +86,17 @@ const MemberActions = ({
             </DropdownMenuItem>
           )}
         </div>
-        {memberRole !== "admin" && canAssignRole && (
-          <DropdownMenuItem
-            onClick={() => onAddCoAdmin(memberId)}
-            className="cursor-pointer px-2.5 py-2 flex items-center gap-2 text-xsm! font-medium text-slate-600 hover:bg-slate-100 focus:bg-slate-50 rounded-md transition-colors"
-          >
-            <ShieldAlert size={14} />
-            <span>Assign Co-Admin</span>
-          </DropdownMenuItem>
-        )}
+        {memberRole !== "admin" &&
+          memberRole !== "co_admin" &&
+          canAssignRole && (
+            <DropdownMenuItem
+              onClick={() => onAddCoAdmin(memberId)}
+              className="cursor-pointer px-2.5 py-2 flex items-center gap-2 text-xsm! font-medium text-slate-600 hover:bg-slate-100 focus:bg-slate-50 rounded-md transition-colors"
+            >
+              <ShieldAlert size={14} />
+              <span>Assign Co-Admin</span>
+            </DropdownMenuItem>
+          )}
 
         <DropdownMenuSeparator className="my-0.5 bg-slate-100" />
 

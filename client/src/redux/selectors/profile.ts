@@ -12,6 +12,12 @@ export const selectIsAdmin = createSelector([selectClassroom], (classroom) => {
   return classroom.myRole === "admin" || classroom.myRole === "co_admin";
 });
 
+export const isMe = (userId: string) =>
+  createSelector([selectAuthUser], (user) => {
+    if (!user) return false;
+    return user._id === userId;
+  });
+
 // Get current user's classroom member info
 export const selectCurrentUserMember = createSelector(
   [selectAuthUser, selectClassroom],

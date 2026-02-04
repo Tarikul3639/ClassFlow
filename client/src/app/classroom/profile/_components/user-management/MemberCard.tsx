@@ -2,6 +2,8 @@ import { User, Shield } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import MemberActions from "./MemberActions";
 import { IClassroomMember } from "@/redux/slices/classroom/types";
+import { isMe as isIAm } from "@/redux/selectors/profile";
+import { useAppSelector } from "@/redux/hooks";
 
 interface MemberCardProps {
   member: IClassroomMember;
@@ -24,6 +26,7 @@ const MemberCard = ({
   onRemoveCoAdmin,
   onRemoveMember,
 }: MemberCardProps) => {
+  const isMe = useAppSelector(isIAm(member.user._id));
   return (
     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-[#dbe1e6] hover:border-[#399aef]/30 transition-all group">
       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -80,8 +83,8 @@ const MemberCard = ({
         </div>
       </div>
 
-      {/* Actions - Don't show for admin role */}
-      {member.role !== "admin" && (
+      {/* Actions - Don't show for admin role and current user */}
+      {member.role !== "admin" && !isMe && (
         <MemberActions
           memberId={member.user._id}
           memberRole={member.role}
