@@ -201,6 +201,18 @@ export class ClassroomService {
   async create(createClassroomDto: CreateClassroomDto, userId: string) {
     const joinCode = await this.generateJoinCode();
 
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.classrooms.length > 0) {
+      throw new BadRequestException(
+        'You can join only one classroom at a time',
+      );
+    }
+
     const classroom = await this.classroomModel.create({
       ...createClassroomDto,
       joinCode,
@@ -238,6 +250,18 @@ export class ClassroomService {
    */
   async joinClassroom(joinClassroomDto: JoinClassroomDto, userId: string) {
     const { joinCode } = joinClassroomDto;
+
+    const user = await this.userModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.classrooms.length > 0) {
+      throw new BadRequestException(
+        'You can join only one classroom at a time',
+      );
+    }
 
     const classroom = await this.classroomModel.findOne({
       joinCode: joinCode.toUpperCase(),

@@ -1,31 +1,45 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUser } from "@/redux/slices/auth/types";
-import { apiClient, setAuthToken } from "@/lib/api/axios";
+import { apiClient } from "@/lib/api/axios";
 import { extractErrorMessage } from "@/lib/utils/error.utils";
 
-interface RegisterPayload {
+interface SignUpPayload {
   name: string;
   email: string;
   password: string;
 }
 
+interface SignUpResponse {
+  user: IUser;
+  // Note: access_token is sent via HTTP-only cookie, not in response body
+}
+
 export const signUpThunk = createAsyncThunk<
-  { user: IUser; access_token: string },
-  RegisterPayload,
+  { user: IUser },
+  SignUpPayload,
   { rejectValue: string }
 >("auth/sign-up", async (data, { rejectWithValue }) => {
   try {
-    const response = await apiClient.post<{ user: IUser; access_token: string }>(
+    console.log('📝 Signing up...');
+    
+    const response = await apiClient.post<SignUpResponse>(
       "/auth/sign-up",
       data,
     );
-    const { user, access_token } = response.data;
+    
+    const { user } = response.data;
+    
+    console.log('✅ Sign-up successful, user:', user.email);
+    console.log('🍪 Access token stored in HTTP-only cookie');
 
-    setAuthToken(access_token);
-    if (typeof window !== "undefined") localStorage.setItem("access_token", access_token);
+    // Store user data for offline access
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user_data", JSON.stringify(user));
+    }
 
-    return { user, access_token };
-  } catch (err) {
+    return { user };
+  } catch (err: any) {
+    console.error('❌ Sign-up error:', err);
     return rejectWithValue(extractErrorMessage(err));
   }
 });

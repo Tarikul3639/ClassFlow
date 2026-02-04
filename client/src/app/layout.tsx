@@ -6,7 +6,6 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "ClassFlow",
   description: "Managed your classes with ease.",
-  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/favicon.svg" }, // Legacy support

@@ -135,7 +135,7 @@ const Navbar: React.FC = () => {
               {/* Modern Divider with Gradient */}
               <div className="h-6 w-px bg-linear-to-b from-transparent via-[#dbe1e6] to-transparent hidden md:block" />
 
-              {/* Notification Bell - Neumorphic Style */}
+              {/* Notification Bell - Neumorphism Style */}
               <button
                 onClick={() => setIsOpen(true)}
                 className="group/bell relative p-2 rounded-xl hover:bg-linear-to-br hover:from-blue-50 hover:to-cyan-50 transition-all duration-300 text-[#617789] hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105"

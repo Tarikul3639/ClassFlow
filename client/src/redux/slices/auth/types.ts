@@ -10,7 +10,6 @@ export interface IUser {
 
 export interface IAuthState {
   user: IUser | null;
-  access_token: string | null;
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;

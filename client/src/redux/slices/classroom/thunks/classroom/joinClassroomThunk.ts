@@ -9,6 +9,7 @@ export const joinClassroomThunk = createAsyncThunk<
   { rejectValue: string }
 >("classroom/join", async (joinCode, { rejectWithValue }) => {
   try {
+    console.log("🔄 Attempting to join classroom with code:", joinCode);
     const response = await apiClient.post<{ classroom: IClassroom }>(
       "/classrooms/join",
       { joinCode },
@@ -16,9 +17,11 @@ export const joinClassroomThunk = createAsyncThunk<
         withCredentials: true,
       },
     );
+    console.log("✅ Join classroom response:", response.data);
     if (!response) throw new Error("Failed to join classroom");
     return response.data.classroom;
   } catch (error) {
+    console.error("❌ Join classroom error:", error);
     return rejectWithValue(extractErrorMessage(error));
   }
 });

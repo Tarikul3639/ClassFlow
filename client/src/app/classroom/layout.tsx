@@ -6,34 +6,36 @@ import { Loader } from "@/components/ui/Loader";
 
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
 import { fetchClassroomThunk } from "@/redux/slices/classroom/thunks/classroom";
+import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
 
 export default function LayoutDashboard({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const isLoading = useAppSelector(
-    (state) => state.auth?.requestStatus.refresh.loading,
+  const dispatch = useAppDispatch();
+
+  const classroomLoading = useAppSelector(
+    (state) => state.classroom.requestStatus.fetchClassroom?.loading,
   );
 
-  const dispatch = useAppDispatch();
+  const classrooms = useAppSelector((state) => state.auth?.user?.classrooms);
+
   useEffect(() => {
-    (async () => {
-      try {
-        const user = await dispatch(verifyAuthThunk()).unwrap();
-        if (user) {
-          dispatch(fetchClassroomThunk(user.classrooms[0]));
-        }
-      } catch (error) {
-        console.error("Error verifying auth or fetching classroom details:", error);
-      }
-    })();
+    dispatch(verifyAuthThunk()); //TODO: Not needed if we have middleware. Right now use just for fetching user data on refresh
   }, [dispatch]);
 
-  if (isLoading && !children) {
-    return <Loader />; // or a loading spinner
+  useEffect(() => {
+    // Middleware already guaranteed user is authenticated
+    // So we just fetch data
+    if (classrooms && classrooms.length > 0) {
+      dispatch(fetchClassroomThunk(classrooms[0]));
+    }
+  }, [dispatch, classrooms]);
+
+  if (classroomLoading) {
+    return <Loader />;
   }
 
   return (

@@ -1,42 +1,48 @@
-// middleware.ts
-// import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// const PUBLIC_ROUTES = ["/", "/sign-in", "/sign-up", "/forgot-password"];
+const PUBLIC_ROUTES = [
+  "/",
+  "/auth/sign-in",
+  "/auth/sign-up",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+];
+
+const AUTH_ROUTES = ["/auth/sign-in", "/auth/sign-up"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  console.log(pathname);
+  const access_token = req.cookies.get("access_token")?.value;
 
-//   // Allow public routes
-//   if (PUBLIC_ROUTES.includes(pathname)) {
-//     return NextResponse.next();
-//   }
+  console.log("🔐 Middleware:", {
+    pathname,
+    hasToken: !!access_token,
+  });
 
-//   // token check (cookie recommended)
-//   const token = req.cookies.get("token")?.value;
+  // Allow public routes
+  if (PUBLIC_ROUTES.includes(pathname)) {
+    // Redirect logged-in users away from auth pages
+    if (access_token && AUTH_ROUTES.includes(pathname)) {
+      console.log("🔄 Redirecting to /classroom");
+      return NextResponse.redirect(new URL("/classroom", req.url));
+    }
+    return NextResponse.next();
+  }
 
-//   console.log("Middleware check for path:", pathname, "Token:", token);
+  // Block protected routes without token
+  if (!access_token) {
+    console.log("🚫 Redirecting to /auth/sign-in");
+    return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+  }
 
-//   // If not logged in → home page
-//   if (!token) {
-//     const url = req.nextUrl.clone();
-//     url.pathname = "/";
-//     return NextResponse.redirect(url);
-//   }
+  // Allow access to protected routes with token
+  console.log("✅ Access granted");
+  return NextResponse.next();
+}
 
-//   // If logged in → allow
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: [
-//     /*
-//      * Match all request paths except for the ones starting with:
-//      * - _next/static (static files)
-//      * - _next/image (image optimization files)
-//      * - favicon.ico (favicon file)
-//      */
-//     "/((?!_next/static|_next/image|favicon.ico).*)",
-//   ],
+export const config = {
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg).*)",
+  ],
 };

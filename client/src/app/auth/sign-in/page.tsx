@@ -38,20 +38,22 @@ const SignInPage: React.FC = () => {
     password: "",
   });
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const data = await dispatch(signInThunk(formData)).unwrap();
 
       if (data.user) {
-        if (data.access_token) {
+        if (data.user.classrooms.length > 0) {
           router.push("/classroom");
+        }
+        else {
+          router.push("/classroom/get-started");
         }
       }
     } catch (err) {
       console.error("Sign in failed:", err);
-      // Optionally show error to user via your existing state
     }
   };
 

@@ -3,30 +3,38 @@ import { Document, Types } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema({
-  timestamps: true,
-  discriminatorKey: 'role',
-})
+@Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true, trim: true })
+  @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, unique: true, lowercase: true, trim: true })
+  @Prop({ required: true, unique: true, lowercase: true })
   email: string;
 
   @Prop({ required: true, select: false })
   password: string;
 
-  @Prop({ default: null })
-  avatarUrl?: string;
+  @Prop({ type: String, default: null })
+  avatarUrl?: string | null;
 
-  // References to classrooms the user is associated with
-  @Prop({
-    type: [{ type: Types.ObjectId, ref: 'Classroom' }],
-    default: [],
-  })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Classroom' }], default: [] })
   classrooms: Types.ObjectId[];
 
+  // Password reset fields
+  @Prop({ select: false })
+  passwordResetToken?: string;
+
+  @Prop({ select: false })
+  passwordResetExpires?: Date;
+
+  // Activity tracking fields (optional)
+  @Prop()
+  lastLoginAt?: Date;
+
+  @Prop()
+  lastLogoutAt?: Date;
+
+  // Timestamps (automatically added by timestamps: true)
   createdAt: Date;
   updatedAt: Date;
 }
@@ -35,4 +43,4 @@ export const UserSchema = SchemaFactory.createForClass(User);
 
 // Indexes for performance
 UserSchema.index({ email: 1 });
-UserSchema.index({ classrooms: 1 });
+UserSchema.index({ passwordResetToken: 1 });

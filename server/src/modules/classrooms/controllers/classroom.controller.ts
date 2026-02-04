@@ -37,6 +37,7 @@ export class ClassroomController {
    * @route POST /classrooms/join
    */
   @Post('join')
+  @UseGuards(JwtAuthGuard)
   joinClassroom(
     @Body() joinClassroomDto: JoinClassroomDto,
     @CurrentUser() user: any,

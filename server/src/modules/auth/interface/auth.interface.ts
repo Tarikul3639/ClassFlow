@@ -3,7 +3,7 @@ export interface AuthUser {
   name: string;
   email: string;
   classrooms: string[];
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

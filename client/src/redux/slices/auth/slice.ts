@@ -11,7 +11,6 @@ import { profileUpdateThunk } from "./thunks/profileUpdateThunk";
 // Initial State
 const initialState: IAuthState = {
   user: null,
-  access_token: null,
   loading: false,
   error: null,
   isAuthenticated: false,
@@ -33,7 +32,6 @@ const authSlice = createSlice({
     // Logout handled in extraReducers
     logout(state) {
       state.user = null;
-      state.access_token = null;
       state.isAuthenticated = false;
     },
   },
@@ -47,7 +45,6 @@ const authSlice = createSlice({
       .addCase(signInThunk.fulfilled, (state, action) => {
         state.requestStatus.signIn.loading = false;
         state.user = action.payload.user;
-        state.access_token = action.payload.access_token;
         state.isAuthenticated = true;
       })
       .addCase(signInThunk.rejected, (state, action) => {
@@ -64,7 +61,6 @@ const authSlice = createSlice({
       .addCase(signUpThunk.fulfilled, (state, action) => {
         state.requestStatus.signUp.loading = false;
         state.user = action.payload.user;
-        state.access_token = action.payload.access_token;
         state.isAuthenticated = true;
       })
       .addCase(signUpThunk.rejected, (state, action) => {
@@ -92,7 +88,6 @@ const authSlice = createSlice({
     // Logout
     builder.addCase(logoutThunk.fulfilled, (state) => {
       state.user = null;
-      state.access_token = null;
       state.isAuthenticated = false;
       state.requestStatus.logout.loading = false;
       state.requestStatus.logout.error = null;
@@ -107,7 +102,6 @@ const authSlice = createSlice({
       .addCase(deactivateAccountThunk.fulfilled, (state) => {
         state.requestStatus.deactivateAccount.loading = false;
         state.user = null;
-        state.access_token = null;
         state.isAuthenticated = false;
         state.error = null;
       })

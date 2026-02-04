@@ -2,12 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RootModule } from './app.module';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(RootModule);
 
   const configService = app.get(ConfigService);
+
+  // 🍪 Enable cookie parser
+  app.use(cookieParser());
+  logger.log('✅ Cookie parser enabled');
 
   // ✅ Verify JWT_SECRET is loaded
   const jwtSecret = configService.get<string>('JWT_SECRET');
