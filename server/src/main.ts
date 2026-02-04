@@ -37,7 +37,7 @@ async function bootstrap() {
   // Add localhost and other URL manually
   frontendUrls.push(
     'http://localhost:3000',
-    'https://class-flow-ruby.vercel.app',
+    'https://class-flow-edu.vercel.app',
   );
 
   app.enableCors({

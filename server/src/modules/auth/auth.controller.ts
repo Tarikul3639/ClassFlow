@@ -17,7 +17,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from '../../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { AuthResponse, AuthUser } from './interface/auth.interface';
+import { AuthUser } from './interface/auth.interface';
 import { ProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
@@ -288,7 +288,7 @@ export class AuthController {
       sameSite: 'none' as const, // 'none' for cross-origin in prod
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: isProduction ? '.class-flow-psi.vercel.app' : undefined, // e.g., '.yourdomain.com'
+      // domain: isProduction ? '.class-flow-psi.vercel.app' : undefined, // e.g., '.yourdomain.com'
     };
 
     res.cookie('access_token', token, cookieOptions);
@@ -312,7 +312,7 @@ export class AuthController {
       secure: true, // false in development, true in production
       sameSite: 'none' as const,
       path: '/',
-      domain: isProduction ? '.class-flow-psi.vercel.app' : undefined,
+      // domain: isProduction ? '.class-flow-psi.vercel.app' : undefined,
     });
   }
 }
