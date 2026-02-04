@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
@@ -73,6 +74,27 @@ export class AuthService {
     // Stateless JWT er jonno ekhane server-side logic mandatory noy.
     // Kintu log tracking ba session audit er jonno eita dorkar hoy.
     return { success: true };
+  }
+
+  async updateProfile(
+    userId: string,
+    dto: { name?: string; avatarUrl?: string },
+  ) {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (dto.name !== undefined) {
+      user.name = dto.name;
+    }
+
+    if (dto.avatarUrl !== undefined) {
+      user.avatarUrl = dto.avatarUrl;
+    }
+
+    await user.save();
+    return user;
   }
 
   async changePassword(

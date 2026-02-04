@@ -78,6 +78,7 @@ const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
               value={user.institute}
               icon={Building2}
               onEdit={onEdit}
+              readOnly
             />
 
             <AccountField
@@ -85,6 +86,7 @@ const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
               value={user.department}
               icon={GraduationCap}
               onEdit={onEdit}
+              readOnly
             />
 
             <AccountField
@@ -92,6 +94,7 @@ const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
               value={user.intake}
               icon={LayoutPanelTop}
               onEdit={onEdit}
+              readOnly
             />
 
             {user.section && (
@@ -100,6 +103,7 @@ const UserSection = ({ user, isAdmin, onEdit, classId }: UserSectionProps) => {
                 value={user.section}
                 icon={Album}
                 onEdit={onEdit}
+                readOnly
               />
             )}
             {user.currentClassroom.joinedAt && (

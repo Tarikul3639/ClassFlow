@@ -10,7 +10,7 @@ const OverView = ({
   totalBlockedMembers,
 }: OverViewProps) => {
   return (
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
       <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
         <p className="text-xxxxs font-black text-blue-600 uppercase tracking-wider">
           Total Members

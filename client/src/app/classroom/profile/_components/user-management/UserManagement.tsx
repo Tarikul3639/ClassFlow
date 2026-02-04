@@ -29,7 +29,7 @@ const UserManagementSection = ({
         </h2>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-3.5 sm:p-6 space-y-6">
         {/* Classroom Stats */}
         <OverView
           totalMembers={classroomInfo.totalMembers}

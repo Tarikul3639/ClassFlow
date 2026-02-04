@@ -313,7 +313,7 @@ const ProfilePage = () => {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased text-[#111518]">
-      <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10 flex flex-col gap-6">
+      <main className="pt-28 flex-1 w-full max-w-3xl mx-auto p-3.5   sm:px-6 py-10 flex flex-col gap-6">
         {/* Header */}
         <ProfileHeader
           user={profileUser}

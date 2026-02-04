@@ -21,5 +21,6 @@ export interface IAuthState {
     refresh: { loading: boolean; error: string | null };
     deactivateAccount: { loading: boolean; error: string | null };
     changePassword: { loading: boolean; error: string | null };
+    profileUpdate: { loading: boolean; error: string | null };
   };
 }

@@ -1,7 +1,18 @@
 "use client";
-import React, { useState, useRef } from "react";
-import { X, Camera, Check, User } from "lucide-react";
-import { motion } from "framer-motion";
+import React, { useState, useRef, useCallback } from "react";
+import {
+  X,
+  Camera,
+  Check,
+  User,
+  RefreshCw,
+  Loader,
+  AlertCircle,
+} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { profileUpdateThunk } from "@/redux/slices/auth/thunks/profileUpdateThunk";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 interface ProfileEditModalProps {
   isOpen: boolean;
@@ -19,34 +30,42 @@ const ProfileEditModal = ({
 }: ProfileEditModalProps) => {
   const [preview, setPreview] = useState(currentData.avatarUrl);
   const [name, setName] = useState(currentData.name);
-  // const [loading, setLoading] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector(
+    (state) => state.auth.requestStatus.profileUpdate,
+  );
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
+  const regenerateAvatar = useCallback(() => {
+    const newSeed = Math.random().toString(36).substring(7);
+    setPreview(`https://api.dicebear.com/7.x/avataaars/svg?seed=${newSeed}`);
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      await dispatch(profileUpdateThunk({ name, avatarUrl: preview })).unwrap();
+
+      onClose();
+    } catch (error) {
+      console.error(error);
     }
   };
-  const handleSave = () => {
-    // Implement save logic here (e.g., API call)
-    onClose();
-  };
 
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{ duration: 0.1 }}
       className="fixed inset-0 z-100 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
     >
       <motion.div
-        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+        initial={{ scale: 0.96, opacity: 0, y: 16 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+        exit={{ scale: 0.96, opacity: 0, y: 16 }}
+        transition={{ duration: 0, ease: "easeInOut" }}
         className="bg-white w-full max-w-md rounded-4xl shadow-2xl overflow-hidden"
       >
         {/* Header */}
@@ -72,29 +91,24 @@ const ProfileEditModal = ({
           <div className="flex flex-col items-center gap-3">
             <div className="relative group">
               <div className="w-24 h-24 rounded-full border-4 border-[#399aef]/10 p-1 shadow-inner overflow-hidden">
-                <img
-                  src={
-                    preview ||
-                    currentData.avatarUrl ||
-                    "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
-                  }
-                  alt="Preview"
-                  className="w-full h-full object-cover rounded-full"
-                />
+                <Avatar className="w-full h-full">
+                  <AvatarImage
+                    src={preview || currentData.avatarUrl}
+                    alt="Preview"
+                  />
+                  <AvatarFallback className="w-full h-full font-black text-4xl bg-blue-50">
+                    {name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
               </div>
               <button
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-0 right-0 bg-[#399aef] text-white p-2 rounded-full border-4 border-white shadow-lg hover:scale-110 transition-transform active:scale-95"
+                type="button"
+                onClick={regenerateAvatar}
+                className="absolute bottom-0 right-0 p-1.5 bg-white border border-slate-200 rounded-full text-[#399aef] hover:bg-slate-50 shadow-sm transition-all active:scale-90 cursor-pointer"
+                title="Change Avatar"
               >
-                <Camera size={16} />
+                <RefreshCw size={14} />
               </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleAvatarChange}
-              />
             </div>
             <p className="text-xxs font-bold text-gray-400 uppercase tracking-tighter">
               Click camera to change photo
@@ -115,6 +129,28 @@ const ProfileEditModal = ({
             />
           </div>
 
+          {/* Error Message - Faster animation */}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -4, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: "auto" }}
+                exit={{ opacity: 0, y: -4, height: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex items-center gap-2 px-3.5 py-2.5 bg-red-50 border border-red-100 rounded-xl"
+              >
+                <AlertCircle
+                  size={14}
+                  strokeWidth={2.5}
+                  className="text-red-500 shrink-0"
+                />
+                <span className="text-xxs sm:text-xs font-medium text-red-600 leading-tight">
+                  {error}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Action Buttons */}
           <div className="flex gap-3 pt-2">
             <button
@@ -127,7 +163,12 @@ const ProfileEditModal = ({
               onClick={handleSave}
               className="flex-1 py-3 rounded-2xl text-[11px] font-black bg-[#399aef] text-white hover:bg-[#2d84d1] shadow-lg shadow-blue-100 transition-all flex items-center justify-center gap-2 uppercase tracking-widest"
             >
-              <Check size={16} strokeWidth={3} /> Save Profile
+              {loading ? (
+                <Loader size={14} className="animate-spin" />
+              ) : (
+                <Check size={16} strokeWidth={3} />
+              )}
+              {loading ? "Saving..." : "Save Profile"}
             </button>
           </div>
         </div>
