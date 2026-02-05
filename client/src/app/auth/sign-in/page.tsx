@@ -44,6 +44,12 @@ const SignInPage: React.FC = () => {
     try {
       const data = await dispatch(signInThunk(formData)).unwrap();
 
+      console.log("🎯 Sign-in response:", data);
+      
+      // Check if cookie is set
+      const cookies = document.cookie;
+      console.log("🍪 All cookies after sign-in:", cookies);
+
       if (data.user) {
         if (data.user.classrooms.length > 0) {
           router.push("/classroom");
