@@ -120,25 +120,6 @@ const CreateClassroomPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Error Alert */}
-          <AnimatePresence mode="wait">
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="mb-4"
-              >
-                <div className="flex items-center gap-2 py-2.5 px-3 rounded-lg bg-red-50 border border-red-200">
-                  <AlertCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-red-600" />
-                  <p className="text-red-700 text-xs sm:text-xsm font-medium">
-                    {error}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-3.5">
             {/* Classroom Name */}
@@ -154,7 +135,7 @@ const CreateClassroomPage: React.FC = () => {
                 onChange={handleChange}
                 placeholder="e.g., CSE 50th Batch Section A"
                 maxLength={100}
-                className="w-full h-11 px-3.5 text-sm rounded-lg border-2 border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
+                className="w-full h-11 px-3.5 text-sm rounded-lg border border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
                 disabled={isLoading}
               />
             </div>
@@ -172,7 +153,7 @@ const CreateClassroomPage: React.FC = () => {
                 placeholder="Brief description about this classroom..."
                 rows={3}
                 maxLength={500}
-                className="w-full px-3.5 py-2.5 text-sm rounded-lg border-2 border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all resize-none placeholder:font-normal"
+                className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all resize-none placeholder:font-normal"
                 disabled={isLoading}
               />
             </div>
@@ -190,7 +171,7 @@ const CreateClassroomPage: React.FC = () => {
                 onChange={handleChange}
                 placeholder="e.g., BUBT University"
                 maxLength={200}
-                className="w-full h-11 px-3.5 text-sm rounded-lg border-2 border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
+                className="w-full h-11 px-3.5 text-sm rounded-lg border border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
                 disabled={isLoading}
               />
             </div>
@@ -208,7 +189,7 @@ const CreateClassroomPage: React.FC = () => {
                 onChange={handleChange}
                 placeholder="e.g., Computer Science & Engineering"
                 maxLength={200}
-                className="w-full h-11 px-3.5 text-sm rounded-lg border-2 border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
+                className="w-full h-11 px-3.5 text-sm rounded-lg border border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
                 disabled={isLoading}
               />
             </div>
@@ -228,7 +209,7 @@ const CreateClassroomPage: React.FC = () => {
                   onChange={handleChange}
                   placeholder="e.g., 50"
                   maxLength={50}
-                  className="w-full h-11 px-3.5 text-sm rounded-lg border-2 border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
+                  className="w-full h-11 px-3.5 text-sm rounded-lg border border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
                   disabled={isLoading}
                 />
               </div>
@@ -245,17 +226,36 @@ const CreateClassroomPage: React.FC = () => {
                   onChange={handleChange}
                   placeholder="e.g., A"
                   maxLength={10}
-                  className="w-full h-11 px-3.5 text-sm rounded-lg border-2 border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
+                  className="w-full h-11 px-3.5 text-sm rounded-lg border border-[#e5e7eb] bg-[#f9fafb] text-[#121716] placeholder:text-[#9ca3af] focus:ring-2 focus:ring-[#1b9883]/20 focus:border-[#1b9883] outline-none transition-all placeholder:font-normal"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
+                      {/* Error Alert */}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                className="mb-4"
+              >
+                <div className="flex items-center gap-2 py-2.5 px-3 rounded-lg bg-red-50 border border-red-200">
+                  <AlertCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-red-600" />
+                  <p className="text-red-700 text-xs sm:text-xsm font-medium">
+                    {error}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-[#1b9883] text-white text-sm font-semibold rounded-lg hover:bg-[#158770] shadow-[0_4px_12px_rgba(27,152,131,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#1b9883] mt-4"
+              className="w-full h-11 mt-5 bg-[#1b9883] text-white text-sm font-semibold rounded-lg hover:bg-[#158770] shadow-[0_4px_12px_rgba(27,152,131,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#1b9883]"
             >
               {isLoading ? (
                 <>
