@@ -293,7 +293,7 @@ export class AuthController {
       : 'localhost';
 
     const cookieOptions: any = {
-      httpOnly: true,
+      httpOnly: false,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
       path: '/',
@@ -324,7 +324,7 @@ export class AuthController {
       this.configService.get<string>('NODE_ENV') === 'production';
 
     const cookieOptions: any = {
-      httpOnly: true,
+      httpOnly: false,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
       path: '/',
