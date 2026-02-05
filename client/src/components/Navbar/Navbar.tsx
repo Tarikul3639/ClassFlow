@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
                   transition-all duration-500 ease-out overflow-hidden
                   ${
                     isActive(dashboard)
-                      ? "bg-linear-to-r from-[#399aef] to-[#2b8ad8] text-white font-semibold shadow-lg shadow-blue-500/30"
+                      ? "bg-linear-to-r from-[#399aef] to-[#2b8ad8] text-white font-semibold shadow-sm shadow-blue-500/30"
                       : "text-[#617789] hover:bg-linear-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-[#399aef]"
                   }
                 `}

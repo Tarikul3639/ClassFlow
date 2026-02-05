@@ -2,7 +2,7 @@
 import { Toaster } from "sonner";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "@/redux/store";
-import { InstallPWA } from "@/components/pwa/InstallPWA";
+// import { InstallPWA } from "@/components/pwa/InstallPWA";
 import "./globals.css";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -10,7 +10,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ReduxProvider store={store}>
       {children}
       <Toaster />
-      <InstallPWA />
+      {/* <InstallPWA /> */}
     </ReduxProvider>
   );
 }

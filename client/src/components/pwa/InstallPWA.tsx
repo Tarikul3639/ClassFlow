@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, X } from "lucide-react";
+import { Download, X, GraduationCap } from "lucide-react";
+import { is, se, tr } from "date-fns/locale";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -11,102 +12,124 @@ interface BeforeInstallPromptEvent extends Event {
 export function InstallPWA() {
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const handler = (e: Event) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      
-      // Save the event so it can be triggered later
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallButton(true);
+    const checkStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (window.navigator as any).standalone ||
+      document.referrer.includes("android-app://");
 
-      console.log("📱 PWA install prompt ready");
+    setIsStandalone(checkStandalone);
+
+    if (checkStandalone) return;
+
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+
+      const dismissed = localStorage.getItem("pwa-install-dismissed");
+      if (dismissed) {
+        const dismissedTime = parseInt(dismissed);
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        if (Date.now() - dismissedTime < sevenDays) return;
+      }
+
+      // Install option available, show the popup
+      setIsOpen(true);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
-
-    // Check if already installed
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      console.log("✅ PWA already installed");
-      setShowInstallButton(false);
-    }
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handler);
     };
   }, []);
 
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      console.log("❌ No install prompt available");
-      return;
+  // Update isOpen based on deferredPrompt availability
+  useEffect(() => {
+    if (deferredPrompt) {
+      setIsOpen(true);
     }
+  }, [deferredPrompt]);
 
-    // Show the install prompt
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
     deferredPrompt.prompt();
-
-    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === "accepted") {
-      console.log("✅ User accepted the install prompt");
-    } else {
-      console.log("❌ User dismissed the install prompt");
+      setIsOpen(false);
     }
-
-    // Clear the deferredPrompt
     setDeferredPrompt(null);
-    setShowInstallButton(false);
   };
 
-  const handleDismiss = () => {
-    setShowInstallButton(false);
-    // Save dismissal in localStorage to not show again for a while
+  const handleDismiss = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("🚫 Install prompt dismissed");
+    setIsOpen(false);
     localStorage.setItem("pwa-install-dismissed", Date.now().toString());
   };
 
-  // Don't show if dismissed recently (within 7 days)
-  useEffect(() => {
-    const dismissed = localStorage.getItem("pwa-install-dismissed");
-    if (dismissed) {
-      const dismissedTime = parseInt(dismissed);
-      const sevenDays = 7 * 24 * 60 * 60 * 1000;
-      if (Date.now() - dismissedTime < sevenDays) {
-        setShowInstallButton(false);
-      }
-    }
-  }, []);
+  const isDebugMode = process.env.NODE_ENV === "development";
 
-  if (!showInstallButton) {
+  // Don't render if already installed
+  if (isStandalone) {
+    return null;
+  }
+
+  // Don't render if not open (including debug mode)
+  if (!isOpen) {
     return null;
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 max-w-sm">
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 flex items-start gap-3">
-        <div className="flex-1">
-          <h3 className="font-semibold text-sm text-gray-900 mb-1">
-            Install ClassFlow
-          </h3>
-          <p className="text-xs text-gray-600 mb-3">
-            Install our app for a better experience and offline access!
-          </p>
+    <div className="fixed bottom-6 right-6 z-50 max-w-[320px] animate-in fade-in slide-in-from-bottom-4 duration-300">
+      <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-blue-50 p-5 flex flex-col gap-4">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            {/* App Icon Container */}
+            <div className="bg-primary p-2 rounded-lg shadow-md shadow-blue-200">
+              <GraduationCap size={24} className="text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-gray-900 leading-tight">
+                Install ClassFlow
+                {isDebugMode && !deferredPrompt && (
+                  <span className="ml-1 text-xxs text-blue-400 font-normal">
+                    (Debug)
+                  </span>
+                )}
+              </h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">
+                Faster access & offline learning
+              </p>
+            </div>
+          </div>
           <button
-            onClick={handleInstallClick}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+            onClick={handleDismiss}
+            type="button"
+            className="text-gray-400 hover:text-gray-600 p-1.5 hover:bg-gray-100 rounded-full transition-all -mr-1 -mt-1 shrink-0"
+            aria-label="Dismiss install prompt"
+            title="Dismiss"
           >
-            <Download size={16} />
-            Install App
+            <X size={18} />
           </button>
         </div>
+
         <button
-          onClick={handleDismiss}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
-          aria-label="Dismiss"
+          onClick={handleInstallClick}
+          disabled={!deferredPrompt && !isDebugMode}
+          className={`w-full text-white text-xxsm font-medium py-2 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-95 ${
+            deferredPrompt || isDebugMode
+              ? "bg-primary hover:bg-[#2992ed] shadow-lg shadow-blue-100 cursor-pointer"
+              : "bg-gray-300 cursor-not-allowed"
+          }`}
         >
-          <X size={18} />
+          <Download size={14} strokeWidth={2.5} />
+          Install Now
         </button>
       </div>
     </div>

@@ -14,7 +14,7 @@ export const Logo = () => {
         
         {/* Icon Container */}
         <div className="relative bg-linear-to-br from-[#399aef] to-[#2b8ad8] p-1.5 rounded-lg text-white shadow-lg group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-300">
-          <GraduationCap className="w-5 h-5 md:w-6 md:h-6 group-hover:rotate-6 transition-transform duration-300" />
+          <GraduationCap size={22} className="group-hover:rotate-6 transition-transform duration-300" />
         </div>
       </div>
 
