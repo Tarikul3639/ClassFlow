@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CloudSun, Bell, LayoutDashboard, User } from "lucide-react";
+import { CloudSun, LayoutDashboard } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog } from "@/components/ui/Dialog";
+import { NotificationBell } from "@/components/Notifications/NotificationBell";
 import NavbarSkeleton from "./NavbarSkeleton";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,8 +12,6 @@ import { useAppSelector } from "@/redux/hooks";
 import { selectProfileUser } from "@/redux/selectors/profile";
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const user = useAppSelector(selectProfileUser);
   const loading = useAppSelector(
     (state) =>
@@ -135,22 +133,8 @@ const Navbar: React.FC = () => {
               {/* Modern Divider with Gradient */}
               <div className="h-6 w-px bg-linear-to-b from-transparent via-[#dbe1e6] to-transparent hidden md:block" />
 
-              {/* Notification Bell - Neumorphism Style */}
-              <button
-                onClick={() => setIsOpen(true)}
-                className="group/bell relative p-2 rounded-xl hover:bg-linear-to-br hover:from-blue-50 hover:to-cyan-50 transition-all duration-300 text-[#617789] hover:shadow-lg hover:shadow-blue-500/10 hover:scale-105"
-              >
-                {/* Pulse Effect on Hover */}
-                <span className="absolute inset-0 rounded-xl bg-blue-400/0 group-hover/bell:bg-blue-400/5 group-hover/bell:animate-ping transition-all" />
-
-                <Bell
-                  size={18}
-                  className="md:w-5 md:h-5 relative z-10 group-hover/bell:rotate-12 group-hover/bell:text-[#399aef] transition-all duration-300"
-                />
-
-                {/* Notification Badge with Pulse */}
-                <span className="absolute top-1 right-1.5 w-2.5 h-2.5 bg-linear-to-br from-red-500 to-rose-600 rounded-full border-2 border-white shadow-lg animate-pulse" />
-              </button>
+              {/* Notification Bell Component */}
+              <NotificationBell />
 
               {/* Profile Avatar - Modern Glow Design */}
               {user && (
@@ -214,16 +198,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </nav>
-
-      {/* Dialog */}
-      <Dialog
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        onConfirm={() => setIsOpen(false)}
-        title="Notifications"
-        variant="info"
-        description="Currently, ClassFlow runs on Version 1.0. Version 3.0, Inshallah, will bring real-time Notifications for a more interactive experience."
-      />
     </>
   );
 };

@@ -5,6 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Classroom, ClassroomSchema } from './schemas/classroom.schema';
 import { User, UserSchema } from '../users/schemas/user.schema';
 
+// Modules
+import { NotificationsModule } from '../notifications/notifications.module';
+
 // Controllers
 import { ClassroomController } from './controllers/classroom.controller';
 import { ClassroomMemberController } from './controllers/classroom-member.controller';
@@ -22,6 +25,7 @@ import { ClassroomHelperService } from './services/classroom-helper.service';
       { name: Classroom.name, schema: ClassroomSchema },
       { name: User.name, schema: UserSchema },
     ]),
+    NotificationsModule, // Import notifications
   ],
   controllers: [
     ClassroomController,

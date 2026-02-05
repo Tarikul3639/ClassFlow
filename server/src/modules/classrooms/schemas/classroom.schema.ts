@@ -117,27 +117,27 @@ ClassroomSchema.index({ 'events.startAt': 1 }); // 🆕
 
 // Virtuals
 ClassroomSchema.virtual('admins').get(function (this: ClassroomDocument) {
-  return this.members.filter(
+  return this.members?.filter(
     (m) => m.role === ClassroomRole.ADMIN || m.role === ClassroomRole.CO_ADMIN,
-  );
+  ) || [];
 });
 
 ClassroomSchema.virtual('regularMembers').get(function (
   this: ClassroomDocument,
 ) {
-  return this.members.filter((m) => m.role === ClassroomRole.MEMBER);
+  return this.members?.filter((m) => m.role === ClassroomRole.MEMBER) || [];
 });
 
 ClassroomSchema.virtual('blockedMembers').get(function (
   this: ClassroomDocument,
 ) {
-  return this.members.filter((m) => m.isBlocked);
+  return this.members?.filter((m) => m.isBlocked) || [];
 });
 
 ClassroomSchema.virtual('activeMembers').get(function (
   this: ClassroomDocument,
 ) {
-  return this.members.filter((m) => !m.isBlocked);
+  return this.members?.filter((m) => !m.isBlocked) || [];
 });
 
 // 🆕 Upcoming events virtual
@@ -146,8 +146,8 @@ ClassroomSchema.virtual('upcomingEvents').get(function (
 ) {
   const now = new Date().toISOString();
   return this.events
-    .filter((e) => e.startAt >= now && !e.isCompleted)
-    .sort((a, b) => a.startAt.localeCompare(b.startAt));
+    ?.filter((e) => e.startAt >= now && !e.isCompleted)
+    ?.sort((a, b) => a.startAt.localeCompare(b.startAt)) || [];
 });
 
 // Pre-save middleware

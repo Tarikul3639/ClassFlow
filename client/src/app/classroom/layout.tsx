@@ -58,14 +58,20 @@ export default function LayoutDashboard({
     }
   }, [dispatch, classrooms, isVerifying]);
 
+  // ✅ Redirect if no user after verification
+  useEffect(() => {
+    if (!isVerifying && !user) {
+      router.replace("/auth/sign-in");
+    }
+  }, [user, isVerifying, router]);
+
   // ✅ Loader control
   if (isVerifying || classroomLoading) {
     return <Loader />;
   }
 
-  // ✅ Final auth guard
+  // ✅ Show nothing while redirecting
   if (!user) {
-    router.replace("/auth/sign-in");
     return null;
   }
 

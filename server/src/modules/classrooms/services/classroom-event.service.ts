@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { Classroom, ClassroomDocument } from '../schemas/classroom.schema';
 import { CreateEventDto } from '../dto/create-event.dto';
 import { UpdateEventDto } from '../dto/update-event.dto';
 import { ClassroomHelperService } from './classroom-helper.service';
+import { NotificationsService } from '../../notifications/notifications.service';
+import { PushNotificationService } from '../../notifications/push-notification.service';
+import { NotificationType } from '../../notifications/schemas/notification.schema';
 
 @Injectable()
 export class ClassroomEventService {
@@ -12,6 +15,8 @@ export class ClassroomEventService {
     @InjectModel(Classroom.name)
     private classroomModel: Model<ClassroomDocument>,
     private helperService: ClassroomHelperService,
+    private notificationsService: NotificationsService,
+    private pushNotificationService: PushNotificationService,
   ) {}
 
   async createEvent(
@@ -36,9 +41,50 @@ export class ClassroomEventService {
     classroom.events.push(event as any);
     await classroom.save();
 
+    const createdEvent = classroom.events[classroom.events.length - 1];
+
+    // 🔔 Send notifications to all classroom members (except creator)
+    const memberIds = classroom.members
+      .map((m) => m.userId.toString())
+      .filter((id) => id !== userId);
+
+    console.log('👥 Total members:', classroom.members.length);
+    console.log('👤 Creator ID:', userId);
+    console.log('📨 Sending notifications to:', memberIds.length, 'members');
+
+    const notificationPromises = memberIds.map((memberId) =>
+      this.notificationsService.create({
+        userId: memberId,
+        classroomId: classroomId,
+        referenceId: (createdEvent as any)._id.toString(),
+        type: NotificationType.EVENT_CREATED,
+        title: 'New Event Created',
+        message: `${createEventDto.title} has been scheduled for ${new Date(createEventDto.date).toLocaleDateString()}`,
+        redirectUrl: `/classroom/${classroomId}`,
+      }),
+    );
+
+    // Send notifications in parallel (don't wait)
+    Promise.all(notificationPromises).catch((err) =>
+      console.error('❌ Failed to send notifications:', err),
+    );
+
+    // 🔔 Send push notifications to members
+    this.pushNotificationService
+      .sendPushToUsers(
+        memberIds,
+        'New Event Created',
+        `${createEventDto.title} has been scheduled for ${new Date(createEventDto.date).toLocaleDateString()}`,
+        {
+          redirectUrl: `/classroom/${classroomId}`,
+          eventId: (createdEvent as any)._id.toString(),
+        },
+      )
+      .catch((err) => console.error('❌ Failed to send push notifications:', err));
+
     return {
       message: 'Event created successfully',
-      event: classroom.events[classroom.events.length - 1],
+      event: createdEvent,
     };
   }
 
