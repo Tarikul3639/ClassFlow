@@ -1,7 +1,11 @@
 import axios from "axios";
 
+// In production (Vercel), use relative /api (proxied via Next.js rewrites)
+// In development, use localhost:5000/api directly
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api";
+  process.env.NODE_ENV === 'production'
+    ? '/api'  // Same-origin via Next.js proxy
+    : process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

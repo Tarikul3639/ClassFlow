@@ -159,6 +159,23 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  
+  // Proxy API requests to backend for same-origin cookies
+  async rewrites() {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    
+    // Only proxy in production (Vercel)
+    if (isDevelopment) {
+      return [];
+    }
+    
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://class-flow-server.vercel.app/api/:path*',
+      },
+    ];
+  },
 };
 
 export default withPWA(nextConfig);
