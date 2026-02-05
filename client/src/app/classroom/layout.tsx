@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer/Footer";
 import { Loader } from "@/components/ui/Loader";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchClassroomThunk } from "@/redux/slices/classroom/thunks/classroom";
 import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
@@ -38,7 +38,7 @@ export default function LayoutDashboard({
       } catch (error) {
         console.error("❌ Auth verification failed:", error);
         // Redirect to sign-in if verification fails
-        router.replace("/auth/sign-in");
+        redirect("/auth/sign-in");
       }
     };
 
@@ -67,7 +67,7 @@ export default function LayoutDashboard({
 
   // Only render if user is authenticated
   if (!user) {
-    return <Loader />;
+    return redirect("/auth/sign-in");
   }
 
   return (
