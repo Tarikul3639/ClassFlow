@@ -282,24 +282,25 @@ export class AuthController {
   private setAuthCookie(res: Response, token: string): void {
     const isProduction = process.env.NODE_ENV === 'production';
 
+    // For Vercel: Don't set domain when frontend and backend are on different domains
+    // sameSite: 'none' requires secure: true (HTTPS)
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      secure: true, // Always use secure in production (Vercel uses HTTPS)
+      sameSite: isProduction ? 'none' : 'lax', // 'none' allows cross-site cookies
       path: '/',
-      domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     // Debug log
     console.log('🍪 Cookie set:', {
       token: token.substring(0, 20) + '...',
+      isProduction,
       options: {
         httpOnly: true,
-        secure: isProduction,
+        secure: true,
         sameSite: isProduction ? 'none' : 'lax',
         path: '/',
-        domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
       },
     });
   }
@@ -314,9 +315,8 @@ export class AuthController {
     res.clearCookie('access_token', {
       httpOnly: true,
       secure: true,
-      sameSite: 'none' as const,
+      sameSite: isProduction ? 'none' : 'lax',
       path: '/',
-      domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
     });
   }
 }
