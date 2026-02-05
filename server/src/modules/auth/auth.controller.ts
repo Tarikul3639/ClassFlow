@@ -286,7 +286,7 @@ export class AuthController {
     // sameSite: 'none' requires secure: true (HTTPS)
     res.cookie('access_token', token, {
       httpOnly: true,
-      secure: true, // Always use secure in production (Vercel uses HTTPS)
+      secure: isProduction, // true in production (HTTPS required), false in dev (HTTP)
       sameSite: isProduction ? 'none' : 'lax', // 'none' allows cross-site cookies
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -298,7 +298,7 @@ export class AuthController {
       isProduction,
       options: {
         httpOnly: true,
-        secure: true,
+        secure: isProduction,
         sameSite: isProduction ? 'none' : 'lax',
         path: '/',
       },
@@ -314,7 +314,7 @@ export class AuthController {
 
     res.clearCookie('access_token', {
       httpOnly: true,
-      secure: true,
+      secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
       path: '/',
     });
