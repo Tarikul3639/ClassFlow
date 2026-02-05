@@ -287,30 +287,21 @@ export class AuthController {
     const isProduction =
       this.configService.get<string>('NODE_ENV') === 'production';
 
-    // Frontend domain - যেখানে cookie store হবে
-    const frontendDomain = isProduction
-      ? '.class-flow-edu.vercel.app' // Important: dot for subdomain support
-      : 'localhost';
-
     const cookieOptions: any = {
-      httpOnly: false,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      httpOnly: true, // Security: prevent JavaScript access
+      secure: isProduction, // HTTPS only in production
+      sameSite: isProduction ? 'none' : 'lax', // 'none' allows cross-origin
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      // DO NOT set domain - let browser handle it automatically
     };
-
-    // Production environment requires explicit domain for cross-site cookies
-    if (isProduction) {
-      cookieOptions.domain = frontendDomain;
-    }
 
     res.cookie('access_token', token, cookieOptions);
 
     console.log('🍪 Cookie set:', {
-      domain: cookieOptions.domain,
       sameSite: cookieOptions.sameSite,
       secure: cookieOptions.secure,
+      httpOnly: cookieOptions.httpOnly,
       hasToken: !!token,
     });
   }
@@ -324,15 +315,11 @@ export class AuthController {
       this.configService.get<string>('NODE_ENV') === 'production';
 
     const cookieOptions: any = {
-      httpOnly: false,
+      httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
       path: '/',
     };
-
-    if (isProduction) {
-      cookieOptions.domain = '.class-flow-edu.vercel.app';
-    }
 
     res.clearCookie('access_token', cookieOptions);
   }
