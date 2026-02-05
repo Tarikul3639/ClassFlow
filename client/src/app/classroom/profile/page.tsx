@@ -23,7 +23,7 @@ import MetadataSection from "./_components/MetadataSection";
 import { logout } from "@/redux/slices/auth/slice";
 import { classroomId } from "@/redux/selectors/selectors";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 // Thunks
 import {
@@ -303,7 +303,7 @@ const ProfilePage = () => {
   };
 
   // Loading state
-  if (isLoading || refreshing || !profileUser) {
+  if (isLoading || refreshing) {
     return (
       <div className="bg-[#f8fafc] min-h-screen flex flex-col font-display antialiased">
         <main className="pt-28 flex-1 w-full max-w-3xl mx-auto px-6 py-10">
@@ -311,6 +311,10 @@ const ProfilePage = () => {
         </main>
       </div>
     );
+  }
+
+  if (!profileUser) {
+    redirect("/auth/sign-in");
   }
 
   return (
