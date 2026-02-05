@@ -11,6 +11,7 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -30,7 +31,10 @@ interface RequestWithUser extends Request {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   // ---------------- AUTHENTICATION ----------------
 
@@ -280,33 +284,31 @@ export class AuthController {
    * @param token - JWT access token
    */
   private setAuthCookie(res: Response, token: string): void {
-    const isProduction = process.env.NODE_ENV === 'production';
+    const isProduction =
+      this.configService.get<string>('NODE_ENV') === 'production';
 
-    // For Vercel: Don't set domain when frontend and backend are on different domains
-    // sameSite: 'none' requires secure: true (HTTPS)
+    // Vercel-specific cookie settings for cross-domain support
     const cookieOptions: any = {
       httpOnly: true,
-      secure: isProduction, // true in production (HTTPS required), false in dev (HTTP)
-      sameSite: isProduction ? 'none' : 'lax', // 'none' allows cross-site cookies
+      secure: isProduction, // true in production
+      sameSite: isProduction ? 'none' : 'lax',
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     };
 
-    // Add Partitioned attribute for cross-site cookies (CHIPS)
+    // Production environment with .vercel.app domain for cross-subdomain cookie support
     if (isProduction) {
-      res.setHeader(
-        'Set-Cookie',
-        `access_token=${token}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=${7 * 24 * 60 * 60}; Partitioned`,
-      );
-    } else {
-      res.cookie('access_token', token, cookieOptions);
+      // .vercel.app allows the cookie to be shared across all subdomains (e.g., class-flow-edu.vercel.app and class-flow-server.vercel.app)
+      cookieOptions.domain = '.vercel.app';
     }
+
+    res.cookie('access_token', token, cookieOptions);
 
     // Debug log
     console.log('🍪 Cookie set:', {
       token: token.substring(0, 20) + '...',
       isProduction,
-      options: cookieOptions,
+      domain: cookieOptions.domain,
     });
   }
 
@@ -315,13 +317,20 @@ export class AuthController {
    * @param res - Response object
    */
   private clearAuthCookie(res: Response): void {
-    const isProduction = process.env.NODE_ENV === 'production';
+    const isProduction =
+      this.configService.get<string>('NODE_ENV') === 'production';
 
-    res.clearCookie('access_token', {
+    const cookieOptions: any = {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
       path: '/',
-    });
+    };
+
+    if (isProduction) {
+      cookieOptions.domain = '.vercel.app';
+    }
+
+    res.clearCookie('access_token', cookieOptions);
   }
 }

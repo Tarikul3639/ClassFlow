@@ -38,13 +38,22 @@ async function bootstrap() {
   frontendUrls.push(
     'http://localhost:3000',
     'https://class-flow-edu.vercel.app',
+    'https://class-flow-server.vercel.app',
   );
 
   app.enableCors({
     origin: frontendUrls,
     credentials: true,
+    exposedHeaders: ['Set-Cookie'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'Accept',
+      'Origin',
+      'Access-Control-Allow-Credentials',
+    ],
   });
 
   app.useGlobalPipes(
