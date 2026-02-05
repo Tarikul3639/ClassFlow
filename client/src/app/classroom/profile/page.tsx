@@ -77,7 +77,9 @@ const ProfilePage = () => {
     (state) => state.classroom.requestStatus.fetchClassroom.loading,
   );
   const error = useAppSelector(
-    (state) => state.auth.requestStatus.changePassword?.error,
+    (state) =>
+      state.auth.requestStatus.changePassword.error ||
+      state.auth.requestStatus.deactivateAccount.error,
   );
 
   // ==================== Security Actions ====================
@@ -94,7 +96,7 @@ const ProfilePage = () => {
       });
       dispatch(logout());
       localStorage.removeItem("access_token");
-      router.push("/login");
+      router.push("/auth/sign-in");
     } catch (error) {
       console.error("Logout failed:", error);
       toast.error(extractErrorMessage(error) || "Failed to logout", {});
@@ -114,7 +116,7 @@ const ProfilePage = () => {
         success: "Successfully left the classroom!",
         error: (err) => extractErrorMessage(err) || "Failed to leave classroom",
       });
-      router.push("/");
+      router.push("/auth/sign-in");
     } catch (error) {
       console.error("Leave classroom failed:", error);
       toast.error(
@@ -138,7 +140,7 @@ const ProfilePage = () => {
         error: (err) =>
           extractErrorMessage(err) || "Failed to delete classroom",
       });
-      router.push("/");
+      router.push("/auth/sign-in");
     } catch (error) {
       console.error("Delete classroom failed:", error);
       toast.error(
@@ -159,7 +161,7 @@ const ProfilePage = () => {
         error: (err) =>
           extractErrorMessage(err) || "Failed to deactivate account",
       });
-      router.push("/");
+      router.push("/auth/sign-in");
     } catch (error) {
       console.error("Deactivate account failed:", error);
       toast.error(

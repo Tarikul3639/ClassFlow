@@ -287,28 +287,31 @@ export class AuthController {
     const isProduction =
       this.configService.get<string>('NODE_ENV') === 'production';
 
-    // Vercel-specific cookie settings for cross-domain support
+    // Frontend domain - যেখানে cookie store হবে
+    const frontendDomain = isProduction
+      ? '.class-flow-edu.vercel.app' // Important: dot for subdomain support
+      : 'localhost';
+
     const cookieOptions: any = {
       httpOnly: true,
-      secure: isProduction, // true in production
+      secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
       path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
-    // Production environment with .vercel.app domain for cross-subdomain cookie support
+    // Production environment requires explicit domain for cross-site cookies
     if (isProduction) {
-      // .vercel.app allows the cookie to be shared across all subdomains (e.g., class-flow-edu.vercel.app and class-flow-server.vercel.app)
-      cookieOptions.domain = '.vercel.app';
+      cookieOptions.domain = frontendDomain;
     }
 
     res.cookie('access_token', token, cookieOptions);
 
-    // Debug log
     console.log('🍪 Cookie set:', {
-      token: token.substring(0, 20) + '...',
-      isProduction,
       domain: cookieOptions.domain,
+      sameSite: cookieOptions.sameSite,
+      secure: cookieOptions.secure,
+      hasToken: !!token,
     });
   }
 
@@ -328,7 +331,7 @@ export class AuthController {
     };
 
     if (isProduction) {
-      cookieOptions.domain = '.vercel.app';
+      cookieOptions.domain = '.class-flow-edu.vercel.app';
     }
 
     res.clearCookie('access_token', cookieOptions);

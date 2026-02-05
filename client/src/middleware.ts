@@ -36,7 +36,7 @@ export function middleware(req: NextRequest) {
   // Block protected routes without token
   if (!access_token) {
     console.log("🚫 No token found, redirecting to /auth/sign-in");
-    // return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+    return NextResponse.redirect(new URL("/auth/sign-in", req.url));
   }
 
   // Allow access to protected routes with token
