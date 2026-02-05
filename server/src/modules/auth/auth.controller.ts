@@ -282,12 +282,13 @@ export class AuthController {
   private setAuthCookie(res: Response, token: string): void {
     const isProduction = process.env.NODE_ENV === 'production';
 
-    res.clearCookie('access_token', {
+    res.cookie('access_token', token, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none' as const,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       path: '/',
       domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     // Debug log
@@ -295,8 +296,8 @@ export class AuthController {
       token: token.substring(0, 20) + '...',
       options: {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none' as const,
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         path: '/',
         domain: isProduction ? '.class-flow-edu.vercel.app' : undefined,
       },

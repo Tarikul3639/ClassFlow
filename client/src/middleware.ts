@@ -15,9 +15,12 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const access_token = req.cookies.get("access_token")?.value;
 
-  console.log("🔐 Middleware:", {
+  // Log all cookies for debugging
+  const allCookies = req.cookies.getAll();
+  console.log("🔐 Middleware Debug:", {
     pathname,
     hasToken: !!access_token,
+    allCookies: allCookies.map(c => ({ name: c.name, hasValue: !!c.value })),
   });
 
   // Allow public routes
@@ -32,7 +35,7 @@ export function middleware(req: NextRequest) {
 
   // Block protected routes without token
   if (!access_token) {
-    console.log("🚫 Redirecting to /auth/sign-in");
+    console.log("🚫 No token found, redirecting to /auth/sign-in");
     return NextResponse.redirect(new URL("/auth/sign-in", req.url));
   }
 
@@ -43,6 +46,14 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg).*)",
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public files (images, etc)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };
