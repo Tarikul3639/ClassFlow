@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer/Footer";
 import { Loader } from "@/components/ui/Loader";
 
 import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchClassroomThunk } from "@/redux/slices/classroom/thunks/classroom";
 import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
@@ -17,57 +17,56 @@ export default function LayoutDashboard({
 }) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [isVerifying, setIsVerifying] = useState(true);
+  const isVerifying = useAppSelector(
+    (state) => state.auth.requestStatus?.refresh?.loading,
+  );
 
   const classroomLoading = useAppSelector(
     (state) => state.classroom.requestStatus.fetchClassroom?.loading,
   );
 
-  const user = useAppSelector((state) => state.auth?.user);
-  const classrooms = useAppSelector((state) => state.auth?.user?.classrooms);
+  const user = useAppSelector((state) => state.auth.user);
+  const classrooms = user?.classrooms;
   const verifyError = useAppSelector(
-    (state) => state.auth?.requestStatus?.refresh?.error,
+    (state) => state.auth.requestStatus?.refresh?.error,
   );
 
+  // ✅ Verify auth once
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        // Verify authentication with backend
         await dispatch(verifyAuthThunk()).unwrap();
-        setIsVerifying(false);
-      } catch (error) {
-        console.error("❌ Auth verification failed:", error);
-        // Redirect to sign-in if verification fails
-        redirect("/auth/sign-in");
+      } catch (err) {
+        router.replace("/auth/sign-in");
       }
     };
 
     verifyUser();
   }, [dispatch, router]);
 
+  // ✅ Redirect on verification error
   useEffect(() => {
-    // If verification returned error, redirect to sign-in
     if (verifyError) {
-      console.error("🚫 Verification error, redirecting to sign-in");
       router.replace("/auth/sign-in");
     }
   }, [verifyError, router]);
 
+  // ✅ Fetch classroom after auth success
   useEffect(() => {
-    // Fetch classroom data after user is verified
-    if (classrooms && classrooms.length > 0 && !isVerifying) {
+    if (!isVerifying && classrooms?.length) {
       dispatch(fetchClassroomThunk(classrooms[0]));
     }
   }, [dispatch, classrooms, isVerifying]);
 
-  // Show loading while verifying authentication
+  // ✅ Loader control
   if (isVerifying || classroomLoading) {
     return <Loader />;
   }
 
-  // Only render if user is authenticated
+  // ✅ Final auth guard
   if (!user) {
-    return redirect("/auth/sign-in");
+    router.replace("/auth/sign-in");
+    return null;
   }
 
   return (
