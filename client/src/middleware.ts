@@ -15,12 +15,15 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const access_token = req.cookies.get("access_token")?.value;
 
-  // Log all cookies for debugging
+  // Log all cookies for debugging (Vercel logs এ দেখাবে)
   const allCookies = req.cookies.getAll();
   console.log("🔐 Middleware Debug:", {
     pathname,
     hasToken: !!access_token,
+    tokenPreview: access_token ? access_token.substring(0, 20) + '...' : 'none',
     allCookies: allCookies.map(c => ({ name: c.name, hasValue: !!c.value })),
+    origin: req.headers.get('origin'),
+    host: req.headers.get('host'),
   });
 
   // Allow public routes
