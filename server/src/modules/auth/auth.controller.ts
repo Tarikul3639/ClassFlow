@@ -284,24 +284,29 @@ export class AuthController {
 
     // For Vercel: Don't set domain when frontend and backend are on different domains
     // sameSite: 'none' requires secure: true (HTTPS)
-    res.cookie('access_token', token, {
+    const cookieOptions: any = {
       httpOnly: true,
       secure: isProduction, // true in production (HTTPS required), false in dev (HTTP)
       sameSite: isProduction ? 'none' : 'lax', // 'none' allows cross-site cookies
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    };
+
+    // Add Partitioned attribute for cross-site cookies (CHIPS)
+    if (isProduction) {
+      res.setHeader(
+        'Set-Cookie',
+        `access_token=${token}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=${7 * 24 * 60 * 60}; Partitioned`,
+      );
+    } else {
+      res.cookie('access_token', token, cookieOptions);
+    }
 
     // Debug log
     console.log('🍪 Cookie set:', {
       token: token.substring(0, 20) + '...',
       isProduction,
-      options: {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'none' : 'lax',
-        path: '/',
-      },
+      options: cookieOptions,
     });
   }
 
