@@ -1,10 +1,10 @@
 import axios from "axios";
 
-// In production (Vercel), use relative /api (proxied via Next.js rewrites)
-// In development, use localhost:5000/api directly
+// Use direct backend URL in both development and production
+// This allows cookies to work properly with CORS credentials
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "/api" // Same-origin via Next.js proxy
+    ? "https://class-flow-server.vercel.app/api" // Direct backend URL
     : process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api";
 
 export const apiClient = axios.create({

@@ -165,22 +165,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   
-  // Proxy API requests to backend for same-origin cookies
-  async rewrites() {
-    const isDevelopment = process.env.NODE_ENV === 'development';
-    
-    // Only proxy in production (Vercel)
-    if (isDevelopment) {
-      return [];
-    }
-    
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://class-flow-server.vercel.app/api/:path*',
-      },
-    ];
-  },
+  // No rewrites needed - using direct backend URL with CORS
+  // This allows cookies to work properly across domains
 };
 
 // export default withPWA(nextConfig);

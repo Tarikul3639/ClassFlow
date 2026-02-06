@@ -55,7 +55,11 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     dispatch(signUpThunk(formData))
       .unwrap()
-      .then(() => router.push("/classroom"))
+      .then(() => {
+        // Set client-side auth marker for middleware (cross-domain cookie support)
+        document.cookie = "cf_auth=1; path=/; max-age=604800; SameSite=Lax";
+        router.push("/classroom");
+      })
       .catch(() => {});
   };
 

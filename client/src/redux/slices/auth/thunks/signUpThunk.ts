@@ -35,6 +35,8 @@ export const signUpThunk = createAsyncThunk<
     // Store user data for offline access
     if (typeof window !== "undefined") {
       localStorage.setItem("user_data", JSON.stringify(user));
+      // Set auth flag for middleware (since cross-domain cookies aren't readable in middleware)
+      localStorage.setItem("auth_status", "authenticated");
     }
 
     return { user };
