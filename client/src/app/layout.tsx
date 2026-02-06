@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     //   { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }, // iOS
     // ],
   },
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
