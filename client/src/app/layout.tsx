@@ -8,13 +8,12 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#4999df",
+  themeColor: "#ffffff",
 };
 
 export const metadata: Metadata = {
   title: "ClassFlow",
   description: "Manage your classes with ease.",
-  manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
