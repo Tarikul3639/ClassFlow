@@ -4,12 +4,14 @@ import { Provider as ReduxProvider } from "react-redux";
 import { store } from "@/redux/store";
 // import { InstallPWA } from "@/components/pwa/InstallPWA";
 import "./globals.css";
+import { OnlineStatusIndicator } from "@/components/ui/OnlineStatusIndicator";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ReduxProvider store={store}>
       {children}
       <Toaster />
+      <OnlineStatusIndicator />
       {/* <InstallPWA /> */}
     </ReduxProvider>
   );

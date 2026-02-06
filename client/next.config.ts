@@ -3,8 +3,8 @@ import withPWAInit from "@ducanh2912/next-pwa";
 
 const withPWA = withPWAInit({
   dest: "public",
-  cacheOnFrontEndNav: true,
-  aggressiveFrontEndNavCaching: true,
+  cacheOnFrontEndNav: false,
+  aggressiveFrontEndNavCaching: false,
   reloadOnOnline: true,
   disable: process.env.NODE_ENV === "development",
   workboxOptions: {
@@ -45,24 +45,26 @@ const withPWA = withPWAInit({
       },
       {
         urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
-        handler: "StaleWhileRevalidate",
+        handler: "NetworkFirst",
         options: {
           cacheName: "static-image-assets",
           expiration: {
             maxEntries: 64,
             maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
+          networkTimeoutSeconds: 3,
         },
       },
       {
         urlPattern: /\/_next\/image\?url=.+$/i,
-        handler: "StaleWhileRevalidate",
+        handler: "NetworkFirst",
         options: {
           cacheName: "next-image",
           expiration: {
             maxEntries: 64,
             maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
+          networkTimeoutSeconds: 3,
         },
       },
       {
@@ -91,35 +93,38 @@ const withPWA = withPWAInit({
       },
       {
         urlPattern: /\.(?:js)$/i,
-        handler: "StaleWhileRevalidate",
+        handler: "NetworkFirst",
         options: {
           cacheName: "static-js-assets",
           expiration: {
             maxEntries: 32,
             maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
+          networkTimeoutSeconds: 3,
         },
       },
       {
         urlPattern: /\.(?:css|less)$/i,
-        handler: "StaleWhileRevalidate",
+        handler: "NetworkFirst",
         options: {
           cacheName: "static-style-assets",
           expiration: {
             maxEntries: 32,
             maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
+          networkTimeoutSeconds: 3,
         },
       },
       {
         urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
-        handler: "StaleWhileRevalidate",
+        handler: "NetworkFirst",
         options: {
           cacheName: "next-data",
           expiration: {
             maxEntries: 32,
             maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
+          networkTimeoutSeconds: 3,
         },
       },
       {
@@ -149,7 +154,7 @@ const withPWA = withPWAInit({
             maxEntries: 32,
             maxAgeSeconds: 24 * 60 * 60, // 24 hours
           },
-          networkTimeoutSeconds: 10,
+          networkTimeoutSeconds: 3,
         },
       },
     ],
