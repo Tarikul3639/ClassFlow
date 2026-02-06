@@ -56,6 +56,7 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
               </label>
               <input
                 type="time"
+                disabled={!form.date}
                 value={startTime}
                 onChange={(e) =>
                   setForm({
@@ -72,6 +73,7 @@ export const ScheduleSection = ({ form, setForm }: ScheduleSectionProps) => {
               </label>
               <input
                 type="time"
+                disabled={!form.date}
                 value={endTime}
                 onChange={(e) =>
                   setForm({ ...form, endAt: `${form.date}T${e.target.value}` })
