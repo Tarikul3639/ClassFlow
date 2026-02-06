@@ -167,6 +167,11 @@ const nextConfig: NextConfig = {
   
   // No rewrites needed - using direct backend URL with CORS
   // This allows cookies to work properly across domains
+  
+  // PWA Configuration
+  env: {
+    NEXT_PUBLIC_ENABLE_PWA: process.env.NEXT_PUBLIC_ENABLE_PWA || 'true',
+  },
 };
 
 // export default withPWA(nextConfig);
