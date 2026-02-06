@@ -35,23 +35,18 @@ export const OnlineStatusIndicator = () => {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-9999 flex items-center justify-center p-3 rounded-full shadow-2xl transition-all duration-500 backdrop-blur-md border ${
+      className={`fixed bottom-6 right-6 z-9999 flex items-center justify-center p-1.5 md:p-3 rounded-full shadow-2xl transition-all duration-500 backdrop-blur-md border ${
         isOnline
           ? "bg-primary border-primary text-white"
-          : "bg-rose-600/90 border-rose-500 text-white"
+          : "bg-rose-500/90 border-rose-500 text-white"
       }`}
       title={isOnline ? "Online" : "Offline"}
     >
       <div className="flex items-center gap-2">
         {isOnline ? (
-          <Wifi size={16} />
+          <Wifi className="size-3.5 md:size-4.5" />
         ) : (
-          <>
-            <WifiOff size={16} className="animate-bounce" />
-            <span className="text-xxs font-bold uppercase tracking-wider">
-              Offline
-            </span>
-          </>
+          <WifiOff className="size-3.5 md:size-4.5 animate-bounce" />
         )}
       </div>
     </div>
