@@ -55,10 +55,10 @@ const SignInPage: React.FC = () => {
 
       if (data.user) {
         if (data.user.classrooms.length > 0) {
-          router.push("/classroom");
+          router.push(`/classroom/${data.user.classrooms[0]}`);
         }
         else {
-          router.push("/classroom/get-started");
+          router.push("/classroom");
         }
       }
     } catch (err) {
