@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchClassroomThunk } from "@/redux/slices/classroom/thunks/classroom";
 import { verifyAuthThunk } from "@/redux/slices/auth/thunks/verifyAuthThunk";
+import { logoutThunk } from "@/redux/slices/auth/thunks/logoutThunk";
+import { cookies, } from "next/headers";
 
 export default function LayoutDashboard({
   children,
@@ -37,6 +39,10 @@ export default function LayoutDashboard({
       try {
         await dispatch(verifyAuthThunk()).unwrap();
       } catch (err) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_data");
+        localStorage.removeItem("auth_status");
+        document.cookie = "cf_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         router.replace("/auth/sign-in");
       }
     };
