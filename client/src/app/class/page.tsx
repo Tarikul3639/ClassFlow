@@ -18,16 +18,16 @@ const GetStartedPage: React.FC = () => {
   const classId = useAppSelector(classroomId);
 
   const handleJoinClassroom = () => {
-    router.push("/classroom/join-classroom");
+    router.push("/class/join");
   };
 
   const handleCreateClassroom = () => {
-    router.push("/classroom/create-classroom");
+    router.push("/class/create");
   };
 
   useEffect(() => {
     if (classId) {
-      router.push(`/classroom/${classId}`);
+      router.push(`/class/${classId}`);
     }
   }, [classId, router]);
 

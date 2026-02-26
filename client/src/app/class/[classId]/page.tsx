@@ -116,7 +116,7 @@ const Page = () => {
           {/* Refined Add Event Button */}
           {isAdmin && (
             <Link
-              href={`/classroom/${classroomId}/new`}
+              href={`/class/${classroomId}/new`}
               className="group relative flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#399aef] text-white overflow-hidden transition-all duration-300 hover:ring-2 hover:ring-[#399aef]/20 active:scale-95 shrink-0"
             >
               {/* Subtle Shine Effect on Hover */}

@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const items = [
   { icon: House, label: "Home", route: "/" },
-  { icon: School, label: "Classes", route: "/classroom" },
-  { icon: Users, label: "Members", route: "/classroom/members" },
-  { icon: CircleUser, label: "Profile", route: "/classroom/profile" },
+  { icon: School, label: "Classes", route: "/class" },
+  { icon: Users, label: "Members", route: "/class/members" },
+  { icon: CircleUser, label: "Profile", route: "/class/profile" },
 ];
 
 export const BottomNav = () => {

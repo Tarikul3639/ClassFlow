@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const UserAvatar = ({ user, isActive }: { user: any; isActive: boolean }) => (
   <Link
-    href="/classroom/profile"
+    href="/class/profile"
     className={`hidden group/avatar relative w-8 h-8 rounded-full md:flex items-center justify-center transition-all duration-500 
       ${isActive ? "scale-110 ring-2 ring-[#399aef] ring-offset-2" : "hover:scale-105"}`}
   >

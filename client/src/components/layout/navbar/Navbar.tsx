@@ -29,9 +29,9 @@ const Navbar: React.FC = () => {
   // Memoized Dashboard Path
   const dashboardPath = useMemo(() => {
     if (user && user.classrooms.length === 1) {
-      return `/classroom/${user.classrooms[0]}`;
+      return `/class/${user.classrooms[0]}`;
     }
-    return "/classroom";
+    return "/class";
   }, [user]);
 
   if (loading) return <NavbarSkeleton />;
@@ -50,17 +50,17 @@ const Navbar: React.FC = () => {
             <NavItem
               href={dashboardPath}
               label="Home"
-              active={pathname === dashboardPath || pathname === "/classroom"}
+              active={pathname === dashboardPath || pathname === "/class"}
             />
             <NavItem
-              href="/classroom/my-classes"
-              label="My Classes"
-              active={pathname === "/classroom/my-classes"}
+              href={`/class/${user?.classrooms[0]}/info`}
+              label="Info"
+              active={pathname === `/class/${user?.classrooms[0]}/info`}
             />
             <NavItem
-              href="/classroom/members"
-              label="Members"
-              active={pathname === "/classroom/members"}
+              href={`/class/${user?.classrooms[0]}/people`}
+              label="People"
+              active={pathname === `/class/${user?.classrooms[0]}/people`}
             />
           </nav>
 
@@ -74,7 +74,7 @@ const Navbar: React.FC = () => {
             {user && (
               <UserAvatar
                 user={user}
-                isActive={pathname === "/classroom/profile"}
+                isActive={pathname === `/class/${user?.classrooms[0]}/profile`}
               />
             )}
           </div>

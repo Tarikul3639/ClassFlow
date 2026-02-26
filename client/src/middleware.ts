@@ -31,7 +31,7 @@ export function middleware(req: NextRequest) {
     // Redirect logged-in users away from auth pages
     if (isAuthenticated && AUTH_ROUTES.includes(pathname)) {
       console.log("🔄 Redirecting to /classroom");
-      return NextResponse.redirect(new URL("/classroom", req.url));
+      return NextResponse.redirect(new URL("/class", req.url));
     }
     return NextResponse.next();
   }
