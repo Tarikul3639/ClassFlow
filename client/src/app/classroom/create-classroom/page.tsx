@@ -81,7 +81,6 @@ const CreateClassroomPage: React.FC = () => {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-sans antialiased">
-      <div className="h-21"></div>
 
       <main className="flex flex-col items-center p-3 sm:p-4 max-w-2xl mx-auto w-full pb-6">
         <motion.div

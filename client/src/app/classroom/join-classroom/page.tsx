@@ -55,8 +55,6 @@ const JoinClassroomPage: React.FC = () => {
 
   return (
     <div className="bg-[#f8fafc] min-h-screen flex flex-col font-sans antialiased">
-      <div className="h-21"></div>
-
       <main className="flex flex-col items-center justify-center p-3 sm:p-4 max-w-sm sm:max-w-md mx-auto w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

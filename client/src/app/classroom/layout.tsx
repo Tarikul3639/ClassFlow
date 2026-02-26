@@ -1,6 +1,7 @@
 "use client";
 
-import Navbar from "@/components/Navbar/Navbar";
+import Navbar from "@/components/layout/navbar/Navbar";
+import { BottomNav } from "@/components/layout/bottomNav/BottomNav";
 import { Footer } from "@/components/Footer/Footer";
 import { Loader } from "@/components/ui/Loader";
 
@@ -82,9 +83,10 @@ export default function LayoutDashboard({
   }
 
   return (
-    <div className="min-h-screen bg-white font-display antialiased text-[#111518]">
+    <div className="min-h-screen bg-white font-display antialiased text-[#111518] pb-20 md:pb-0">
       <Navbar />
       {children}
+      <BottomNav />
       <Footer />
     </div>
   );

@@ -99,9 +99,8 @@ const Page = () => {
 
   return (
     <div className="bg-white min-h-screen flex flex-col font-display antialiased text-[#111518]">
-      <div className="h-16" />
 
-      <main className="flex-1 w-full max-w-2xl mx-auto px-6 py-10 flex flex-col gap-8">
+      <main className="flex-1 w-full max-w-2xl mx-auto p-6 flex flex-col gap-8">
         {/* Header */}
         <header className="flex items-start justify-between gap-4">
           <div className="space-y-1 flex-1 min-w-0">

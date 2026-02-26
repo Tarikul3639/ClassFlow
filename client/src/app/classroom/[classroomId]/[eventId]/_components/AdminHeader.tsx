@@ -7,7 +7,7 @@ export const AdminHeader = ({ id }: { id?: string }) => {
   const router = useRouter();
   
   return (
-    <div className="px-6 sm:px-10 pt-10 pb-4 sm:pb-6 lg:pb-8 border-b border-[#f1f5f9] flex flex-col gap-6">
+    <div className="px-6 sm:px-10 pt-3 sm:pt-4 pb-4 sm:pb-6 lg:pb-8 border-b border-[#f1f5f9] flex flex-col gap-6">
       <div className="flex items-center gap-4 sm:gap-5 lg:gap-6">
         {/* Back Button */}
         <button

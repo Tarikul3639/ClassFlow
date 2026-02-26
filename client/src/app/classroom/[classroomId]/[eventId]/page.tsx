@@ -47,7 +47,6 @@ export default function Page() {
 
   return (
     <div className="min-h-screen max-w-2xl mx-auto overflow-hidden">
-      <div className="h-16" />
 
       <AdminHeader id={id} />
 
