@@ -1,7 +1,6 @@
 import axios from "axios";
 
 // Use direct backend URL in both development and production
-// This allows cookies to work properly with CORS credentials
 const API_BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://class-flow-server.vercel.app/api" // Direct backend URL
@@ -9,7 +8,6 @@ const API_BASE_URL =
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // HTTP-only cookie
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,6 +19,14 @@ export const apiClient = axios.create({
 // =======================
 apiClient.interceptors.request.use(
   (config) => {
+    // Add Authorization token from localStorage
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("access_token");
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+
     if (process.env.NODE_ENV === "development") {
       console.log("📤", config.method?.toUpperCase(), config.url);
     }
@@ -47,8 +53,11 @@ apiClient.interceptors.response.use(
   (error) => {
     // 🚫 Token invalid / expired
     if (error.response?.status === 401) {
-      // Let Redux / UI decide what to do
+      // Clear auth data
       if (typeof window !== "undefined") {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_data");
+        localStorage.removeItem("auth_status");
         window.dispatchEvent(new Event("auth-expired"));
       }
     }

@@ -48,56 +48,45 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() dto: RegisterDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<{ user: AuthUser }> {
+  ): Promise<{ user: AuthUser; access_token: string }> {
     const { access_token, user } = await this.authService.register(dto);
 
-    // Set HTTP-Only cookie for enhanced security
-    this.setAuthCookie(res, access_token);
-
-    return { user };
+    return { user, access_token };
   }
 
   /**
    * Login existing user
    * @param dto - Login credentials
-   * @param res - Response object to set cookies
-   * @returns User data (token sent via HTTP-only cookie)
+   * @returns User data and access token
    */
   @Public()
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() dto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<{ user: AuthUser }> {
+  ): Promise<{ user: AuthUser; access_token: string }> {
     const { access_token, user } = await this.authService.login(dto);
 
-    // Set HTTP-Only cookie
-    this.setAuthCookie(res, access_token);
-
-    return { user };
+    return { user, access_token };
   }
 
   /**
    * Refresh access token
    * @param req - Request with current token
-   * @param res - Response to set new cookie
-   * @returns Success message
+   * @returns New access token
    */
   @UseGuards(JwtAuthGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refreshToken(
     @Req() req: RequestWithUser,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<{ success: boolean; message: string }> {
+  ): Promise<{ success: boolean; message: string; access_token: string }> {
     const newToken = await this.authService.refreshToken(req.user.userId);
-    this.setAuthCookie(res, newToken);
 
     return {
       success: true,
       message: 'Token refreshed successfully',
+      access_token: newToken,
     };
   }
 
@@ -235,9 +224,8 @@ export class AuthController {
   // ---------------- LOGOUT ----------------
 
   /**
-   * Logout user and clear authentication cookie
+   * Logout user
    * @param req - Request with user data
-   * @param res - Response to clear cookie
    * @returns Success message
    */
   @UseGuards(JwtAuthGuard)
@@ -245,13 +233,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async logout(
     @Req() req: RequestWithUser,
-    @Res({ passthrough: true }) res: Response,
   ): Promise<{ success: boolean; message: string }> {
     // Optional: Add token to blacklist if you implement token blacklisting
     await this.authService.logout(req.user.userId);
-
-    // Clear the authentication cookie
-    this.clearAuthCookie(res);
 
     return {
       success: true,
@@ -276,51 +260,5 @@ export class AuthController {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
-  }
-
-  /**
-   * Set authentication cookie
-   * @param res - Response object
-   * @param token - JWT access token
-   */
-  private setAuthCookie(res: Response, token: string): void {
-    const isProduction =
-      this.configService.get<string>('NODE_ENV') === 'production';
-
-    const cookieOptions: any = {
-      httpOnly: true, // Security: prevent JavaScript access
-      secure: isProduction, // HTTPS only in production
-      sameSite: isProduction ? 'none' : 'lax', // 'none' allows cross-origin
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      // DO NOT set domain - let browser handle it automatically
-    };
-
-    res.cookie('access_token', token, cookieOptions);
-
-    console.log('🍪 Cookie set:', {
-      sameSite: cookieOptions.sameSite,
-      secure: cookieOptions.secure,
-      httpOnly: cookieOptions.httpOnly,
-      hasToken: !!token,
-    });
-  }
-
-  /**
-   * Clear authentication cookie
-   * @param res - Response object
-   */
-  private clearAuthCookie(res: Response): void {
-    const isProduction =
-      this.configService.get<string>('NODE_ENV') === 'production';
-
-    const cookieOptions: any = {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
-    };
-
-    res.clearCookie('access_token', cookieOptions);
   }
 }

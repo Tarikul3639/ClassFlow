@@ -11,7 +11,7 @@ interface SignInPayload {
 
 interface SignInResponse {
   user: IUser;
-  // Note: access_token is sent via HTTP-only cookie, not in response body
+  access_token: string;
 }
 
 export const signInThunk = createAsyncThunk<
@@ -27,15 +27,15 @@ export const signInThunk = createAsyncThunk<
       data,
     );
     
-    const { user } = response.data;
+    const { user, access_token } = response.data;
     
     console.log('✅ Sign-in successful, user:', user.email);
-    console.log('🍪 Access token stored in HTTP-only cookie');
+    console.log('🔑 Access token stored in localStorage');
 
-    // Store user data for offline access (but NOT the token)
+    // Store auth data in localStorage
     if (typeof window !== "undefined") {
+      localStorage.setItem("access_token", access_token);
       localStorage.setItem("user_data", JSON.stringify(user));
-      // Set auth flag for middleware (since cross-domain cookies aren't readable in middleware)
       localStorage.setItem("auth_status", "authenticated");
       
       // Process any queued offline requests
@@ -52,8 +52,9 @@ export const signInThunk = createAsyncThunk<
       
       if (typeof window !== "undefined") {
         const cachedUser = localStorage.getItem("user_data");
+        const cachedToken = localStorage.getItem("access_token");
         
-        if (cachedUser) {
+        if (cachedUser && cachedToken) {
           console.log('✅ Using cached user data');
           return {
             user: JSON.parse(cachedUser),

@@ -56,8 +56,9 @@ const RegisterPage: React.FC = () => {
     dispatch(signUpThunk(formData))
       .unwrap()
       .then(() => {
-        // Set client-side auth marker for middleware (cross-domain cookie support)
+        // Set client-side auth marker cookie for middleware
         document.cookie = "cf_auth=1; path=/; max-age=604800; SameSite=Lax";
+        console.log("✅ Auth data stored in localStorage");
         router.push("/classroom");
       })
       .catch(() => {});

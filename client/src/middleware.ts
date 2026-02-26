@@ -13,24 +13,18 @@ const AUTH_ROUTES = ["/auth/sign-in", "/auth/sign-up"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const access_token = req.cookies.get("access_token")?.value;
   
-  // Check for auth marker (for cross-domain cookie support)
+  // Check for auth marker cookie (set from client-side after successful auth)
   const auth_marker = req.cookies.get("cf_auth")?.value;
 
-  // Log all cookies for debugging (Vercel logs এ দেখাবে)
-  const allCookies = req.cookies.getAll();
   console.log("🔐 Middleware Debug:", {
     pathname,
-    hasToken: !!access_token,
     hasAuthMarker: !!auth_marker,
-    tokenPreview: access_token ? access_token.substring(0, 20) + "..." : "none",
-    allCookies: allCookies.map((c) => ({ name: c.name, hasValue: !!c.value })),
     origin: req.headers.get("origin"),
     host: req.headers.get("host"),
   });
   
-  const isAuthenticated = !!(access_token || auth_marker);
+  const isAuthenticated = !!auth_marker;
 
   // Allow public routes
   if (PUBLIC_ROUTES.includes(pathname)) {
@@ -42,13 +36,13 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Block protected routes without token
+  // Block protected routes without auth marker
   if (!isAuthenticated) {
-    console.log("🚫 No token found, redirecting to /auth/sign-in");
+    console.log("🚫 No auth marker found, redirecting to /auth/sign-in");
     return NextResponse.redirect(new URL("/auth/sign-in", req.url));
   }
 
-  // Allow access to protected routes with token
+  // Allow access to protected routes with auth marker
   console.log("✅ Access granted");
   return NextResponse.next();
 }

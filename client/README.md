@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌙 Ramadan Orbit
 
-## Getting Started
+[Live Demo](https://ramadan-orbit.vercel.app)
 
-First, run the development server:
+Ramadan Orbit is a web app designed to enhance your Ramadan experience by providing **Sehri, Iftar, and Fajr timings** for all **64 districts of Bangladesh**, based on the official guidelines from the **Islamic Foundation of Bangladesh**. The app automatically detects your location and shows the Ramadan calendar tailored for your area.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Auto Location Detection** – Instantly get your local timings.
+- **Full Ramadan Calendar** – Plan your month effectively.
+- **Mobile-Friendly & Full-Screen View** – Check timings on the go.
+- **Clean, Smooth UI** – Easy navigation and interactions.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🖼️ Screenshots
 
-To learn more about Next.js, take a look at the following resources:
+<img src="./image/image_1.png" alt="Ramadan Orbit Screenshot 1" width="300" />  
+<img src="./image/image_2.png" alt="Ramadan Orbit Screenshot 2" width="300" />  
+<img src="./image/image_3.png" alt="Ramadan Orbit Screenshot 3" width="300" />  
+<img src="./image/image_4.png" alt="Ramadan Orbit Screenshot 4" width="300" />
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Tech Stack
 
-## Deploy on Vercel
+- **Frontend:** React, Next.js  
+- **Styling:** Tailwind CSS  
+- **Animation:** Framer Motion  
+- **Icons:** Lucide React  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Live Demo
+
+Check it live here: [https://ramadan-orbit.vercel.app](https://ramadan-orbit.vercel.app)
+
+---
+
+## 🙏 Contribution
+
+Feel free to fork the project, submit issues, or create pull requests to improve the app.  
+This project is open-source and aims to help the community make Ramadan more organized and spiritually fulfilling.
